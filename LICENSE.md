@@ -1,6 +1,6 @@
 The libSTARK library is developed by the authors and contributors (see the [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
 
-Copyright (c) 2017-2018 Eli Ben-Sasson, Iddo Bentov, Yinon Horesh, Michael Riabzev and contributors (see [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
+Copyright (c) 2017-2018 Eli Ben-Sasson, Iddo Bentov, Yinon Horesh, Michael Riabzev and external contributors (see [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
