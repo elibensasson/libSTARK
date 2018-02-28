@@ -12,7 +12,7 @@ The libSTARK library implements _scalable_ and _transparent argument of knowledg
 
 ## Disclaimer
 
-The code is **academic grade**, meant for academic peer review and evaluation. It very likely to contain _multiple serious security flaws_, and should not be relied upon for any other purpose.
+The code is **academic grade**, meant for academic peer review and evaluation. It very likely contains _multiple serious security flaws_, and should not be relied upon for any other purpose.
 
 ## How to run the code
 1. clone this repository (git clone ??? ~/
