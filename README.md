@@ -15,6 +15,12 @@ The libSTARK library implements a scalable and transparent argument of knowledge
 The code is **academic grade**, meant for academic peer review and evaluation. It very likely to contain _multiple serious security flaws_, and should not be relied upon for any other purpose.
 
 ## How to run the code
+1. clone this repository (git clone ??? ~/
+1. change to libSTARK/???
+1. make the code: make
+1. executables:
+   1. blah
+   1. blah blah
 
 ## Academic literature (partial list, reverse chronological order)
 
