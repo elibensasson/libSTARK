@@ -5,7 +5,6 @@
 #include <string>
 #include <algebraLib/FieldElement.hpp>
 #include <iomanip>
-#include <openssl/aes.h>
 #include <wmmintrin.h>
 
 #ifdef WIN32

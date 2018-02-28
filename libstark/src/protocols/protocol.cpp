@@ -139,10 +139,13 @@ bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const
             bool doStatusLoop = true;
             Timer roundTimer;
             std::thread barManager( [&](){
-                       unsigned int sleepTime = 100; 
+                       unsigned int sleepInterval = 10;
+                       unsigned int sleepTime = 10;
                        while(doStatusLoop){
                            std::cout<<"."<<std::flush;
-                           std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+                           for(unsigned int i=0; (i< sleepTime) && doStatusLoop; i++){
+                               std::this_thread::sleep_for(std::chrono::milliseconds(sleepInterval));
+                           }
                            sleepTime*=2;
                         }
                     });
@@ -159,16 +162,19 @@ bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const
             const auto pMsg = prover.sendMessage();
 
             proverTime += t.getElapsed();
+           
+            {
+                doStatusLoop = false;
+                barManager.join();
+                std::cout<<"("<<roundTimer.getElapsed()<<" seconds)"<<std::endl;
+            }
+            
             t = Timer();
 
             startVerifier();
             verifier.receiveMessage(*pMsg);
 
             startCicleCount();
-           
-            doStatusLoop = false;
-            barManager.join();
-            std::cout<<"("<<roundTimer.getElapsed()<<" seconds)"<<std::endl;
         }
     }
    
@@ -386,13 +392,16 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, b
     Timer reductionTimer;
     std::thread barManager(
             [&](){
-            unsigned int sleepTime = 100; 
-            while(doStatusLoop){
-                std::cout<<"."<<std::flush;
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-                sleepTime*=2;
-            }
-            }
+               unsigned int sleepInterval = 10;
+               unsigned int sleepTime = 10;
+               while(doStatusLoop){
+                   std::cout<<"."<<std::flush;
+                   for(unsigned int i=0; (i< sleepTime) && doStatusLoop; i++){
+                       std::this_thread::sleep_for(std::chrono::milliseconds(sleepInterval));
+                   }
+                   sleepTime*=2;
+                }
+                }
             );
     unique_ptr<AcspWitness> acspWitness = CBairToAcsp::reduceWitness(instance, witness);
     doStatusLoop = false;
