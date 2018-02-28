@@ -1,0 +1,51 @@
+CC=g++
+CPPFLAGS=-std=c++14
+CFLAGS=-O3 -g -Wall -fmessage-length=0 -fopenmp -mavx -maes -mtune=native
+
+INCFLAGS=-Isrc -I$(GADGET3INC) -I$(LIBSTARKINC) -I$(ALGEBRAINC) -I$(FFTINC)
+LIBS=						\
+	gadgetlib				\
+	stark					\
+	algebralib				\
+	FFT
+
+LIBFLAGS=$(addprefix -l, $(LIBS))
+LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -L"$(GADGET3LNKDIR)" -L"$(LIBSTARKLINKDIR)" -lgomp
+
+SRCDIR  = src
+SRCEXT  = cpp
+OBJDIR  = $(BLDDIR)/obj
+
+SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
+SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
+OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
+
+TARGET=$(BLDDIR)/stark-tinyram
+DST=$(EXEDIR)/stark-tinyram
+all: $(TARGET)
+
+$(TARGET): buildrepo $(OBJS)
+#	@echo 'Building target: $@'
+#	@echo 'Invoking: GCC Linker'
+	$(CC) -o "$@" $(OBJS) -fopenmp $(LNKFLAGS) $(LIBFLAGS)
+#	@echo 'Finished building target: $@'
+	cp $(TARGET) $(DST)
+
+$(OBJDIR)/%.o: %.$(SRCEXT)
+#	@echo "$(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c -o "$@" "$<""
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c -o "$@" "$<"
+
+clean:
+	rm -f $(TARGET) $(OBJS) $(DEPS)
+	rm -rf $(OBJDIR)
+	rm $(DST)
+
+buildrepo:
+	$(call make-repo)
+
+define make-repo
+for dir in $(SRCDIRS); \
+	do \
+	mkdir -p $(OBJDIR)/$$dir; \
+	done
+endef
