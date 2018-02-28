@@ -15,3 +15,16 @@ The libSTARK library implements a scalable and transparent argument of knowledge
 The code is **academic grade**, meant for academic peer review and evaluation. It very likely to contain _multiple serious security flaws_, and should not be relied upon for any other purpose.
 
 ## How to run the code
+
+## Academic literature (partial list, reverse chronological order)
+
+1. Scalable perfect zero knowledge IOP systems [[BCGV](https://link.springer.com/chapter/10.1007%2F978-3-662-49099-0_2), [BCFGRS](https://link.springer.com/chapter/10.1007%2F978-3-319-70503-3_6)].
+1. A STARK without ZK [[SCI](https://link.springer.com/chapter/10.1007%2F978-3-319-56617-7_19)].
+1. Survey of alternative (non-STARK) proof systems [[WB](https://dl.acm.org/citation.cfm?doid=2641562)].
+1. Interactive Oracle Proofs [[BCS](https://link.springer.com/chapter/10.1007%2F978-3-662-53644-5_2), [RRR](https://dl.acm.org/citation.cfm?doid=2897518.2897652)].
+1. PCPs with scalable (quasi-linear) proof size [[BS](http://epubs.siam.org/doi/10.1137/050646445), [D](https://dl.acm.org/citation.cfm?doid=1236457.1236459)].
+1. ZK-PCPs [[K](https://dl.acm.org/citation.cfm?doid=129712.129782), [KPT](https://dl.acm.org/citation.cfm?doid=258533.258643), [IMS](https://link.springer.com/chapter/10.1007%2F978-3-642-28914-9_9)].
+1. Probabilisitcally checkable proofs (PCPs) [[AS](https://dl.acm.org/citation.cfm?doid=273865.273901), [ALMSS](https://dl.acm.org/citation.cfm?doid=278298.278306)] and PCPs of Proximity (PCPPs) [[BGHSV](http://epubs.siam.org/doi/10.1137/S0097539705446810), [DR](http://epubs.siam.org/doi/10.1137/S0097539705446962)].
+1. Scalable (poly-logarithmic) verification of computations [[BFLS](https://dl.acm.org/citation.cfm?doid=103418.103428), 
+[BGHSV](http://ieeexplore.ieee.org/document/1443079/)].
+1. Interactive and ZK proof systems [[BM](https://www.sciencedirect.com/science/article/pii/0022000088900281?via%3Dihub), [GMR](https://dl.acm.org/citation.cfm?doid=22145.22178), [BFL](https://link.springer.com/article/10.1007%2FBF01200056)].
