@@ -1,4 +1,4 @@
-The libSTARK library is developed by the authors and contributors (see the [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
+The libSTARK library is developed by the authors and external contributors (see the [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
 
 Copyright (c) 2017-2018 Eli Ben-Sasson, Iddo Bentov, Yinon Horesh, Michael Riabzev and external contributors (see [AUTHORS.md](https://github.com/elibensasson/libSTARK/blob/master/AUTHORS.md) file).
 
