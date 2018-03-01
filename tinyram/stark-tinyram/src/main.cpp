@@ -19,8 +19,8 @@ void printHelp(const string exeName){
     cout<<endl<<"Example:"<<endl;
     cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm 10"<<std::endl;
     cout<<endl<<"The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2^10-1) machine steps."<<endl;
-    cout<<"in the simulation the Prover and verify interact, the Prover generates a proof and the verify verifies it."<<endl;
-    cout<<"during the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
+    cout<<"In the simulation the Prover and verify interact, the Prover generates a proof and the verify verifies it."<<endl;
+    cout<<"During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
 
 }
 
