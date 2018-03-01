@@ -33,7 +33,7 @@ for example:
 ```
 The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt,and the suspects fingerprint in examples-dpm/fp_nomatch.txt. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database.
 
-A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 256 bit numbers in hexadecimal form, separated by a single period.A database is a file where each line represents a fingerprint.
+A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 8 bit numbers in hexadecimal form, separated by a single period. A database is a file where each line represents a fingerprint.
 
 ### STARK for TinyRAM programs
 Arguments format:
