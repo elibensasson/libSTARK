@@ -15,10 +15,29 @@ The libSTARK library implements _scalable_ and _transparent argument of knowledg
 The code is **academic grade**, meant for academic peer review and evaluation. It very likely contains _multiple serious security flaws_, and should not be relied upon for any other purpose.
 
 ## How to run the code
+# Compilation:
 ```
 git clone https://github.com/elibensasson/libSTARK.git
 cd libSTARK
 make -j8
+```
+
+# STARK for DPM (DNA fingerprint blacklist)
+Arguments format:
+```
+./stark-dpm <database file path> <fingerprint file path>
+```
+for example:
+```
+./stark-dpm examples-dpm/database.txt examples-dpm/fp_no_match.txt
+```
+The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt,and the suspects fingerprint in examples-dpm/fp_nomatch.txt. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database.
+
+A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 256 bit numbers in hexadecimal form, separated by a single period.A database is a file where each line represents a fingerprint.
+
+# STARK for TinyRAM programs
+Arguments format:
+```
 ./stark-tinyram <TinyRAM assembly file path> <number of machine steps indicator>
 ```
 for example:
@@ -26,7 +45,9 @@ for example:
 ./stark-tinyram examples-tinyram/collatz.asm 10
 ```
 The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2<sup>10</sup>-1) machine steps.
-In the simulation the Prover and verify interact, the Prover generates a proof and the verify verifies it.
+
+# Execution results
+In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it.
 During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output.
 
 ## Academic literature (partial list, reverse chronological order)
