@@ -22,10 +22,8 @@ void printHelp(const string exeName){
     cout<<"$>"<<exeName<<" examples-dpm/database.txt examples-dpm/fp_no_match.txt"<<std::endl;
     cout<<endl<<"The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt,";
     cout<<"and the suspects fingerprint in examples-dpm/fp_nomatch.txt. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database."<<endl;
-    cout<<endl<<"A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 256 bit numbers in hexadecimal form, separated by a single period.";
-    cout<<"A database is a file where each line represents a fingerprint."<<endl;
-    cout<<endl<<"In the simulation the Prover and verify interact, the Prover generates a proof and the verify verifies it."<<endl;
-    cout<<"During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
+    cout<<endl<<"A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 8 bit numbers in hexadecimal basis, separated by a single period. A database is a file where each line represents a fingerprint."<<endl;
+    cout<<endl<<"In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it. During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
 
 }
 

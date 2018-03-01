@@ -17,11 +17,9 @@ void printHelp(const string exeName){
     cout<<"Usage:"<<endl;
     cout<<"$>"<<exeName<<" <TinyRAM assembly file path> <trace length log_2>"<<endl;
     cout<<endl<<"Example:"<<endl;
-    cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm 10"<<std::endl;
+    cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm 10"<<endl;
     cout<<endl<<"The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2^10-1) machine steps."<<endl;
-    cout<<"In the simulation the Prover and verify interact, the Prover generates a proof and the verify verifies it."<<endl;
-    cout<<"During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
-
+    cout<<endl<<"In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it. During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
 }
 
 libstark::BairInstance constructInstance(const TinyRAMProgram& prog, const unsigned int t){
