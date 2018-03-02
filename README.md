@@ -3,7 +3,7 @@
 ## Overview
 
 The libSTARK library implements _scalable_ and _transparent argument of knowledge_ (STARK) systems. These systems can be executed with, or without, _zero knowledge_ (ZK), and may be designed as either _interactive_ or _non-interactive_ protocols. The theoretical constructions which this library implements are described in detail in the [zk-STARK paper](https://eprint.iacr.org/2018/046). Briefly, the main properties of (zk)-STARK systems are: 
-+ **universality**: the system can be applied to any computation specified by an algebraic internal representation (AIR) or by a permuted algebraic intermediate representation (PAIR) as defined in the [zkSTARK paper](https://eprint.iacr.org/2018/046). The former (AIR) is relevant to "memory efficient" computations and the latter (PAIR) for computations that require random access memory (RAM).
++ **universality**: the system can be applied to any computation specified by an algebraic intermediate representation (AIR) or by a permuted algebraic intermediate representation (PAIR) as defined in the [zkSTARK paper](https://eprint.iacr.org/2018/046). The former (AIR) is relevant to "memory efficient" computations and the latter (PAIR) for computations that require random access memory (RAM).
 + **transparency**: all messages sent by the verifier, including queries to the proof oracles, are public random coins (i.e., the protocol is "Arthur-Merlin").
 + **scalability**: as an asymptotic function of the number of cycles (T) required by the computation whose integrity is being proved, both of the following conditions hold:
   + **prover scalability**: prover running time scales _quasi-linearly_ in T, i.e., like T poly log T.
