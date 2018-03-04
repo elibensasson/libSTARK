@@ -27,7 +27,7 @@ The code was tested with gcc version 7.3.0 (https://gcc.gnu.org), using c++11 st
 In order to compile on Mac please use this thread:
 https://github.com/elibensasson/libSTARK/issues/2
 
-### Libraries
+### Libraries (all should be available in standard linux distribution package managers)
 * OpenMP (https://en.wikipedia.org/wiki/OpenMP) for parallelization.
 * googletest (https://github.com/google/googletest) for **unit-tests compilation only**
 
