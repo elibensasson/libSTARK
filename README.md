@@ -14,6 +14,23 @@ The libSTARK library implements _scalable_ and _transparent argument of knowledg
 
 The code is **academic grade**, meant for academic peer review and evaluation. It very likely contains _multiple serious security flaws_, and should not be relied upon for any other purpose.
 
+## Dependencies
+### Hardware acceleration
+* sse4 (https://en.wikipedia.org/wiki/SSE4)
+  * CLMUL (https://en.wikipedia.org/wiki/CLMUL_instruction_set) for basic arithmetics in characteristic 2 fields.
+  * SIMD (https://en.wikipedia.org/wiki/SIMD) instructions for FFT acceleration.
+* aes (https://en.wikipedia.org/wiki/AES_instruction_set) to accelerate Merkle tree construction and verification.
+
+### Compiler
+The code was tested with gcc version 7.3.0 (https://gcc.gnu.org), using c++11 standard. But should probably work with most common versions of gcc.
+#### Compilation on MAC
+In order to compile on Mac please use this thread:
+https://github.com/elibensasson/libSTARK/issues/2
+
+### Libraries
+* OpenMP (https://en.wikipedia.org/wiki/OpenMP) for parallelization.
+* googletest (https://github.com/google/googletest) for **unit-tests compilation only**
+
 ## How to run the code
 ### Compilation:
 ```
@@ -49,6 +66,18 @@ The above execution results in execution of STARK simulation over the collatz pr
 ### Execution results
 In the simulation the Prover and Verifier interact, the Prover generates a proof and the Verifier verifies it.
 During the executions the specifications of generated BAIR and APR, measurements, and Verifier's decision, are printed to the standard output.
+
+### Unit-tests
+Compilation:
+```
+make -j8 tests
+```
+Execution:
+```
+./bin/algebralib-tests/algebralib_tests
+./bin/libstark-tests/libstark-tests
+./bin/stark-tinyram-tests/stark-tinyram-tests
+```
 
 ## Academic literature (partial list, reverse chronological order)
 
