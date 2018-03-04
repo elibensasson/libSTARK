@@ -1,0 +1,74 @@
+#define N 7
+#define T 995
+
+// ~/path/tinyram16-elf-gcc -L/path/inst/release/linux/opt/diet/lib-tinyram16/ -Wl,-T,tinyramelf16-harvard.x -nostdlib -o ssum.trx ssum.c --save-temps
+// ~/path/PCP --print-memless --files-path . --program ssum.trx
+
+int input[2*N] = {10,20,30,40,50,60,70,-10,-20,-30,-40,-50,-60,70};
+int arr[ 4 * ( (1 << (N+1)) - 1 ) ];
+
+int main(void) {
+	register int *inp = &input[0], *last_inp;
+	register int *p1, *p2, *next, *next_backup;
+	register int b;
+
+	//phase1: prepare arrays
+	p1 = p2 = &arr[0];
+	for(;;) { //prepare each half array
+		next = next_backup = (p1+2);
+		*p1 = *(p1+1) = 0;
+		b = 1;
+		last_inp = inp + N;
+		for(;;) { //iterate over each input
+			for(;;) { //merge
+				if(p1 == next_backup) {
+					while(p2 < next_backup) {
+						*(next++) = *(p2++) + *inp;
+						*(next++) = *(p2++) ^ b;
+					}
+					break;
+				}
+				if(p2 == next_backup) {
+					while(p1 < next_backup) {
+						*(next++) = *(p1++);
+						*(next++) = *(p1++);
+					}
+					break;
+				}	
+				if(*p1 > *p2 + *inp) {
+					*(next++) = *(p2++) + *inp;
+					*(next++) = *(p2++) ^ b;
+				}	
+				else {
+					*(next++) = *(p1++);
+					*(next++) = *(p1++);
+				}
+			}
+			if(++inp == last_inp)
+				break;
+			b = b << 1;
+			next_backup = next;
+		}
+		if( p1 > &arr[0] + (1 << (N+2)) )
+			break;
+		p1 = p2 = next;
+	}
+	//phase2: search
+	p1 = &arr[ 2*((1 << (N+1)) - 1) - 2 ];
+	for(;;) {
+		if(T == *p1 + *p2)
+			return *(p1+1) ^ (*(p2+1) << N);
+		if(T > *p1 + *p2) {
+			if(p2 == &arr[0] + 4*((1 << (N+1))-1) - 2)
+				break;
+			p2 = p2 + 2;
+		}
+		else {
+			if(p1 == &arr[0])
+				break;
+			p1 = p1 - 2;
+		}
+	}
+	return 0;
+}
+

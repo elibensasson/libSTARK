@@ -1,16 +1,20 @@
-include ../../flags.mk
+include ../flags.mk
 
-INCFLAGS=-Isrc -I$(GADGET3INC) -I$(LIBSTARKINC) -I$(ALGEBRAINC) -I$(FFTINC)
+WHICH				:= $(shell which which)
+MKDIR				:= $(shell $(WHICH) mkdir)
+DIRNAME				:= $(shell $(WHICH) dirname)
+
+INCFLAGS=-I. -I$(LIBSTARKINC) -I$(ALGEBRAINC) -I$(FFTINC)
 LIBS=						\
-	gadgetlib				\
+	gtest					\
 	stark					\
 	algebralib				\
 	FFT
 
 LIBFLAGS=$(addprefix -l, $(LIBS))
-LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -L"$(GADGET3LNKDIR)" -L"$(LIBSTARKLINKDIR)" -lgomp
+LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -L"$(LIBSTARKLINKDIR)" -lgomp
 
-SRCDIR  = src
+SRCDIR  = .
 SRCEXT  = cpp
 OBJDIR  = $(BLDDIR)/obj
 
@@ -18,16 +22,14 @@ SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
 OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
 
-TARGET=$(BLDDIR)/stark-tinyram
-DST=$(EXEDIR)/stark-tinyram
+TARGET=$(BLDDIR)/libstark-tests
 all: $(TARGET)
 
 $(TARGET): buildrepo $(OBJS)
-#	@echo 'Building target: $@'
-#	@echo 'Invoking: GCC Linker'
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC Linker'
 	$(CC) -o "$@" $(OBJS) -fopenmp $(LNKFLAGS) $(LIBFLAGS)
-#	@echo 'Finished building target: $@'
-	cp $(TARGET) $(DST)
+	@echo 'Finished building target: $@'
 
 $(OBJDIR)/%.o: %.$(SRCEXT)
 #	@echo "$(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c -o "$@" "$<""
@@ -35,8 +37,6 @@ $(OBJDIR)/%.o: %.$(SRCEXT)
 
 clean:
 	$(RM) -f $(TARGET) $(OBJS) $(DEPS)
-	$(RM) -rf $(OBJDIR)
-	$(RM) $(DST)
 
 buildrepo:
 	$(call make-repo)

@@ -1,6 +1,4 @@
-CC=g++
-CPPFLAGS=-std=c++14
-CFLAGS=-O3 -g -Wall -fmessage-length=0 -fopenmp -mavx -maes -mtune=native
+include ../flags.mk
 
 WHICH				:= $(shell which which)
 MKDIR				:= $(shell $(WHICH) mkdir)

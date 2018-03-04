@@ -4,12 +4,22 @@ WHICH				:= $(shell which which)
 MKDIR				:= $(shell $(WHICH) mkdir)
 DIRNAME				:= $(shell $(WHICH) dirname)
 
+SRCDIR=.
+
 CFLAGS+=
 CPPFLAGS+=
-INCFLAGS=-I$(FFTINC) -Iheaders
-TARGET=$(BLDDIR)/libalgebralib.a
+INCFLAGS=-I$(ALGEBRAINC) -I$(FFTINC)
+LIBS=						\
+	algebralib				\
+	gtest					\
+	FFT
 
-SRCS:= $(shell ls src/*.cpp)
+LIBFLAGS=$(addprefix -l, $(LIBS))
+LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -lgomp
+
+TARGET=$(BLDDIR)/algebralib_tests
+
+SRCS:=	$(shell ls *.cpp)
 OBJS=$(addprefix $(BLDDIR)/, $(SRCS:.cpp=.o))
 
 $(BLDDIR)/%.o: %.cpp
@@ -23,5 +33,7 @@ clean:
 	$(RM) -f $(TARGET) $(OBJS) $(DEPS)
 
 $(TARGET): $(OBJS)
-#	@echo 'Building target: $@'
-	ar -r  "$@" $(OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC Linker'
+	$(CC) -o "$@" $(OBJS) -fopenmp $(LNKFLAGS) $(LIBFLAGS)
+	@echo 'Finished building target: $@'
