@@ -303,7 +303,7 @@ vector<unique_ptr<UnivariatePolynomialInterface>> witnessCheckerHelper(const Acs
  * Construct an Acsp partial instance from a Bair full instance (top-level arithmetization function for partial instances)
  */
 unique_ptr<AcspInstance> CBairToAcsp::reduceInstance(const BairInstance&  instance){
-    // get common deffintion
+    // get common definition
     const common commonDef(instance);
 
     // fetch more parameters
