@@ -28,7 +28,7 @@ namespace BairToAcsp{
  * @brief A trivial implementation to RoutingNetwork interface, using a matrix with no constraints
  *
  * This class is for internal use of the routing networks library only, and should not be exposed as some interface outside,
- * because is is made with poor interface, no encapsulation, and state may be non consistent 
+ * because it is made with poor interface, no encapsulation, and state may be non consistent 
  * (the dimensions may be changed independently to the 'data' vector). One who uses it must be responsible
  * for keeping the state consistent.
  */
