@@ -54,7 +54,7 @@ namespace {
 		GadgetPtr transitionFunction = TransitionFunction::create(pb, followingTraceVariables, memoryFollowingTraceVariables, program);
 		transitionFunction->generateConstraints();
 		
-		//generate Witeness
+		//generate Witness
 		//line 0
 		for (unsigned int j = 0; j < program.size(); j++){
 			std::dynamic_pointer_cast<TransitionFunction>(transitionFunction)->generateWitness(j);
@@ -83,7 +83,7 @@ namespace {
 				}
 			}
 			
-			// Change pc and check soudness
+			// Change pc and check soundness
 			for (int i = 0; i < pcLength; i++){
 				pb->val(followingTraceVariables.second_.pc_[i]) = Algebra::one() + pb->val(followingTraceVariables.second_.pc_[i]);
 				EXPECT_FALSE(pb->isSatisfied(Opcode::NONE));
