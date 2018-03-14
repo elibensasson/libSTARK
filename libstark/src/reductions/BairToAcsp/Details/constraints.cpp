@@ -390,7 +390,7 @@ const CS_testLocations& testLocations){
         // because the constraint system consistency tests should not be done there
         //
         // The second vanishes on the last row (aka \f$ g^{-1} \f$) in current column
-        // because the deffinition of Bair does not require consistency
+        // because the definition of Bair does not require consistency
         // between the last assignment and the first assignment
         const FieldElement zeroRowOffset = instanceMapping.mapNonPermutation_zeroRow(testIndex);
         const FieldElement lastRowOffset = instanceMapping.mapNonPermutation_lastRow(testIndex);
@@ -464,7 +464,7 @@ const CS_testLocations& testLocations){
         // because the constraint system consistency tests should not be done there
         //
         // The second vanishes on the last row (aka \f$ g^{-1} \f$) in current column
-        // because the deffinition of Bair does not require consistency
+        // because the definition of Bair does not require consistency
         // between the last assignment and the first assignment
         const FieldElement zeroRowOffset = instanceMapping.mapNonPermutation_zeroRow(testIndex);
         const FieldElement lastRowOffset = instanceMapping.mapNonPermutation_lastRow(testIndex);
@@ -551,7 +551,7 @@ const vector<FieldElement>& paddingPi){
     }
 
     /******************************************************************
-     *      add the last DeBruijn column identicle check
+     *      add the last DeBruijn column identical check
      ******************************************************************/
     for(size_t currVar=0; currVar < commonDef.variablesPerm().size(); currVar++){
         const size_t currLayer = 2*currVar;

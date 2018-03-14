@@ -33,7 +33,7 @@ verifier_t::verifier_t(const AcspInstance& instance, const RS_verifierFactory_t&
 
     //Initialize
     {
-    //Boundry - aka Witness
+    //Boundary - aka Witness
     {
         const short logSizeWitnesses = Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(instance) + Log2(sizeof(FieldElement));
 
@@ -65,7 +65,7 @@ void verifier_t::receiveMessage(const TranscriptMessage& msg){
     
     case(Ali::details::phase_t::UNIVARIATE_COMMITMENTS):
     {
-        TASK("Recieved commitments");
+        TASK("Received commitments");
         
         keepZK_Composition_maskCommitment(pMsg.commitments[0]);
         keepWitnessCommitment(pMsg.commitments[1]);
@@ -76,7 +76,7 @@ void verifier_t::receiveMessage(const TranscriptMessage& msg){
     
     case(Ali::details::phase_t::RS_PROXIMITY):
     {
-        TASK("Recieved message for RS proximity prover");
+        TASK("Received message for RS proximity prover");
         
         if(!RS_verifier_witness_->doneInteracting()){
             RS_verifier_witness_->receiveMessage(*pMsg.RS_prover_witness_msg);
@@ -94,7 +94,7 @@ void verifier_t::receiveMessage(const TranscriptMessage& msg){
     
     case(Ali::details::phase_t::RESULTS):
     {
-        TASK("Recieved results");
+        TASK("Received results");
         digestResults(pMsg.results);
         fetchResults();
         phase_ = Ali::details::advancePhase(phase_);
@@ -281,7 +281,7 @@ rawQueries_t verifier_t::getRawQueries()const{
     
     //boundry 
     {
-        TASK("Boundry polynomials");
+        TASK("Boundary polynomials");
         res.boundaryPolysMatrix = state_.boundaryPolysMatrix.getRawQuery();
     }
     
@@ -297,9 +297,9 @@ void verifier_t::digestResults(const rawResults_t& rawResults){
         state_.ZK_mask_composition.digestResults(rawResults.ZK_mask_composition);
     }
     
-    //boundry 
+    //boundary 
     {
-        TASK("Boundry polynomials");
+        TASK("Boundary polynomials");
         state_.boundaryPolysMatrix.digestResults(rawResults.boundaryPolysMatrix);
     }
 }
@@ -314,9 +314,9 @@ bool verifier_t::verifyComitment()const{
         res &= state_.ZK_mask_composition.verifyComitment();
     }
     
-    //boundry
+    //boundary
     {
-        TASK("Boundry polynomials");
+        TASK("Boundary polynomials");
         res &= state_.boundaryPolysMatrix.verifyComitment();
     }
 
@@ -325,7 +325,7 @@ bool verifier_t::verifyComitment()const{
 
 
 void verifier_t::fetchResults()const{
-    TASK("Verifyer fetches results");
+    TASK("Verifier fetches results");
     
     //ZK Composition mask
     {
@@ -333,9 +333,9 @@ void verifier_t::fetchResults()const{
         state_.ZK_mask_composition.fetchResults();
     }
     
-    //boundry
+    //boundary
     {
-        TASK("Boundry polynomials");
+        TASK("Boundary polynomials");
         state_.boundaryPolysMatrix.fetchResults();
     }
 

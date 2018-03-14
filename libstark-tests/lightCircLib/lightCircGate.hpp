@@ -90,7 +90,7 @@ public:
 /********** lightAdditionGate Class *************/
 /**************************************************/
 /**
-* Addition gate. It's value equals the summation of its inputs.
+* Addition gate. Its value equals the summation of its inputs.
 */
 class lightAdditionGate : public lightCircGate{
 
@@ -117,7 +117,7 @@ public:
 /************ lightMultiplicationGate Class **************/
 /**************************************************/
 /**
-* Times gate. It's value equals the multiplication of its inputs.
+* Times gate. Its value equals the multiplication of its inputs.
 */
 class lightMultiplicationGate : public lightCircGate {
 protected:	
@@ -142,7 +142,7 @@ public:
 /************ lightExpoGate Class ***************/
 /**************************************************/
 /**
-* Exponentiation gate. It's value equals its SINGLE input in some power (m_expo).
+* Exponentiation gate. Its value equals its SINGLE input in some power (m_expo).
 */
 class lightExpoGate : public lightCircGate {
 

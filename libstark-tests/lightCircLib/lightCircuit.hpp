@@ -27,8 +27,8 @@ public:
 	lightCircuit(size_t numInputs, size_t numOutputs):m_inputs(numInputs),m_outputs(numOutputs){};
 
     /**
-     * Same as above, but for smae type of nodes
-     * couldn't merge them togethe because os some bug.
+     * Same as above, but for small type of nodes
+     * couldn't merge them together because of some bug.
      * (Maybe I do not understand something, or maybe compiler bug)
      */
     lightCircuit(const lightCircuit& circ);

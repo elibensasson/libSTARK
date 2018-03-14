@@ -109,7 +109,7 @@ void printSpecs(const double proverTime, const double verifierTime, const size_t
 void printSpecsCSV(const double proverTime, const double verifierTime, const size_t proofGeneratedBytes, const size_t proofSentBytes, const size_t queriedDataBytes){
     return;
     startSpecs();
-    std::cout<<"Comma Seperated Valued (CSV) specifications:"<<std::endl;
+    std::cout<<"Comma Separated Valued (CSV) specifications:"<<std::endl;
     std::cout<<"Prover time (seconds), Verifier time (seconds), Proof size (Bytes), Proof sent (Bytes), Queried data (Bytes)"<<std::endl;
     std::cout<<proverTime<<","<<verifierTime<<","<<proofGeneratedBytes<<","<<proofSentBytes<<","<<queriedDataBytes<<std::endl;
 

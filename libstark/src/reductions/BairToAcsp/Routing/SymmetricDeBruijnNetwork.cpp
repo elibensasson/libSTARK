@@ -12,7 +12,7 @@ namespace{
 /***
  * @class fixIndexes
  * @brief permutes a given sequence for a specific fix needed for DeBruijn network
- * this is made to have the first column allways ordered in increasing order 0,1,2,...
+ * this is made to have the first column always ordered in increasing order 0,1,2,...
  *
  * We define \f$ sr : {0,1}^{numBits} \to {0,1}^{numBits} \f$ as 
  * the cyclic shift right operator.
@@ -36,7 +36,7 @@ public:
 	:src_(src),numBits_(numBits){};
 	
 	size_t getElementByIndex(index_t index)const {
-        const labelID_t mask = (1<<numBits_)-1; // the mask is least segnificant $k$ bits set
+        const labelID_t mask = (1<<numBits_)-1; // the mask is least significant $k$ bits set
 	    const auto shifted_index = ((index<<1) | (index>>(numBits_-1))) & mask;
         const auto origVal = src_.getElementByIndex(shifted_index);
         const auto shifted_data = ((origVal>>1) | (origVal<<(numBits_-1))) & mask;

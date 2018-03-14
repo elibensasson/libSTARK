@@ -123,9 +123,9 @@ namespace{
         const auto basisPCPP = Ali::details::PCP_common::basisForWitness(acspInstance);
 
         //
-        //Constructin evaluation
+        //Constructing evaluation
         //
-        TASK("Constructing boundary constraints proof : evaluatin " 
+        TASK("Constructing boundary constraints proof : evaluating " 
                 + std::to_string(numOfWitnesses) +" witnesses and 1 ZK MASK polynomial on spaces of dimension " + std::to_string(basisPCPP.basis.size()));
 
         vector<coeffs_t> witnessCoeffs(numOfWitnessesWithZkMask);
@@ -181,7 +181,7 @@ namespace{
             const size_t numCosetsInParallel = POW2(logNumCosetsInParallel);
 
             //
-            // Handeling the case where the proof fits entirely into RAM
+            // Handling the case where the proof fits entirely into RAM
             //
             if(entireWitnessKept == true){
                 const bool proofFitsInRAM = (logNumCosetsInParallel >= shiftsBasis.size());
@@ -204,7 +204,7 @@ namespace{
                             dataWithCommitment(widthLog + cosetBasis.size() + logNumCosetsInParallel, shiftsBasis.size() - logNumCosetsInParallel,
                                 [&](const size_t globalShiftIdx, FieldElement* res){
 
-                                TASK("Constracting " + std::to_string(numCosetsInParallel) + " cosets of total " + std::to_string(numShifts));
+                                TASK("Constructing " + std::to_string(numCosetsInParallel) + " cosets of total " + std::to_string(numShifts));
 
                                 vector<FieldElement> affineShifts(numCosetsInParallel);
 
@@ -395,7 +395,7 @@ namespace{
         /** Filling in the parameters values according to the given parameter t */
 
         //
-        //Construct ordered basises for proofs
+        //Construct ordered bases for proofs
         //
         const auto  basisPCPP = Ali::details::PCP_common::basisForConsistency(acspInstance);
 
@@ -435,7 +435,7 @@ namespace{
         TASK("Constructing univariate polynomial for Witness PCPP proof");
 
         //
-        //Construct ordered basises for proofs
+        //Construct ordered bases for proofs
         //
         const auto basisPCPP = Ali::details::PCP_common::basisForWitness(acspInstance);
         const size_t numColumns = POW2(ceil(Log2(1 + acspInstance.witnessDegreeBound().size()))); //+1 for ZK mask poly
@@ -571,7 +571,7 @@ namespace{
         const size_t numCosetsToEvaluate = cosetsWithQueries.size();
         
         //    
-        //Calculate number of cosets in parallel for perfomance
+        //Calculate number of cosets in parallel for performance
         //
         size_t NumCosetsInParallel;
         {
@@ -784,7 +784,7 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
 
     case(Ali::details::phase_t::START_PROTOCOL):
     {
-        TASK("Recieved start protocol request)");
+        TASK("Received start protocol request)");
         evaluateBoundryPolys();
         evaluateZK_Composition_mask();
         phase_ = Ali::details::advancePhase(phase_);
@@ -793,7 +793,7 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
     
     case(Ali::details::phase_t::VERIFIER_RANDOMNESS):
     {
-        TASK("Recieving randomness from verifier");
+        TASK("Receiving randomness from verifier");
         
         RS_prover_witness_ = RS_proverFactory_(
                 Ali::details::PCP_common::basisForWitness(instance_).basis, 
@@ -812,11 +812,11 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
     
     default:
     if(vMsg.RS_verifier_witness_msg){
-        TASK("Recieved message from Witness RS proximity verifier");
+        TASK("Received message from Witness RS proximity verifier");
         RS_prover_witness_->receiveMessage(*vMsg.RS_verifier_witness_msg);
     }
     if(vMsg.RS_verifier_composition_msg){
-        TASK("Recieved message from Composition RS proximity verifier");
+        TASK("Received message from Composition RS proximity verifier");
         RS_prover_composition_->receiveMessage(*vMsg.RS_verifier_composition_msg);
     }
     {

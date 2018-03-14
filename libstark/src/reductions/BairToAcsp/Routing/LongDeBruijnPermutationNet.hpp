@@ -28,7 +28,7 @@ namespace BairToAcsp{
  * It is simply a DeBruijn network, in tandem with a DeBruijn network that routs in constant direction:
  * each vertex \f$ ( \ell_i , \omega ) \f$ in the additional network has exactly one neighbor : \f$ (\ell_{i+1}, sr(\omega)) \f$
  *
- * This is used for the arighmetization step, where the amount of layers must be a power of 2
+ * This is used for the arithmetization step, where the amount of layers must be a power of 2
  */
 class LongDeBruijnPermutationNet : public  Deg2PermutationRoutingNet{
 public:

@@ -2,7 +2,7 @@
 #include <algebraLib/ErrorHandling.hpp>
 namespace Algebra{
 
-	//useful auxilary method to eval by assignment when only have eval by vector
+	//useful auxiliary method to eval by assignment when only have eval by vector
 
 	vector<FieldElement> assignmentToVector(const Algebra::VariableAssignment& assignment){
 		vector<FieldElement> retVal(assignment.size() * 2);
@@ -35,7 +35,7 @@ namespace Algebra{
 		}
 	}
 
-	//if selectorRelevant vector not given as input,assume all selectors are relevant
+	//if selectorRelevant vector not given as input, assume all selectors are relevant
 	SelectorSum::SelectorSum(const vector<CircuitPolynomial>& constraints, const vector<Variable>& selectorVariableVector, const vector<long>& selectorToConstraint) :
 		constraints(constraints),
         selectorToConstraint(selectorToConstraint),
@@ -51,7 +51,7 @@ namespace Algebra{
 			selectorVariables.insert(selectorVariableVector[i]);
 					}
 		for (unsigned int i = 0; i < selectorToConstraint.size();i++)
-			selectorRelevant.push_back(true);//if selectorRelevant vector not given as input,assume all selectors are relevant
+			selectorRelevant.push_back(true);//if selectorRelevant vector not given as input, assume all selectors are relevant
 
 	}
 
@@ -84,7 +84,7 @@ namespace Algebra{
         ALGEBRALIB_FATAL("Not implemented");
     }
 
-	//the need for this method has to do with different selectors having same P_i, as explaing in top of hpp file
+	//the need for this method has to do with different selectors having same P_i, as explained in top of hpp file
 	vector<FieldElement> SelectorSum::getConstraintCoeffs(const vector<FieldElement>& x)const{
 		vector<FieldElement> selectorVals = getSelectorVals(x);
 		vector<FieldElement> coeffs;
@@ -114,7 +114,7 @@ namespace Algebra{
 		long curLength = 2;
 
 		for (auto i = 1; i < selectorVarNum; i++){// in principle can do last  iteration of loop separately to avoid rounding up selectorNum to a power of 2
-			for (auto j = 0; j < curLength; j++){//copying the current vector.Then Mult each element of first copy by newVar +1, each element of second copy by newVar
+			for (auto j = 0; j < curLength; j++){//copying the current vector. Then Mult each element of first copy by newVar +1, each element of second copy by newVar
 				//doing it in a `crooked' way to do just mult by newVar, and not also the mult by newVar +1
 				selectorVals[j + curLength] = selectorVals[j] * x[selectorVars[i]];
 				selectorVals[j] += selectorVals[j + curLength];
@@ -198,7 +198,7 @@ namespace Algebra{
 		for (unsigned int i = 0; i < selectorVars.size(); i++)
 			selectorVars[i] = old2New[selectorVars[i]];
 	
-		varSet newSelectorVariables;//this somehwat silly intermiedate variable, is because (at least VS) compiler insists there is problem when using auto& below
+		varSet newSelectorVariables;//this somewhat silly intermediate variable, is because (at least VS) compiler insists there is problem when using auto& below
 		for (auto var : selectorVariables){
 			var.setNewIndex(old2New[var.getIndex()]);
 			newSelectorVariables.insert(var);

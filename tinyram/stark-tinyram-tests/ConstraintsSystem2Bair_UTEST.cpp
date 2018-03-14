@@ -90,7 +90,7 @@ void testProg(const TinyRAMProgram & prog, std::function<void(gadgetlib::Protobo
     vector<string> runtimeArgs;// = ::Configuration::getInstance().getRandomArgs();
 	int flags = 1|4;
 
-	//The folowing code is in a seperate block so the memory it allocates
+	//The following code is in a separate block so the memory it allocates
 	//won't pass on to the PCP proof constructions phase.
 	//Any case we get here some (lots of) memory that is passed on and I'm not sure why (Michael)
     // Init PB
