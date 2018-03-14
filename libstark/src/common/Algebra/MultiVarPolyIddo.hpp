@@ -13,7 +13,7 @@ namespace Algebra{
 	class MultiVarPoly : public PolynomialInterface{
 	public:
 
-		//adds monomial to polynomial. If monomial exists with different coefficient adds the new coefficint to exisiting monomial
+		//adds monomial to polynomial. If monomial exists with different coefficient adds the new coefficient to existing monomial
 		//Warning:Assumes monomial always contains variables in same order.
 		void AddMonomial(MultiVarMonomial M){
 			for (auto it = monomials.begin(); it != monomials.end(); it++){
