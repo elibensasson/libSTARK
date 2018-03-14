@@ -131,7 +131,7 @@ public:
     /**
      * return whether a specified input is effective:
      * it returns false only if the result
-     * can not be effected by the specified input
+     * can not be affected by the specified input
      */
     virtual bool isEffectiveInput(const size_t inputIndex)const;
 
@@ -148,7 +148,7 @@ protected:
 	 * the result is \f$ p(x) \cdot \q(y) \f$.
 	 * @param  other the other polynomial
 	 * @param  mergingGate a pointer to the merging gate. After it is passed to
-	 * this function it's management responsibility is passed to this lightCircPoly
+	 * this function, its management responsibility is passed to this lightCircPoly
 	 * (it is added to the circuits gates set, and will be released only by it)
 	 */
 	void mergeDistinctInputs(const lightCircPoly& other, LightCircLib::lightCircGate* mergingGate);
@@ -167,7 +167,7 @@ protected:
      * are added ().
 	 * @param  other the other polynomial
 	 * @param  mergingGate a pointer to the merging gate. After it is passed to
-	 * this function it's management responsibility is passed to this lightCircPoly
+	 * this function, its management responsibility is passed to this lightCircPoly
 	 * (it is added to the circuits gates set, and will be released only by it)
 	 */
 	void mergeSameInputs(const lightCircPoly& other, LightCircLib::lightCircGate* mergingGate);
