@@ -37,7 +37,7 @@ neighbors_(commonDef.witnessLayersAmount())
     constructAssignmentCS();
 
     //
-    // Routing network related naighbors
+    // Routing network related neighbors
     //
     
     if (commonDef.hasRoutingNetwork()){
