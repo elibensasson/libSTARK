@@ -17,7 +17,7 @@ namespace Algebra {
 class LinearizedPolynomial : public  AffinePolynomial{
 	
 	public:
-		/** Class Constructor - Assignes the given coefficient array to the newly created polynomial.
+		/** Class Constructor - Assigns the given coefficient array to the newly created polynomial.
 		Assigns the constant factor of the poly to be 0.
 		*/
 		LinearizedPolynomial(std::vector<FieldElement> coefficients) :AffinePolynomial(coefficients, zero()){};
