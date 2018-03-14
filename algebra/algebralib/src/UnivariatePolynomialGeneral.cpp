@@ -66,7 +66,7 @@ UnivariatePolynomialGeneral::UnivariatePolynomialGeneral(const evaluation_t& eva
     vector<FieldElement> vals(spaceSize);
     for(size_t i=0; (i>>basisSize)==0; i++){
         const auto iter = evaluationTabel.find(getSpaceElementByIndex(orderedBasis, zero(), i));
-        ALGEBRALIB_ASSERT(iter != evaluationTabel.end(),"Bad evaluation table, imposible interpolation");
+        ALGEBRALIB_ASSERT(iter != evaluationTabel.end(),"Bad evaluation table, impossible interpolation");
         vals[i] = iter->second;
     }
 
@@ -172,7 +172,7 @@ PolynomialDegree UnivariatePolynomialGeneral::getDegree()const {
 	
 unique_ptr<UnivariatePolynomialInterface> UnivariatePolynomialGeneral::divideByMe(const UnivariatePolynomialInterface& dividend)const {
    /*
-    * Division implemented using the algorithem from Wikipedia:
+    * Division implemented using the algorithm from Wikipedia:
     * https://en.wikipedia.org/wiki/Polynomial_long_division
     *
     * function n / d:
@@ -282,7 +282,7 @@ void UnivariatePolynomialGeneral::add(const UnivariatePolynomialGeneral& other){
     if(!degOfOther.isInteger())return;
 
     //otherwise, the other polynomial has effective coefficients.
-    //extend corrent poly len if needed
+    //extend current poly len if needed
     const size_t otherNumCoeffs = 1+PolynomialDegree::integral_t(degOfOther);
     if(polynomial_.size() < otherNumCoeffs){
         polynomial_.resize(otherNumCoeffs,zero());
