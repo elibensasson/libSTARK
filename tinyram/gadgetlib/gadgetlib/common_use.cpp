@@ -52,31 +52,31 @@ FieldElement getGeneratorPower(const unsigned int n){
 
 
 #define tempSelector
-Algebra::CircuitPolynomial getSelector(int programLength, int instructionLine, Algebra::UnpackedWord unpakedPC){
-	GADGETLIB_ASSERT(unpakedPC.size() >= Log2ceiled(programLength), "Number of unpacked bits used should be at least log length of the program");
+Algebra::CircuitPolynomial getSelector(int programLength, int instructionLine, Algebra::UnpackedWord unpackedPC){
+	GADGETLIB_ASSERT(unpackedPC.size() >= Log2ceiled(programLength), "Number of unpacked bits used should be at least log length of the program");
 	FElem value = (instructionLine & 1U) ? Algebra::one() : Algebra::zero();
 #ifndef tempSelector
 
-	Algebra::CircuitPolynomial selectorPoly(Algebra::one() + value + unpakedPC[0]);
+	Algebra::CircuitPolynomial selectorPoly(Algebra::one() + value + unpackedPC[0]);
 
 	instructionLine >>= 1U;
 	int i = 1;
-	while (instructionLine || i < unpakedPC.size()){
+	while (instructionLine || i < unpackedPC.size()){
 		FElem value = (instructionLine & 1U) ? Algebra::one() : Algebra::zero();
-		selectorPoly = selectorPoly * (Algebra::one() + value + unpakedPC[i]);
+		selectorPoly = selectorPoly * (Algebra::one() + value + unpackedPC[i]);
 		i++;
 		instructionLine >>= 1U;
 	}
 	return selectorPoly;
 #else
 	std::vector<Algebra::LinearCombination> lcVec;
-	Algebra::LinearCombination lc(Algebra::one() + value + unpakedPC[0]);
+	Algebra::LinearCombination lc(Algebra::one() + value + unpackedPC[0]);
 	lcVec.push_back(lc);
 	instructionLine >>= 1U;
 	unsigned int i = 1;
-	while (instructionLine || i < unpakedPC.size()){
+	while (instructionLine || i < unpackedPC.size()){
 		FElem value = (instructionLine & 1U) ? Algebra::one() : Algebra::zero();
-		lcVec.push_back(Algebra::one() + value + unpakedPC[i]);
+		lcVec.push_back(Algebra::one() + value + unpackedPC[i]);
 		i++;
 		instructionLine >>= 1U;
 	}
