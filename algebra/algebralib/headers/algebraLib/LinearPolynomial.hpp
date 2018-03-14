@@ -30,7 +30,7 @@ public:
 	/**
 	 * @brief   returns the value of the coefficient of \f$x^\text{index}\f$
 	 * @param   index the power of \f$x\f$ the coefficient multiplies 
-	 * @return   coefficient the value of the coefficient
+	 * @return   cefficient the value of the coefficient
 	 */
 	FieldElement getCoefficient(const unsigned int index)const;
 	 
