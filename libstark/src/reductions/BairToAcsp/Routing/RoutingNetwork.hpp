@@ -29,7 +29,7 @@ namespace BairToAcsp{
  *
  * A routing network with no constraints on, might be thought as
  * a matrix of nodes, each node holds some arbitrary data.
- * This may sound weird, but there is no constraints on 
+ * This may sound weird, but there are no constraints on 
  * on the data either. It may appear from no-where and disappear to nowhere.
  * Such a definition is used in order to get better performance,
  * because constraints defined must be enforced,
@@ -82,7 +82,7 @@ T reverseBits(const T& src){
 	case 8 : res = ((res & 0xf0f0f0f0f0f0f0f0)>>4) | ((res & 0x0f0f0f0f0f0f0f0f)<<4);
 	case 4 : res = ((res & 0xcccccccccccccccc)>>2) | ((res & 0x3333333333333333)<<2);
 	case 2 : res = ((res & 0xaaaaaaaaaaaaaaaa)>>1) | ((res & 0x5555555555555555)<<1); break;
-	default : _COMMON_FATAL("Unsupported variable size for bit reversing (if it is because we have an archtectore with 128 bit or more than 'WOW!' and the fix should be trivial, otherwise this should not happen)");
+	default : _COMMON_FATAL("Unsupported variable size for bit reversing (if it is because we have an architecture with 128 bit or more than 'WOW!' and the fix should be trivial, otherwise this should not happen)");
 	}
 	return res;
 }
