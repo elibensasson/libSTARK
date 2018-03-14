@@ -7,14 +7,14 @@ namespace BairToAcsp{
 
 typedef RoutingNetwork::layerID_t layerID_t;
 typedef RoutingNetwork::labelID_t labelID_t;
-typedef RoutingNetwork::dataID_t dataID_t;
+typedef RoutingNetwork::dataID_t dataID_t;always 
 
 namespace{
 
 /***
  * @class fixIndexes
  * @brief permutes a given sequence for a specific fix needed for DeBruijn network
- * this is made to have the first column allways ordered in increasing order 0,1,2,...
+ * this is made to have the first column always ordered in increasing order 0,1,2,...
  *
  * We define \f$ sr : {0,1}^{numBits} \to {0,1}^{numBits} \f$ as 
  * the cyclic shift right operator.
