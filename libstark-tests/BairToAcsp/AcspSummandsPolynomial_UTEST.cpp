@@ -17,7 +17,7 @@ namespace{
 	typedef std::vector<Algebra::FieldElement>  EvaluationPoint;
 	typedef libstark::BairToAcsp::AcspSummandsPolynomial::polyID polyID;
 	typedef std::vector<Algebra::SubspacePolynomial> SubspacePolyVec;
-	typedef std::pair<polyID, Algebra::FieldElement>  AuxPoly;   //the auxillary polynomials are represented by (an ID of a) subspace polynomial, and its shift
+	typedef std::pair<polyID, Algebra::FieldElement>  AuxPoly;   //the auxiliary polynomials are represented by (an ID of a) subspace polynomial, and its shift
 	typedef std::vector<AuxPoly> AuxPolyVec;
 	typedef Algebra::UnivariatePolynomialInterface uniPoly;
 	using std::move;
@@ -29,7 +29,7 @@ namespace{
 #define SET_SIZE 11
 #define NUM_OF_SUMMANDS 200
 #define NUM_OF_NEIGHBORS 20
-	/***Auxilary functions to be used in tests **/
+	/***Auxiliary functions to be used in tests **/
 
 	//creates a set containing only the 0 field element
 	elementsSet_t zeroSet(){
