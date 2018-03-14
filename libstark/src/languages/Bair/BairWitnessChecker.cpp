@@ -50,7 +50,7 @@ bool BairWitnessChecker::verify(const BairInstance& instance, const BairWitness&
 }
 
 bool BairWitnessChecker::verify_permutation(const BairInstance& instance, const BairWitness& witness){
-	TASK("verifyin mapping is permutation");
+	TASK("verifying mapping is permutation");
 	size_t numElements = instance.domainSize();
 	return isPermutation(numElements,witness.permutation());
 }
