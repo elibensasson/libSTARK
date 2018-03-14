@@ -832,7 +832,7 @@ void GPU_FFT::taylorExpansion_gpu(const FFT* fft, Chunk* d_chunk_P, len_t p_len 
 	/*
 	 *  Input:
 	 *  1) d_chunk_p - The polynomial on device's memory.
-	 *  2) p_len - number of chunks in d_cunnk_p.
+	 *  2) p_len - number of chunks in d_chunk_p.
 	 *  3) chunk_idx - the chunk current thread has to deal with.
 	 *  4) in_chunk_idx - the number of the cell the current thread deals with.
 	 *  5) t_dim - The dim of the original (input) subpolynomial.
@@ -1135,7 +1135,7 @@ __device__ void InTB_postMulShrink(	Chunk * const d_a,
  * The state of d_a[1] is unknown at the end.
  *
  * 1)	d_a - the chunk the mult.
- * 2) 	in_chunk_idx - Is thread index % Chunk::elemets_in_chunk
+ * 2) 	in_chunk_idx - Is thread index % Chunk::elements_in_chunk
  */
 __device__ void InTB_Mult(Chunk* const d_a, const idx_t in_chunk_idx){
 	Chunk::clmul_by_chunk(*d_a,d_a[1],in_chunk_idx,d_a);
@@ -1148,7 +1148,7 @@ __device__ void InTB_Mult(Chunk* const d_a, const idx_t in_chunk_idx){
  * 2) exp - pointer to the exponents to multiply (global mem).
  * 3) dim - dimension of multiexponentiation.
  * 4) idx - thread index.
- * 5) chunkIdx - idx/Chunk::elemets_in_chunk.
+ * 5) chunkIdx - idx/Chunk::elements_in_chunk.
  * 6) in_chunk_idx - idx%Chunk::elements_in_chunk.
  */
  __device__ void InTB_MultiExp(	Chunk* const d_a,
@@ -1406,10 +1406,10 @@ __device__ void InTB_WFromUV_inChunk(	Chunk* const d_a,
 										const idx_t in_chunk_idx,
 										const len_t half_d_a_len){
 	/*
-	 * 1)backup the WHOLE cell.
+	 * 1)Backup the WHOLE cell.
 	 * 2)Multiply by subspace chunk (will nullify lower top).
-	 * 3)Xor by it self when shifting right subspace-times.
-	 * 4) Xor the load.
+	 * 3)Xor by itself when shifting right subspace-times.
+	 * 4)Xor the load.
 	 */
 	chunk_cell_t load[4];
 	/*
@@ -1687,7 +1687,7 @@ k_gpuFFT_InTB(Chunk* const d_a, Chunk** subspaces, Chunk** exps, len_t dim, cons
 		}
 	 }
 /*
- * This is the inverse FFT imnplementation
+ * This is the inverse FFT implementation
  */
 
  void GPU_FFT::ifft_gpu(const FFT* const fft,Polynomial* P){
@@ -1864,7 +1864,7 @@ void GPU_FFT::itaylorExpansion_gpu(const FFT* fft, Chunk* d_chunk_P, len_t p_len
 	/*
 	 *  Input:
 	 *  1) d_chunk_p - The polynomial on device's memory.
-	 *  2) p_len - number of chunks in d_cunnk_p.
+	 *  2) p_len - number of chunks in d_chunk_p.
 	 *  3) chunk_idx - the chunk current thread has to deal with.
 	 *  4) in_chunk_idx - the number of the cell the current thread deals with.
 	 *  5) t_dim - The dim of the original (input) subpolynomial.
