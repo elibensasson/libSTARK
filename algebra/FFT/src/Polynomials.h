@@ -19,7 +19,7 @@ class Polynomials {
 public:
 	/*
 	 * Calculates the Taylor Expansion of p at (x^2-x).
-	 * Given a polynomial f(x) of deg 2^(k+1) calcuating the taylor expansion of f(x)
+	 * Given a polynomial f(x) of deg 2^(k+1) calculating the taylor expansion of f(x)
 	 * at (x^2-x) is finding m=2^k polynomials h_0(x),...,h_(m-1)(x), each of degree <= 2.
 	 * Such that:
 	 * 			f(x)= h_0(x)*(x^2-x)^0+ h_1(x)*(x^2-x)^1+....+h_(m-1)(x)*(x^2-x)^(m-1).
