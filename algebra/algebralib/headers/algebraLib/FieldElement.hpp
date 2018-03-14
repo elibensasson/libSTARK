@@ -155,7 +155,7 @@ inline FieldElement power(const FieldElement& a, long e)
 /**
  * @brief   An order on field elements
  * This exists only in order to be able to keep
- * field elements in an STL set, hance the order
+ * field elements in an STL set, hence the order
  * is arbitrary, as long as it really is an order.
  * In this case lexicographically, representing each
  * FieldElement as vector of bytes
@@ -196,7 +196,7 @@ std::vector<FieldElement> getStandartOrderedBasis(const unsigned short basisSize
  * Let "numToWrite" = \f$ 2^0  b_0 + 2^1  b_1 + \dots + 2^k  b_k \f$
  * Lets name "shift" as S , and "numBits" as N
  *
- * This functions generated the field element that
+ * These functions generated the field element that
  * as a polynomial over GF(2) might be represented as:
  * \f$ x^{s} b_0 + x^{s+1} b_1 + \dots x^{s+n-1} b_{n-1} \f$
  **/
