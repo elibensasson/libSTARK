@@ -261,7 +261,7 @@
 		Algebra::Variable timeStamp0 = followingTraceVariables_.first_.timeStamp_;
 		Algebra::Variable timeStamp1 = followingTraceVariables_.second_.timeStamp_;
 		pb_->val(timeStamp1) = pb_->val(timeStamp0) * generator;
-		// Timestamp is reprented by g^i in order to know the degree of the element
+		// Timestamp is represented by g^i in order to know the degree of the element
 		// we keep a mapping between the FELem and i. Each time we increase the timestamp,
 		// we update the mapping in protoboard
 		unsigned int timeStampDegree = (pb_->val(timeStamp0) == Algebra::one()) ? 0 : pb_->getDegreeOfFElem(pb_->val(timeStamp0));

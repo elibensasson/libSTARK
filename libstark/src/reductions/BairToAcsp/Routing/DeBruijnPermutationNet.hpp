@@ -49,7 +49,7 @@ namespace BairToAcsp{
  * \f$ \phi(\ell_i , \omega) = (\ell_i , sr^{(k + 1 -l) \mod k}(\omega)) \f$
  *
  * # What is this class #
- * This class uses the isomorphism mentioned above. It hold an instance of a 4 butterflies networks
+ * This class uses the isomorphism mentioned above. It holds an instance of a 4 butterfly network
  * that routes the needed permutation, and translates the addresses using the mentioned isomorphism to
  * get a De Bruijn from it.
  */

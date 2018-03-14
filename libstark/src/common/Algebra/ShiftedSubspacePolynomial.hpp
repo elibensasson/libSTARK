@@ -4,7 +4,7 @@ These have the property that the linear part is a subspace polynomial - (see exp
 SubspacePolynomial)
 The only difference between this class and SubspacePolynomial is that the constantFactor_ member
 is not required to be zero.
-(and therefore, the constructor of this class recieves the value of constantFactor_  as a parameter)
+(and therefore, the constructor of this class receives the value of constantFactor_  as a parameter)
 */
 
 #ifndef _COMMON_ALGEBRA_SHIFTEDSUBSPACEPOLYNOMIAL_HPP__

@@ -11,7 +11,7 @@ namespace libstark{
 
 /** 
  * @class RationalConstraintSys
- * @brief An interface for representation of system of ratonal constraints.
+ * @brief An interface for representation of system of rational constraints.
  *
  * A rational constraint system \f$ \mathcal{C} \f$ is a pair \f$ \f$
  *

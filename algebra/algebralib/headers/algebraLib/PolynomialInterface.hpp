@@ -113,7 +113,7 @@ public:
 	virtual FieldElement eval(const FieldElement& x)const = 0;
 
     /**
-     * @brief evaluates a polynomial over a givven space (represented by a ordered basis and affine shift)
+     * @brief evaluates a polynomial over a given space (represented by a ordered basis and affine shift)
      * @return the evaluation as a vector, element number \f$ \sum_{i=0}^n b_i \cdot 2^i \f$ represents
      *          the value at the point \f$ shift + \sum_{i=0}^n (basis element)_i \cdot 2^i \f$
      */

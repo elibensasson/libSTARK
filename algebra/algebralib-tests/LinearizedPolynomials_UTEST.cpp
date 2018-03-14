@@ -200,4 +200,4 @@ TEST(Algebra, linearizedPolynomialConstructor){
 
 
 
-} //anonimus namespace
+} //anonymous namespace

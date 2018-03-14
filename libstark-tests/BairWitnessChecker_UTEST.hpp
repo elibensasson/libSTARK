@@ -17,7 +17,7 @@ std::pair<libstark::BairInstance,libstark::BairWitness> generate_valid_boundary(
 
 /***************************************************
  *
- * This generates a invalid Bair pair,
+ * This generates an invalid Bair pair,
  * with no constraints and no permutations.
  * the only relevant test here is boundary constraints.
  *
@@ -55,7 +55,7 @@ std::pair<libstark::BairInstance,libstark::BairWitness> generate_invalid_permuta
  * Generation method:
  * generates all parameters but the
  * constraint systems.
- * And defines each constraint system to be saticfied
+ * And defines each constraint system to be satisfied
  * exactly from the parameters given.
  * 
  ***************************************************/
@@ -74,7 +74,7 @@ std::pair<libstark::BairInstance,libstark::BairWitness> generate_valid_constrain
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *
@@ -96,7 +96,7 @@ std::pair<libstark::BairInstance,libstark::BairWitness> generate_invalid_constra
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *
@@ -118,7 +118,7 @@ std::pair<libstark::BairInstance,libstark::BairWitness> generate_invalid_constra
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *

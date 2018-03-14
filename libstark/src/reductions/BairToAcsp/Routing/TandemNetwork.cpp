@@ -16,7 +16,7 @@ layerID_t TandemNetwork::width()const{
 	for (const auto& network : networks_){
 		amount += network->width() - 1;
 		//-1 because for each network, the first layer is
-		//shared with the last layer of previouse network (if there is such)
+		//shared with the last layer of previous network (if there is such)
 	}
 	return amount;
 }

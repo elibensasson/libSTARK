@@ -38,7 +38,7 @@ namespace Algebra{
 			return coefficients;
 
 
-		//Initialzing as the subspace poly of the space {0} - which is x
+		//Initializing as the subspace poly of the space {0} - which is x
 		coefficients.push_back(one());
 		FieldElement c, eiPower;
 		unsigned int i = 0, j;

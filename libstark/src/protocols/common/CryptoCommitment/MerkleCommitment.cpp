@@ -344,12 +344,12 @@ hashDigest_t SparceMerkleLayer::hashPair(const size_t idx)const{
     return hash(src);
 }
 
-SparceMerkleLayer SparceMerkleLayer::calculateNextLayer(const SparceMerkleLayer& recieved)const{
-    SparceMerkleLayer res = recieved;
+SparceMerkleLayer SparceMerkleLayer::calculateNextLayer(const SparceMerkleLayer& received)const{
+    SparceMerkleLayer res = received;
     
     //as it is sufficient to scan only pairs
     //we can skip every second entry,
-    //as it is handled already by it's mate
+    //as it is handled already by its mate
     bool needToCalc = false;
     for(const auto& v: data_){
         needToCalc = !needToCalc;
@@ -410,7 +410,7 @@ std::vector< std::pair<short,size_t> > SparceMerkleTree::getSerializationMapping
     std::vector< std::pair<short,size_t> > res;
     
     //A partial mapping from index that can be calculated
-    //to wether it is explicit in the serialized subtree (true)
+    //to whether it is explicit in the serialized subtree (true)
     //or implied by lower layer (false)
     std::map<size_t,bool> knownIndices;
 
@@ -433,7 +433,7 @@ std::vector< std::pair<short,size_t> > SparceMerkleTree::getSerializationMapping
             next_knownIndices[known.first>>1] = false;
         }
 
-        //Any element in next known indices that is known must have it's mate
+        //Any element in next known indices that is known must have its mate
         //known as well, thus if it is not known implicitly it must be passed explicitly
         //in the serialization
         std::vector<size_t> explictlyKnown;
@@ -471,8 +471,8 @@ void SparceMerkleTree::addPath(const std::array<hashDigest_t,2>& data, const pat
 hashDigest_t SparceMerkleTree::calculateRoot()const{
     SparceMerkleLayer currLayer;
 
-    for(const auto& recievedLayer : layers_){
-        currLayer = currLayer.calculateNextLayer(recievedLayer);
+    for(const auto& receivedLayer : layers_){
+        currLayer = currLayer.calculateNextLayer(receivedLayer);
     }
     
     const hashDigest_t rootCalculated = currLayer.hashPair(0);

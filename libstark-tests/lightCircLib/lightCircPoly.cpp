@@ -90,7 +90,7 @@ unique_ptr<PolynomialInterface> lightCircPoly::clone()const{
 	
 
 /**
- * @brief   A constructor to that expand the amount of inputs of a givven
+ * @brief   A constructor to that expand the amount of inputs of a given
  * lightCircPoly
  *
  * It requires a mapping from the original inputs indexes to new inputs indexes
@@ -214,7 +214,7 @@ PolynomialDegree lightCircPoly::getDegree()const {
 /**
  * return whether a specified input is effective:
  * it returns false only if the result
- * can not be effected by the specified input
+ * can not be affected by the specified input
  */
 bool lightCircPoly::isEffectiveInput(const size_t inputIndex)const{
     return model_->isInputEffective(inputIndex);

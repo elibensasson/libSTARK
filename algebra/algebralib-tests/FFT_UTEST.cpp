@@ -93,7 +93,7 @@ TEST(Algebra,novelFFT_single){
     const unsigned short basisSize = 10;
     const size_t polyDeg = (1<<basisSize);
     
-    //construct the basis (just the standard basis)
+    //construct the basis (just the standart basis)
     elementsSet_t basisUnordered = getStandartBasis(basisSize);
     vector<FieldElement> orderedBasis;
     for(const auto& b : basisUnordered) orderedBasis.push_back(b);
@@ -131,7 +131,7 @@ TEST(Algebra,novelFFT_multiple){
     const size_t numPolys = 2;//5;
     const size_t numCosets = 1;//3;
     
-    //construct the basis (just the standard basis)
+    //construct the basis (just the standart basis)
     elementsSet_t basisUnordered = getStandartBasis(basisSize);
     vector<FieldElement> orderedBasis;
     for(const auto& b : basisUnordered) orderedBasis.push_back(b);
@@ -196,7 +196,7 @@ TEST(Algebra,FFT_LDE){
         vals.push_back(generateRandom());
     }
 
-    //comput the LDE
+    //compute the LDE
     vector<FieldElement> LDE_res = LDE(vals, orderedBasis_src, shift_src, orderedBasis_dst, shift_dst);
 
     //compute the reference

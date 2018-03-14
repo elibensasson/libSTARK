@@ -11,7 +11,7 @@
  * # Proof #
  * The proof is constructive, and well explained at 
  * http://pages.cs.wisc.edu/~tvrdik/10/html/Section10.html
- * (under off-line permutaion routing)
+ * (under off-line permutation routing)
  *
  *
  *     @author  Michael Riabzev (), RiabzevMichael@gmail.com
@@ -136,7 +136,7 @@ void static constructBenes_recursive(matrixNetwork& revBtrfly, matrixNetwork& bt
 	
 void BenesNetwork::rout(const permutation_t& permutation){
 	if(!isPermutation(permutation)){
-		_COMMON_FATAL("Can't rout given sequence, it is noot a permutation");
+		_COMMON_FATAL("Can't rout given sequence, it is not a permutation");
 	}
 
 	data_.reset(constructBenes(permutation));
@@ -146,7 +146,7 @@ void BenesNetwork::rout(const permutation_t& permutation){
 
 dataID_t BenesNetwork::getDataID(const layerID_t& l, const labelID_t& w) const{
 	if (!isRouted){
-		_COMMON_FATAL("Can't get data, network ot routed");
+		_COMMON_FATAL("Can't get data, network not routed");
 	}
 	return data_.getDataID(l,w);
 }

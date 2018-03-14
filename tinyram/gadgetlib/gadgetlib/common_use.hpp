@@ -71,9 +71,9 @@ enum class Opcode : int {
 std::vector<Algebra::Variable> getPCVars(const Algebra::UnpackedWord& pc);
 
 
-// We need the unpakcedPC be at least the log(programLength). 
+// We need the unpackedPC be at least the log(programLength). 
 // The polynomial is Product (
-Algebra::CircuitPolynomial getSelector(int programLength, int instructionLine, Algebra::UnpackedWord unpakedPC);
+Algebra::CircuitPolynomial getSelector(int programLength, int instructionLine, Algebra::UnpackedWord unpackedPC);
 
 
 

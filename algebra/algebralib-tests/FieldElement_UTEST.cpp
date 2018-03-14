@@ -31,7 +31,7 @@ using Algebra::invertPointwise;
 using std::vector;
 
 /**
- * A function to test that field elements comparisonf
+ * A function to test that field elements comparison
  * function (for stl collections usage)
  * works
  */
@@ -104,4 +104,4 @@ TEST(Algebra,elementInvertVector){
     }
 }
 
-} //anonimus namespace
+} //anonymous namespace
