@@ -22,7 +22,7 @@ Variable::Variable(const std::string& name) :
     index_(nextFreeIndex_++),
     newIndex_(-1),
     name_(name){
-	ALGEBRALIB_ASSERT(nextFreeIndex_ > 0, ALGEBRALIB_FMT("Variable index overflow has occured, maximum number of "
+	ALGEBRALIB_ASSERT(nextFreeIndex_ > 0, ALGEBRALIB_FMT("Variable index overflow has occurred, maximum number of "
 		"Variables is %lu", ULONG_MAX));
 }
 
@@ -49,7 +49,7 @@ FElem Variable::eval(const std::vector<FElem>& assignment) const {
 }
 
 VarIndex_t Variable::getNewIndex() const {
-	//ALGEBRALIB_ASSERT(newIndex_ < 0, "trying to getNewIndex from varialbe when it is negative - meaning probably not initialized");
+	//ALGEBRALIB_ASSERT(newIndex_ < 0, "trying to getNewIndex from variable when it is negative - meaning probably not initialized");
 	return newIndex_;
 }
 
