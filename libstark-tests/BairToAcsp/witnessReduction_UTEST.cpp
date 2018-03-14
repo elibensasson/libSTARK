@@ -306,4 +306,4 @@ TEST(BairToAcspWitness,PermutationOnAdditionalElement){
     verifyPermutation_aditionalElement(src,*witness);
 }
 
-} //anonymus namespace
+} //anonymous namespace
