@@ -35,7 +35,7 @@ public:
 	 */
 	Basis basis;
 	/*
-	 * This is the series of bases over which the polynomial is actually recusrively evaluated.
+	 * This is the series of bases over which the polynomial is actually recursively evaluated.
 	 */
 	Basis* bases;
 	/*
@@ -75,7 +75,7 @@ public:
 	Chunk** gpu_exp;
 	Chunk** gpu_i_exp;
 	/*
-	 * This is the chunk that is used for the last phase, every even element in the chunk contains lastD+lastShift, every odd one will contains only lastD.
+	 * This is the chunk that is used for the last phase, every even element in the chunk contains lastD+lastShift, every odd one will contain only lastD.
 	 */
 	Chunk linear_mul;
 	Chunk ilinear_mul;
