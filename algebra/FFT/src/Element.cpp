@@ -248,7 +248,7 @@ void Element::do_FFT_step(const Element& factor,Element* a, Element* b, const in
             // thus there are only 8 possibilities for each polynomial.
             // Moreover, the product of any such option by 1 + x + x^3 + x^4 is a polynomial
             // of degree oat most 2+4=6,
-            // and in particular, defined by it's first byte.
+            // and in particular, defined by its first byte.
             // We use a precomputed lookup table to compute the required reductions:
             //
             // xmmCarry1[ 64: 0] = ( ( ( (factor * a[0]) div x^64 ) * ( 1 + x + x^3 + x^4 ) (div x^64) ) * x^64 ) (mod Irr(x))
