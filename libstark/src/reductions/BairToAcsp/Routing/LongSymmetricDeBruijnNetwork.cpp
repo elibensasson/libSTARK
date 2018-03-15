@@ -36,7 +36,7 @@ dataID_t LongSymmetricDeBruijnNetwork::getDataID(const layerID_t& l, const label
 
     //else : simulate constant routing to "first" neighbor (no XOR)
 	
-    const labelID_t mask = (1<<k_)-1; // the mask is least segnificant $k$ bits set
+    const labelID_t mask = (1<<k_)-1; // the mask is least significant $k$ bits set
     labelID_t baseLabel;
 
     if ( l < halfWidth_){

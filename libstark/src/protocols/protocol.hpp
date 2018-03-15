@@ -57,7 +57,7 @@ public:
 
 
 //
-// A partie that wants to verify a very big an fixed input
+// A partie that wants to verify a very big and fixed input
 // is closed to some code C.
 //
 // The verifier first interacts with the prover,

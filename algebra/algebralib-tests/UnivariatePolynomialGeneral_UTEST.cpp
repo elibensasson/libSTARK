@@ -158,7 +158,7 @@ TEST(Algebra,UniPolyInterpulation){
 
     //construct basis superset
     //This set will contain the basis
-    //which will be exactly the first linearly undependant
+    //which will be exactly the first linearly independent
     //elements the iterator will go over
     elementsSet_t basis_supset;
     for(int i=0; i<basisMaxSize; i++){
@@ -168,11 +168,11 @@ TEST(Algebra,UniPolyInterpulation){
     //construct evaluation map for the vector space
     //spanned by the basis (each coefficient is 0 or 1)
     //
-    //while constructing the mapping, remove linearly dependant
+    //while constructing the mapping, remove linearly dependent
     //elements from the basis set
     //do it by in every step looking at the next element
     //in the basis super set, if this element has already
-    //an evaluation than it is dependant with the previous
+    //an evaluation than it is dependent with the previous
     //elements, and will be skipped.
     //Otherwise, the element will be added to the basis set,
     //and we will find a random evaluation for all the elements
@@ -194,7 +194,7 @@ TEST(Algebra,UniPolyInterpulation){
         //otherwise, add to basis, and expand the mapping
         basis.insert(belem);
         for(const auto& point : mapping){
-            //The if is just so we wont get into an infinite loop
+            //The if is just so we won't get into an infinite loop
             if(mapping.count(point.first + belem) == 0){
                 mapping[point.first + belem] = generateRandom();
             }
@@ -215,4 +215,4 @@ TEST(Algebra,UniPolyInterpulation){
     }
 }
 
-} //anonimus namespace
+} //anonymous namespace

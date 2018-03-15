@@ -163,7 +163,7 @@ public:
     //A hint for fast construction of the composition polynomial
     compAlgorithm_t compositionAlgorithm_; 
 
-    //A hint for the determenistic witness checker for faster check if vanishing on vanishing set
+    //A hint for the deterministic witness checker for faster check if vanishing on vanishing set
     witnessCheckerHelperAlgorithm_t witnessCheckerHelperAlgorithm_;
 
     static std::vector<Algebra::FieldElement> naiveComposition_N_division_Alg(const AcspInstance& instance, const AcspWitness& witness, const std::vector<Algebra::FieldElement>& basis, const Algebra::FieldElement& shift, const bool witnessIsEvaluation){

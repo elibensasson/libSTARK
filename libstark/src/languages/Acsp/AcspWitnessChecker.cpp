@@ -20,7 +20,7 @@ class notRootPredicate : public ::Algebra::FieldElementPredicate {
 public:
 	/**
 	 * @brief   The constructor
-	 * @param   instnace that contains a constraint polynomial
+	 * @param   instance that contains a constraint polynomial
 	 * \f$P:\mathbb{F}^n \to \mathbb{F}\f$ and a neighbors polynomials
 	 * vector \f$\vec{N}:\mathbb{F}^n \to  \mathbb{F}^n\f$
 	 * @param   witness that contains an assignment polynomial \f$A:\mathbb{F} \to \mathbb{F}\f$

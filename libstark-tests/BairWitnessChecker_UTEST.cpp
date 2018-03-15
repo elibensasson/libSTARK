@@ -158,7 +158,7 @@ vector<FieldElement> getRandomPadding(const size_t& vectorLen){
  ****************************************************************/
 
 /********************
- * Allways saticfied
+ * Always satisfied
  *******************/
 class allwaysSatisfiedSystem : public ConstraintSys{
 public:
@@ -214,7 +214,7 @@ public:
             }
             if (makeIncomplete){
             //remove one root, so the system
-            //wont be saticfied by current setting
+            //won't be satisfied by current setting
                 size_t i = rand() % (domainSize-1);
                 size_t perm_img = permutation.getElementByIndex(i);
                 BairWitness::color_t c1 = witness.get_color(i);
@@ -340,7 +340,7 @@ private:
         polys_.push_back(polyPtr_t(new lightCircPoly(selectorForCurrNode,numVars_,originalVarsLocations)));
         }
      
-        //For each posible value for the current variable,
+        //For each possible value for the current variable,
         //build a selector polynomial that vanishes on every other
         //option prefix, but that value.
         //This polynomial would be a factor of a polynomial
@@ -390,7 +390,7 @@ private:
         polys_.push_back(polyPtr_t(new lightCircPoly(vanishesOnFirstElem,numVars_,originalVarsLocations)));
         }
 
-        //For each posible value for the first variable,
+        //For each possible value for the first variable,
         //build a polynomial that vanishes on every other
         //option, but that value.
         //This polynomial would be a factor of a polynomial
@@ -459,7 +459,7 @@ pair<BairInstance,BairWitness> generate_valid_boundary(){
 
 /***************************************************
  *
- * This generates a invalid Bair pair,
+ * This generates an invalid Bair pair,
  * with no constraints and no permutations.
  * the only relevant test here is boundary constraints.
  *
@@ -619,7 +619,7 @@ pair<BairInstance,BairWitness> generate_invalid_permutations(){
  * Generation method:
  * generates all parameters but the
  * constraint systems.
- * And defines each constraint system to be saticfied
+ * And defines each constraint system to be satisfied
  * exactly from the parameters given.
  * 
  ***************************************************/
@@ -665,7 +665,7 @@ pair<BairInstance,BairWitness> generate_valid_constraints(){
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *
@@ -714,7 +714,7 @@ pair<BairInstance,BairWitness> generate_invalid_constraints_Assignment(){
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *
@@ -763,7 +763,7 @@ pair<BairInstance,BairWitness> generate_invalid_constraints_Permutation(){
  * And defines each constraint system to be satisfied
  * exactly from the parameters given,
  * except of one victim constraints system that is
- * chosen randomely, one victim index 'i',
+ * chosen randomly, one victim index 'i',
  * such that the test of that index 
  * (color(i),color(perm(i))) will fail.
  *

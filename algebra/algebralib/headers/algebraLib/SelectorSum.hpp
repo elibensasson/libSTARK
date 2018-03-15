@@ -61,7 +61,7 @@ namespace Algebra{
 		vector<FieldElement> getSelectorVals(const vector<FieldElement>& x)const;
 		vector <CircuitPolynomial> constraints;
 		vector<VarIndex_t> selectorVars;
-		varSet selectorVariables;//need to store this in addition to one above is to be able to implememnt the getUsedVariables method - needed for SelectorSum class to 
+		varSet selectorVariables;//need to store this in addition to one above is to be able to implement the getUsedVariables method - needed for SelectorSum class to 
 										//inside CircuitPolynomial
 		vector<long> selectorToConstraint; //v[i] tells us what constraint S_i should multiply
 		vector<bool> selectorRelevant; //v[i] tells us if i'th selector S_i really used in this polynomial

@@ -142,7 +142,7 @@ TEST(MerkleCommitment,SparceTree){
         }
     }
 
-    //Serialize and Desierialize test
+    //Serialize and Deserialize test
     {
         const auto serialTree = subTree.toVector();
         SparceMerkleTree subTree_DS(NUM_BYTES_LOG);

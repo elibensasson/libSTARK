@@ -71,8 +71,8 @@ void ALUInputConsistency::generateWitness(unsigned int i){
 	::std::shared_ptr<const TinyRAMProtoboardParams> params = std::dynamic_pointer_cast<const TinyRAMProtoboardParams>(pb_->params());
 	unsigned int arg1 = program_.code()[i].arg1Idx_;
 	unsigned int dest = program_.code()[i].destIdx_;
-	bool arg2IsImmidiate = program_.code()[i].arg2isImmediate_; //If 1 then arg2 is immidiate
-	if (!arg2IsImmidiate){
+	bool arg2IsImmediate = program_.code()[i].arg2isImmediate_; //If 1 then arg2 is immediate
+	if (!arg2IsImmediate){
 		unsigned int arg2 = program_.code()[i].arg2IdxOrImmediate_;
 		pb_->val(output_.arg2_val_) = pb_->val(input_.registers_[arg2]);
 	}

@@ -211,7 +211,7 @@ void FFT::AlgFFT(Polynomial* P, len_t p_len)const{
 #endif	// #ifdef __GPU
 		// Use this for debug, print out of the polynomial
 //		std::cout << "here in Matan's ALGFFT:" << std::endl;
-//		Polynomials::printPolynomial(*P,8);//temp added for debuging ARIEL
+//		Polynomials::printPolynomial(*P,8);//temp added for debugging ARIEL
 	}
 
 void FFT::AlgIFFT(Element* P){
@@ -224,7 +224,7 @@ void FFT::AlgIFFT(Element* P){
 		
 	}
 	/*
-	 * Allocating Version of the FFT Algoirthm
+	 * Allocating Version of the FFT Algorithm
 	 */
 	void FFT::AlgFFT(const Polynomial* P, len_t p_len,  Element** res){
 		if(p_len > (1UL<<this->basis.getSize()))

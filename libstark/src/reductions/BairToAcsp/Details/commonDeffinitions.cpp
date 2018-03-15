@@ -127,7 +127,7 @@ pair<vector<size_t>,vector<unique_ptr<PolynomialInterface>>> commonDeffinitions:
 
     vector<size_t> unusedIndexes;
     //Push only the indexes that are not routed
-    //meaning, only those that the constraints system not uses
+    //meaning, only those that the constraints system does not use
     //from the second vector
     for(size_t i=vecLen; i< 2*vecLen; i++){
         if(!CSystemPermutation.varUsed(i)){

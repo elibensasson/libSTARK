@@ -240,7 +240,7 @@ prover_t::prover_t(const std::vector<FieldElement>& evaluationBasis, std::vector
     {
 
     //
-    //construct the root evaqluation
+    //construct the root evaluation
     //
     {
         TASK("Constructing proof of proximity root");
@@ -289,7 +289,7 @@ vector<hashDigest_t> prover_t::constructProofs(const vector<subproofLocation_t>&
     vector<hashDigest_t> result(proofsList.size());
 
     //
-    // First comitment for root, if was requested
+    // First commitment for root, if was requested
     //
     {
         if(requestsByLayer.count(0) > 0){

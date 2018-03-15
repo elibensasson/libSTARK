@@ -15,12 +15,12 @@ namespace Algebra{
 ///
 /// This algorithm has O(n \log n ) time complexity, with very low constants
 /// It is very easy to use to evaluate many polynomials at one shot over the same space.
-/// It's additional space complexity is less then the evaluation size.
+/// It's additional space complexity is less than the evaluation size.
 ///
 /// As this algorithm uses special polynomial basis,
 /// it first transforms coefficients over the standard basis to coefficients
 /// for the special basis, this is done by evaluation (using Matans FFT) and
-/// IFFT using the nofel IFFT algorithm.
+/// IFFT using the novel IFFT algorithm.
 ///
 /// The coefficients in the special basis are kept for future evaluation.
 /// 

@@ -70,7 +70,7 @@ namespace BairToAcsp{
  * and the first layer of the butterfly network)
  *
  * ## Important fact ##
- * For any any given permutation \f$ \pi: \{0,1,\dots,2^k -1\} \to \{0,1,\dots,2^k -1\} \f$,
+ * For any given permutation \f$ \pi: \{0,1,\dots,2^k -1\} \to \{0,1,\dots,2^k -1\} \f$,
  * there exists a Benes network of degree \f$ k \f$ that routs the data packets \f$ \{0,1,\dots,2^k -1\} \f$ using distinct
  * nodes, such that a data packet \f$ d \f$ is in the last layer in the node labeled \f$ \omega \f$
  * if and only if the data packet \f$ \pi(d) \f$ is located in the first layer at the node labeled \f$ \omega \f$

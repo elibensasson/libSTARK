@@ -26,7 +26,7 @@ namespace libstark {
 
 
 /**
- * The ErrorHandling class containimplements the functionality of displaying the content of error
+ * The ErrorHandling class contains and implements the functionality of displaying the content of error
  * messages (including content of call stack when error happened), and exiting the program.
  */
 class ErrorHandling {

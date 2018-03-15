@@ -8,7 +8,7 @@ namespace libstark {
 
 /**
  * @class BairWitnessChecker
- * @brief class for determenistic Bair Witness Checker
+ * @brief class for deterministic Bair Witness Checker
  *
  * For two assignments \f$ \alpha , \beta : \mathcal{V} \to \mathbb{F} \f$ we define \f$ (\alpha,\beta):\mathcal{V} \times\{0,1\} \to \mathbb{F} \f$ by:
  * \f[ 

@@ -179,16 +179,16 @@ verifier_t::verifier_t(const vector<FieldElement> evaluationBasis, const unsigne
 
     TASK("Generating Reed Solomon Proximity proofs queries to reach security level of " +
             std::to_string(securityLevel) +
-            " bits, for evaluation over a space of dimention " + 
+            " bits, for evaluation over a space of dimension " + 
             std::to_string(evaluationBasis.size()));
 
     //
     // Construct queries
     //
     {
-        // construct comitment paths and link to results
+        // construct commitment paths and link to results
         {
-            TASK("Generating " + std::to_string(numComitmentPaths) + " commites query paths of depth " + std::to_string(depth_));
+            TASK("Generating " + std::to_string(numComitmentPaths) + " commitment query paths of depth " + std::to_string(depth_));
 
             RS_results_.resize(numComitmentPaths);
             for(size_t i=0; i< numComitmentPaths; i++){
@@ -225,7 +225,7 @@ verifier_t::verifier_t(const vector<FieldElement> evaluationBasis, const unsigne
     // Construct first layer
     //
     {
-        //small hack - this line 'asks' first for the 0 layer (the linear combinatoin) 
+        //small hack - this line 'asks' first for the 0 layer (the linear combination) 
         currProofRequests_.push_back( proofRequest_t(&state_,subproofLocation_t(0)));
 
         //now asks for the next layer

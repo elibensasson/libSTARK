@@ -26,7 +26,7 @@ namespace BairToAcsp{
  * \f$P_i\f$ - the multivariate polynomial representing the constraint , is a rather general polynomial, but usually very low-degree - typically 2 or 3 (but might be arbitrary).
  * 
  * \f$Sel_i\f$ - the 'Selector polynomial', is a polynomial of relatively high degree\f$^*\f$ but with a lot of structure.
- * It's purpose is to vanish on \f$ H \setminus U_i \f$, where \f$U_i\f$ is the set of points on which we wish to verify the constraint \f$P_i\f$.
+ * Its purpose is to vanish on \f$ H \setminus U_i \f$, where \f$U_i\f$ is the set of points on which we wish to verify the constraint \f$P_i\f$.
  * \f$U_i\f$ is usually a subspace of \f$H\f$, but might be an arbitrary subset as well.
  * More details about the structure of \f$Sel_i\f$ are given below - in the description of the private class AcspConstraintSummand.
  * The purpose of this private class is to contain such a summand.
@@ -63,8 +63,8 @@ namespace BairToAcsp{
         //and a constant shift $c$ which is a field element.
         //This is used because each AcspConstraintSummand has such pair, which while it is
         //evaluated on some assignment x,y_1...y_n it should calculate the value of 1/(L(x)-c).
-        //Inversion is time consuming, but inversion of a bunch of FieldElements together is cheeper,
-        //so we do all the inversions togeter, and pass the results the the AcspConstraintSummand polynomials.
+        //Inversion is time consuming, but inversion of a bunch of FieldElements together is cheaper,
+        //so we do all the inversions together, and pass the results of the AcspConstraintSummand polynomials.
         typedef std::pair<polyID,Algebra::FieldElement> DenominatorType;
         typedef std::vector<DenominatorType> DenominatorsVecType;
 		
@@ -141,7 +141,7 @@ namespace BairToAcsp{
 		///different such polynomials, each appearing in many summands.
 		SubspacePolyVec subspacePolys;
 
-        //the denominators vector, for a bunch inversion (cheeper than one at a time)
+        //the denominators vector, for a bunch inversion (cheaper than one at a time)
         DenominatorsVecType denomsVec_;
 		
 		///stores the summands in this polynomial
@@ -161,8 +161,8 @@ namespace BairToAcsp{
          * \f$ Sel \f$ can be computed much more efficiently when represented explicitly as this quotient
          * (rather than explicitly computing \f$ Sel \f$'s coefficients), especially in our case, when the enumerator is common for a lot of selectors.
          * In fact, in the PCP we are interested in computing \f$ Sel \cdot \frac{P_i}{Z_H} = \frac{P_i}{Z_S+c} \f$ composed with univariate polynomials.
-         * This is another reason it makes sense to exlicitly store \f$ Z_S \f$ and \f$ c \f$, rather than just \f$ Sel \f$'s coefficients.
-         * Occaisionally, \f$ Sel \f$ will be of the form described above
+         * This is another reason it makes sense to explicitly store \f$ Z_S \f$ and \f$ c \f$, rather than just \f$ Sel \f$'s coefficients.
+         * Occasionally, \f$ Sel \f$ will be of the form described above
          * but multiplied by a few more auxiliary shifted subspace polynomials.
          * This case is addressed by the member variable auxPolys
          *

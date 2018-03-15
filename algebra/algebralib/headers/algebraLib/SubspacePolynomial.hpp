@@ -1,6 +1,6 @@
 /**
 * A class for special linearized polynomials - subspace polynomials - that split into distinct roots
-The main addition in this clase is a constructor that takes as input a set of elements,
+The main addition in this class is a constructor that takes as input a set of elements,
 and returns the subspace poly whose roots are exactly the linear span of this set
 */
 

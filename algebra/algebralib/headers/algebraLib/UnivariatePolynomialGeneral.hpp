@@ -76,7 +76,7 @@ public:
 	FieldElement eval(const FieldElement& x)const;
     
     /**
-     * @brief evaluates a polynomial over a givven space (represented by a ordered basis and affine shift)
+     * @brief evaluates a polynomial over a given space (represented by a ordered basis and affine shift)
      * @return the evaluation as a vector, element number \f$ \sum_{i=0}^n b_i \cdot 2^i \f$ represents
      *          the value at the point \f$ shift + \sum_{i=0}^n (basis element)_i \cdot 2^i \f$
      */
@@ -115,9 +115,9 @@ public:
 
 	/**
 	 * @brief Let this polynomial be \f$a \in \mathbb{F}[x]\f$, and the parameter be \f$b \in \mathbb{F}[x]\f$
-	 * than by the devision theorem there exists \f$ q,r \in \mathbb{F}[x] \f$ such that \f$ \deg r < \deg a \f$
+	 * than by the division theorem there exists \f$ q,r \in \mathbb{F}[x] \f$ such that \f$ \deg r < \deg a \f$
 	 * and \f$ b = aq + r \f$.
-	 * This method return \f$q\f$
+	 * This method returns \f$q\f$
 	 */
 	std::unique_ptr<UnivariatePolynomialInterface> divideByMe(const UnivariatePolynomialInterface& dividend)const; 
 

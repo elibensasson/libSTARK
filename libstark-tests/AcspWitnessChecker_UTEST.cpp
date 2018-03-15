@@ -132,7 +132,7 @@ public:
 	}
 
 	/**
-	 * @brief   return the set of elments
+	 * @brief   return the set of elements
 	 * @return  the elements set
 	 */
 	const elementsSet_t& getElements()const {
@@ -300,10 +300,10 @@ static pair<AcspInstance,AcspWitness> vanishing_generate_invalid_pair(){
 	}
 
 	/**
-	 * Similary to the completeness check,
+	 * Similarly to the completeness check,
 	 * we generate P as a product of univariate polynomials
 	 * defined by their roots.
-	 * In this case first of all roots are selected randomally, but a
+	 * In this case first of all roots are selected randomly, but a
 	 * special root (to be explained now).
 	 * We choose some \f$ z\f$ from the vanishing set, and for each
 	 * \f$ q_i(x)\f$ we set \f$A(N_i(z))\f$ to be a root.
@@ -400,7 +400,7 @@ static pair<AcspInstance,AcspWitness> witness_degree_generate_valid_pair(){
 
 /**
  * @brief   Generates a random pair of AcspInstance and AcspWitness
- * such that the witness does not satisfie the instance for
+ * such that the witness does not satisfy the instance for
  * witness degree validation check,
  * meaning  deg A > AcspInstance.witnessDegreeBound
  * @return  The random pair
@@ -447,7 +447,7 @@ static pair<AcspInstance,AcspWitness> witness_degree_generate_invalid_pair(){
 
 /**
  * @brief   Generates a random pair of AcspInstance and AcspWitness
- * such that the witness satisfies the instance for boundy constraints validation check
+ * such that the witness satisfies the instance for boundary constraints validation check
  * @return  The random pair
  */
 static pair<AcspInstance,AcspWitness> boundary_generate_valid_pair(){
@@ -681,7 +681,7 @@ static pair<AcspInstance,AcspWitness> generate_valid_pair_all_in_neighbor(){
 }
 
 //added by Ariel
-//In this test the constraint polynomial is x+y. There is one neighb that's the identity, and the constraint poly is Z_H, i.e.,
+//In this test the constraint polynomial is x+y. There is one neighbour that's the identity, and the constraint poly is Z_H, i.e.,
 //the vanishing space subspace poly. The witness poly is the identity x
 static pair<AcspInstance, AcspWitness> generate_valid_pair_all_in_constraintsPoly2(){
 	const size_t vanishingSpaceDegree = 3;
@@ -747,7 +747,7 @@ TEST(AcspWitnessChecker,verify_all_in_constraintsPoly){
 /** added by ARIEL
 * @brief   GTEST function to test completeness of AcspWitnessChecker::verify for a full witness
 * such that the witness is the identity polynomial, the constraint polynomial is Z_H(x)+Z_H(y) where H is the vanishing space,
-* there is one neighboy which is the identity
+* there is one neighbor which is the identity
 */
 TEST(AcspWitnessChecker, verify_all_in_constraintsPoly2){
 	pair<AcspInstance, AcspWitness> validPair = Acsp_UTEST::generate_valid_pair_all_in_constraintsPoly2();

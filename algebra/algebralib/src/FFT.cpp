@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cstring>
 
-/// Important : all this assumes Matans irredusible is used for the context field
+/// Important : all this assumes Matans irreducible is used for the context field
 
 namespace Algebra{
 using std::vector;

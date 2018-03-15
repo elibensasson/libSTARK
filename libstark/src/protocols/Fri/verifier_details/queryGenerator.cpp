@@ -72,7 +72,7 @@ bool verifyDeg2(const vector<FieldElement>& results, const unsigned int dim){
 }
 
 bool RS_result::verify()const{
-    TASK("Determenistic test of degree " + std::to_string(degBound_) + " over evaluation space of size " + std::to_string(POW2(basis_.size())));
+    TASK("Deterministic test of degree " + std::to_string(degBound_) + " over evaluation space of size " + std::to_string(POW2(basis_.size())));
     
     bool res = false;
     //
@@ -135,9 +135,9 @@ bool ConsistencyPath_result::verify()const{
     
     //
     //Verify the polynomial with values L0Data[.]
-    //over the sapce spanned by basis_[.]
+    //over the space spanned by basis_[.]
     //when evaluated over columnId_
-    //it's value is columnPointData
+    //its value is columnPointData
     //
     //This is done using Lagrange interpolation
     //
@@ -204,7 +204,7 @@ void addRandomQueryPath(RS_queriesTree& commitedTree,
        return; 
     }
 
-    // draw a random commited column
+    // draw a random committed column
     const size_t columnIndex = std::rand() % commitedTree.subproofs.size();
     const FieldElement columnId = getSubproofKeyByIndex(commitedTree, columnIndex);
 
@@ -213,8 +213,8 @@ void addRandomQueryPath(RS_queriesTree& commitedTree,
     const auto L1Basis = getL1Basis(evaluationBasis, L0isMSB);
     const FieldElement currSigmentOffset = getSpaceElementByIndex(L1Basis, zero(), sigmentIdx);
 
-    // call recursivly
-    // do it befor initializing results to keep there address in memory uncahned
+    // call recursively
+    // do it before initializing results to keep their address in memory unchanged
     // (as the size of the results vector is yet unknown)
     {
         const auto nextColumnBasis = getColumnBasis(evaluationBasis, L0isMSB);

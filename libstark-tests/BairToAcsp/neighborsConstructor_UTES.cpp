@@ -34,7 +34,7 @@ typedef pair<BairInstance,BairWitness> BairPair;
 
 vector<pair<size_t,size_t>> constructNeighborsLocations(const vector<vector<unique_ptr<const UnivariatePolynomialInterface>>>& neighborsVec){
     
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers;
     size_t currLayer = 0;
     for(const auto& nVec : neighborsVec){
@@ -62,7 +62,7 @@ void verifyID(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     //get the neighbors polynomials vector
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all network locations
@@ -102,7 +102,7 @@ void verifyTwinLayer(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     //get the neighbors polynomials vector
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all network locations
@@ -152,7 +152,7 @@ void verifyDeBruijn(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     //get the neighbors polynomials vector
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all network locations except
@@ -215,7 +215,7 @@ void verifyRoutingBit(const BairPair& bair_pair, const AcspNeighbors& neighbors)
     //get the neighbors polynomials vector
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all network locations
@@ -256,7 +256,7 @@ void verifyPermutationConstraints(const BairPair& bair_pair, const AcspNeighbors
     //get the neighbors polynomials vector
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all permutation constraints, and all rows
@@ -349,7 +349,7 @@ void verifyAssignmentConstraints(const BairPair& bair_pair, const AcspNeighbors&
     //get the neighbors vec
     const auto neighborsVec = neighbors.getNeighborPolynomials();
 
-    //construct a mapping from neighbot id to (poly,layer)
+    //construct a mapping from neighbor id to (poly,layer)
     vector<pair<size_t,size_t>> neighborsInLayers = constructNeighborsLocations(neighborsVec);
 
     //verify neighbors by testing on all permutation constraints, and all rows
@@ -479,7 +479,7 @@ TEST(BairToAcspNeighbors,verifyTwinLayer){
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
-    //TWIN LAYER naighbor
+    //TWIN LAYER neighbor
     if(!defs.hasRoutingNetwork())return;
     
     verifyTwinLayer(src,neighbors);
@@ -495,7 +495,7 @@ TEST(BairToAcspNeighbors,verifyDeBruijn){
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
-    //TWIN LAYER naighbor
+    //TWIN LAYER neighbor
     if(!defs.hasRoutingNetwork())return;
     
     verifyDeBruijn(src,neighbors);
@@ -511,7 +511,7 @@ TEST(BairToAcspNeighbors,verifyRoutingBit){
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
-    //TWIN LAYER naighbor
+    //TWIN LAYER neighbor
     if(!defs.hasRoutingNetwork())return;
     
     verifyRoutingBit(src,neighbors);
