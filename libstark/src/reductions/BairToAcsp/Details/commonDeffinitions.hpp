@@ -32,7 +32,7 @@ public:
     };
 
     //constructor
-    commonDeffinitions(const BairInstance& instance);
+    commonDeffinitions(const BairInstance& instance, const std::vector<Algebra::FieldElement>& coeffsPi, const std::vector<Algebra::FieldElement>& coeffsChi);
 
     /*
      * variables partition getters
@@ -102,7 +102,7 @@ private:
 
     //private methods
     static std::vector<size_t> getRoutedIndexes(const BairInstance& instance);
-    static std::pair<std::vector<size_t>,std::vector<std::unique_ptr<Algebra::PolynomialInterface>>> getUnroutedIndexes_and_ConstraintsChi(const BairInstance& instance);
+    static std::pair<std::vector<size_t>,std::vector<std::unique_ptr<Algebra::PolynomialInterface>>> getUnroutedIndexes_and_ConstraintsChi(const BairInstance& instance, const std::vector<Algebra::FieldElement>& coeffsChi);
     static Algebra::PolynomialDegree getMaxTestDegree(const BairInstance& instance, const bool hasRoutingNetwork, const Algebra::PolynomialDegree& ascpWitnessDegreeBound);
     static std::pair<Algebra::UnivariatePolynomialGeneral,std::vector<std::pair<Algebra::PolynomialInterface*,size_t> > > getCommonUnivariateConstraint(const BairInstance& instance);
 };

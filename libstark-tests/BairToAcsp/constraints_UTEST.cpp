@@ -38,6 +38,14 @@ using std::move;
 using std::max;
 using std::vector;
 
+vector<FieldElement> genRandVector(const unsigned int len){
+    vector<FieldElement> res(len);
+    for(auto& e : res){
+        e = generateRandom();
+    }
+    return res;
+}
+
 typedef pair<BairInstance,BairWitness> BairPair;
 
 /*************************************************************
@@ -54,7 +62,7 @@ class BairToAcsp_tester : private CBairToAcsp, private witnessReduction{
      static AcspWitness ruinRoutingBit(const BairPair& bair_pair){
    
         //get common information
-        common commonDef(bair_pair.first);
+        common commonDef(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
         witnessMappings witnessMapping(commonDef);
     
         //ordered basis for witness space
@@ -95,7 +103,7 @@ class BairToAcsp_tester : private CBairToAcsp, private witnessReduction{
      static AcspWitness ruinDeBruijnLastColumn(const BairPair& bair_pair){
    
         //get common information
-        common commonDef(bair_pair.first);
+        common commonDef(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
         witnessMappings witnessMapping(commonDef);
     
         //ordered basis for witness space
@@ -131,7 +139,7 @@ class BairToAcsp_tester : private CBairToAcsp, private witnessReduction{
      static AcspWitness ruinAdditionalElementRouting(const BairPair& bair_pair){
    
         //get common information
-        common commonDef(bair_pair.first);
+        common commonDef(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
         witnessMappings witnessMapping(commonDef);
   
         //ordered basis for witness space
@@ -167,7 +175,7 @@ class BairToAcsp_tester : private CBairToAcsp, private witnessReduction{
      static AcspWitness ruinDeBruijnVertexData(const BairPair& bair_pair){
    
         //get common information
-        common commonDef(bair_pair.first);
+        common commonDef(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
         witnessMappings witnessMapping(commonDef);
   
         //ordered basis for witness space
@@ -211,7 +219,7 @@ class BairToAcsp_tester : private CBairToAcsp, private witnessReduction{
 TEST(BairToAcsp_Constraints,reductionCompletness){
 	const BairPair src = PCP_UTESTS::generate_valid_pair();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = CBairToAcsp::reduceWitness(src.first,src.second);
     
     EXPECT_TRUE(AcspWitnessChecker::verify_vanishing(*instance,*witness));
@@ -220,7 +228,7 @@ TEST(BairToAcsp_Constraints,reductionCompletness){
 TEST(BairToAcsp_Constraints,reductionSoundness_routingBits){
 	const BairPair src = PCP_UTESTS::generate_valid_pair();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = BairToAcsp_tester::ruinRoutingBit(src);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,witness));
@@ -229,7 +237,7 @@ TEST(BairToAcsp_Constraints,reductionSoundness_routingBits){
 TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnLastColumn){
 	const BairPair src = PCP_UTESTS::generate_valid_pair();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = BairToAcsp_tester::ruinDeBruijnLastColumn(src);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,witness));
@@ -238,7 +246,7 @@ TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnLastColumn){
 TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnLastAdditionalElementRouting){
 	const BairPair src = PCP_UTESTS::generate_valid_pair();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = BairToAcsp_tester::ruinAdditionalElementRouting(src);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,witness));
@@ -247,7 +255,7 @@ TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnLastAdditionalElementRout
 TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnDataRouting){
 	const BairPair src = PCP_UTESTS::generate_valid_pair();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = BairToAcsp_tester::ruinDeBruijnVertexData(src);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,witness));
@@ -256,7 +264,7 @@ TEST(BairToAcsp_Constraints,reductionSoundness_DeBruijnDataRouting){
 TEST(BairToAcsp_Constraints,reductionComplitness_Constraints){
 	const BairPair src = PCP_UTESTS::generate_valid_constraints();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = CBairToAcsp::reduceWitness(src.first,src.second);
     
     EXPECT_TRUE(AcspWitnessChecker::verify_vanishing(*instance,*witness));
@@ -265,7 +273,7 @@ TEST(BairToAcsp_Constraints,reductionComplitness_Constraints){
 TEST(BairToAcsp_Constraints,reductionSoundness_Permutation_Constraints){
 	const BairPair src = PCP_UTESTS::generate_invalid_constraints_Permutation();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = CBairToAcsp::reduceWitness(src.first,src.second);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,*witness));
@@ -274,7 +282,7 @@ TEST(BairToAcsp_Constraints,reductionSoundness_Permutation_Constraints){
 TEST(BairToAcsp_Constraints,reductionSoundness_Assignment_Constraints){
 	const BairPair src = PCP_UTESTS::generate_invalid_constraints_Assignment();
     
-    const auto instance = CBairToAcsp::reduceInstance(src.first);
+    const auto instance = CBairToAcsp::reduceInstance(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const auto witness = CBairToAcsp::reduceWitness(src.first,src.second);
     
     EXPECT_FALSE(AcspWitnessChecker::verify_vanishing(*instance,*witness));

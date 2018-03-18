@@ -3,6 +3,7 @@
 #include "common/Utils/ErrorHandling.hpp"
 #include "common/Infrastructure/Infrastructure.hpp"
 #include "common/Utils/TaskReporting.hpp"
+#include "reductions/BairToAcsp/BairToAcsp.hpp"
 #include <algebraLib/PolynomialDegree.hpp>
 
 #include <string>
@@ -18,24 +19,41 @@ using Ali::details::rawResults_t;
 using Infrastructure::Log2;
 using Algebra::FieldElement;
 using Algebra::PolynomialDegree;
+using Algebra::one;
 using std::vector;
 
-verifier_t::verifier_t(const AcspInstance& instance, const RS_verifierFactory_t& RS_verifierFactory) : 
-    instance_(instance),
+vector<FieldElement> getRandVector(const unsigned int len){
+    vector<FieldElement> res(len);
+    for(auto& e : res){
+        e = Algebra::generateRandom();
+    }
+
+    return res;
+}
+
+verifier_t::verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory) : 
+    bairInstance_(bairInstance),
     phase_(Ali::details::phase_t::START_PROTOCOL)
     {
     
     TASK("Constructing verifier");
 
+    //Random coefficients for constraints
     {
-        verifyParams(instance);
+        coeffsPi_ = getRandVector(bairInstance.constraintsPermutation().numMappings());
+        coeffsChi_ = getRandVector(bairInstance.constraintsAssignment().numMappings());
+        instance_ = CBairToAcsp::reduceInstance(bairInstance,coeffsPi_,coeffsChi_);
+    }
+
+    {
+        verifyParams(*instance_);
     }
 
     //Initialize
     {
     //Boundary - aka Witness
     {
-        const short logSizeWitnesses = Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(instance) + Log2(sizeof(FieldElement));
+        const short logSizeWitnesses = Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*instance_) + Log2(sizeof(FieldElement));
 
         //boundary
         state_.boundaryPolysMatrix = uniEvalView_t(logSizeWitnesses);
@@ -43,7 +61,7 @@ verifier_t::verifier_t(const AcspInstance& instance, const RS_verifierFactory_t&
 
     //composition
     {
-        const size_t basisPCPP_size = Ali::details::PCP_common::basisForConsistency(instance).basis.size();
+        const size_t basisPCPP_size = Ali::details::PCP_common::basisForConsistency(*instance_).basis.size();
         const short logSizeBytes =  basisPCPP_size + Log2(sizeof(FieldElement));
 
         //ZK_Composition_mask
@@ -121,6 +139,8 @@ msg_ptr_t verifier_t::sendMessage(){
     case(Ali::details::phase_t::VERIFIER_RANDOMNESS):
     {
         TASK("Sending random coefficients for unified RS proximity proof (including ZK rho)");
+        vMsg.coeffsPi = coeffsPi_;
+        vMsg.coeffsChi = coeffsChi_;
         vMsg.randomCoefficients = randCoeffs_;
         phase_ = Ali::details::advancePhase(phase_);
     }
@@ -152,9 +172,9 @@ msg_ptr_t verifier_t::sendMessage(){
 void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, const queriesToInp_t& queriesToInput_composition){
     TASK("Verifier digests queries");
 
-    const auto basisPCPP(Ali::details::PCP_common::basisForWitness(instance_));
-    const size_t numWitnesses = instance_.witnessDegreeBound().size();
-    const size_t numWitnessColumns = Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logWidth(instance_));
+    const auto basisPCPP(Ali::details::PCP_common::basisForWitness(*instance_));
+    const size_t numWitnesses = instance_->witnessDegreeBound().size();
+    const size_t numWitnessColumns = Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logWidth(*instance_));
     
     //
     // Digest queries made to univariate of Witness PCPP
@@ -212,7 +232,7 @@ void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, con
     {
         TASK("Digest queries to Composition RS PCPP univariate");
        
-        const auto consistencySpace(Ali::details::PCP_common::basisForConsistency(instance_));
+        const auto consistencySpace(Ali::details::PCP_common::basisForConsistency(*instance_));
 
         //calculate total number of queries
         polyEvaluation_composition_.resize(queriesToInput_composition.size());
@@ -227,7 +247,7 @@ void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, con
 
             auto& currComb = polyEvaluation_composition_[currCombIdx++];
             {
-                currComb.init(instance_,alpha);
+                currComb.init(*instance_,alpha);
                 for(FieldElement* location : resultsAddressList){
                     currComb.addAnswerPtr(location);
                 }
@@ -245,7 +265,7 @@ void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, con
                     
                     for (size_t wIndex = 0; wIndex < numWitnesses; wIndex++){
 
-                        const auto& neighbours = instance_.neighborPolys()[wIndex];
+                        const auto& neighbours = instance_->neighborPolys()[wIndex];
                         size_t nsize = neighbours.size();
 
                         for (unsigned int affine_num = 0; affine_num < nsize; affine_num++){
@@ -396,8 +416,8 @@ void verifier_t::generateQueries(const RS_verifierFactory_t& RS_verifierFactory)
 
     {
         TASK("RS proximity of witness (aka boundary)");
-        const auto PCPP_Basis(Ali::details::PCP_common::basisForWitness(instance_));
-        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(instance_));
+        const auto PCPP_Basis(Ali::details::PCP_common::basisForWitness(*instance_));
+        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*instance_));
         const short deg_log_composition = ceil(Infrastructure::Log2(deg_composition));
         {
             specsPrinter witnessFriSpecs("FRI for witness (f) specifications");
@@ -408,8 +428,8 @@ void verifier_t::generateQueries(const RS_verifierFactory_t& RS_verifierFactory)
     
     {
         TASK("RS proximity of composition");
-        const auto PCPP_Basis(Ali::details::PCP_common::basisForConsistency(instance_));
-        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::composition_div_ZH_degreeBound(instance_));
+        const auto PCPP_Basis(Ali::details::PCP_common::basisForConsistency(*instance_));
+        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::composition_div_ZH_degreeBound(*instance_));
         const short deg_log_composition = ceil(Infrastructure::Log2(deg_composition));
         {
             specsPrinter compFriSpecs("FRI for constraints (g) specifications");
@@ -430,11 +450,11 @@ void verifier_t::generateRandomCoefficients(Ali::details::randomCoeffsSet_t& ran
 
     {
     //get degree bounds
-    const PolynomialDegree::integral_t requiredDegreeBound = PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(instance_));
+    const PolynomialDegree::integral_t requiredDegreeBound = PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*instance_));
 
     //boundary witnesses
-    const auto& degBounds = Ali::details::PCP_common::witness_div_Z_Boundery_degreeBound(instance_);
-    for(size_t wIndex =0 ; wIndex < instance_.witnessDegreeBound().size(); wIndex++){
+    const auto& degBounds = Ali::details::PCP_common::witness_div_Z_Boundery_degreeBound(*instance_);
+    for(size_t wIndex =0 ; wIndex < instance_->witnessDegreeBound().size(); wIndex++){
 
         Protocols::Ali::details::randomCoeefs currCoeffs;
 
@@ -475,12 +495,12 @@ bool verifier_t::doneInteracting()const{
 }
 
 size_t verifier_t::expectedCommitedProofBytes()const{
-    const size_t basisPCPP_size = Ali::details::PCP_common::basisForWitness(instance_).basis.size();
+    const size_t basisPCPP_size = Ali::details::PCP_common::basisForWitness(*instance_).basis.size();
     const size_t evaluationBytes = Infrastructure::POW2(basisPCPP_size) * sizeof(FieldElement);
     const size_t evaluationWithCommitmentBytes = 2UL * evaluationBytes;
     
     // *2 for merkle 
-    const size_t witnessMatrixSize = 2UL*Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(instance_)) * sizeof(FieldElement);
+    const size_t witnessMatrixSize = 2UL*Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*instance_)) * sizeof(FieldElement);
     
     //Witness matrix + witness ZK mask
     const size_t localProofsBytes = evaluationWithCommitmentBytes + witnessMatrixSize;

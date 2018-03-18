@@ -7,6 +7,8 @@
 #include "languages/Acsp/AcspInstance.hpp"
 #include "languages/Acsp/AcspWitness.hpp"
 
+#include "languages/Bair/BairInstance.hpp"
+
 #include "protocols/common/proofs.hpp"
 #include "protocols/Fri/prover.hpp"
 #include "common/Utils/TaskReporting.hpp"
@@ -32,12 +34,13 @@ typedef Ali::details::partyState<std::unique_ptr<dataWithCommitment>> uniEvalsSe
 
 class prover_t : public PartieInterface{
 public:
-    prover_t(const AcspInstance& instance, const AcspWitness& witness, const RS_proverFactory_t& RS_proverFactory);
+    prover_t(const BairInstance& bairInstance, const AcspWitness& witness, const RS_proverFactory_t& RS_proverFactory);
     void receiveMessage(const TranscriptMessage& msg);
     msg_ptr_t sendMessage(); 
 
 private:
-    const AcspInstance& instance_;
+    const BairInstance& bairInstance_;
+    std::unique_ptr<AcspInstance> instance_;
     const AcspWitness& witness_;
     const RS_proverFactory_t RS_proverFactory_;
     std::unique_ptr<Algebra::novelFFT> fftInstance_;

@@ -46,6 +46,8 @@ class verifierMsg : public TranscriptMessage{
 public:
     virtual ~verifierMsg(){};
     randomCoeffsSet_t randomCoefficients;
+    std::vector<Algebra::FieldElement> coeffsPi;
+    std::vector<Algebra::FieldElement> coeffsChi;
     Ali::details::rawQueries_t queries;
     std::unique_ptr<TranscriptMessage> RS_verifier_witness_msg;
     std::unique_ptr<TranscriptMessage> RS_verifier_composition_msg;

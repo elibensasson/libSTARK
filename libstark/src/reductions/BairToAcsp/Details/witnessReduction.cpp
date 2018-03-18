@@ -21,7 +21,7 @@ unique_ptr<AcspWitness> witnessReduction::reduceWitness( const BairInstance& ins
     TASK("Reducing Bair witness to Acsp");
     
     //get common information
-    common commonDef(instance);
+    common commonDef(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
     witnessMappings witnessMapping(commonDef);
 
     //get the embedding
@@ -46,7 +46,7 @@ unique_ptr<AcspWitness> witnessReduction::reduceWitness( const BairInstance& ins
 
 class exponentsPermutation : public Sequence<size_t>{
 public:
-    exponentsPermutation(const BairInstance& instance):instance_(instance),commonDef_(instance){};
+    exponentsPermutation(const BairInstance& instance):instance_(instance),commonDef_(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one())){};
 
 	size_t getElementByIndex(index_t index)const{
         const size_t singeltonIndex = instance_.domainSize();

@@ -20,8 +20,8 @@ namespace BairToAcsp{
  */
 class common : public commonDeffinitions, public commonInformation{
     public:
-        common(const BairInstance& instance):
-            commonDeffinitions(instance),
+        common(const BairInstance& instance, const std::vector<Algebra::FieldElement>& coeffsPi, const std::vector<Algebra::FieldElement>& coeffsChi):
+            commonDeffinitions(instance, coeffsPi, coeffsChi),
             commonInformation(*((commonDeffinitions*)this))
             {};
         

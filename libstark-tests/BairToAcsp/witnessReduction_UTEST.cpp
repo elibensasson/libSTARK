@@ -54,7 +54,7 @@ FieldElement advanceToNextRow(const FieldElement src, const common& commonInfo){
 void verifyIntegrity(const BairPair& bair_pair, const AcspWitness& acsp_witness){
 
     //get common information
-    const common commonDef(bair_pair.first);
+    const common commonDef(bair_pair.first,vector<FieldElement>(), vector<FieldElement>());
     const witnessMappings witnessMapping(commonDef);
     const commonMappings& commonMapping = witnessMapping;
 
@@ -143,7 +143,7 @@ size_t cyclicShift(const size_t src, const char bitsAmount){
 void verifyRoutingNetwork(const BairPair& bair_pair, const AcspWitness& acsp_witness){
 
     //get common information
-    common commonDef(bair_pair.first);
+    common commonDef(bair_pair.first,vector<FieldElement>(), vector<FieldElement>());
     witnessMappings witnessMapping(commonDef);
 
     //get the Bair pair
@@ -243,7 +243,7 @@ void verifyRoutingNetwork(const BairPair& bair_pair, const AcspWitness& acsp_wit
 void verifyPermutation_aditionalElement(const BairPair& bair_pair, const AcspWitness& acsp_witness){
 
     //get common information
-    common commonDef(bair_pair.first);
+    common commonDef(bair_pair.first,vector<FieldElement>(), vector<FieldElement>());
     witnessMappings witnessMapping(commonDef);
 
     //get the Bair pair

@@ -20,19 +20,18 @@ using Algebra::zero;
 namespace libstark{
 namespace BairToAcsp{
 
-	commonDeffinitions::commonDeffinitions(const BairInstance& instance) {
+	commonDeffinitions::commonDeffinitions(const BairInstance& instance, const vector<FieldElement>& coeffsPi, const vector<FieldElement>& coeffsChi) {
     
     //getting variables partition
     {
     variablesPerm_ = getRoutedIndexes(instance);
-    auto vars_n_constraints = getUnroutedIndexes_and_ConstraintsChi(instance);
+    auto vars_n_constraints = getUnroutedIndexes_and_ConstraintsChi(instance,coeffsChi);
     variablesNonPerm_ = vars_n_constraints.first;
     constraintsChi_ = move(vars_n_constraints.second);
     
     //initialize constraints Pi
     {    
-        const vector<FieldElement> coeffs(instance.constraintsPermutation().numMappings(),Algebra::one());
-        constraintsPi_.push_back(unique_ptr<PolynomialInterface>(instance.constraintsPermutation().getLinearComb(coeffs)));
+        constraintsPi_.push_back(unique_ptr<PolynomialInterface>(instance.constraintsPermutation().getLinearComb(coeffsPi)));
     }
     }
 
@@ -121,7 +120,7 @@ vector<size_t> commonDeffinitions::getRoutedIndexes(const BairInstance& instance
     return usedIndexes;
 }
 
-pair<vector<size_t>,vector<unique_ptr<PolynomialInterface>>> commonDeffinitions::getUnroutedIndexes_and_ConstraintsChi(const BairInstance& instance){
+pair<vector<size_t>,vector<unique_ptr<PolynomialInterface>>> commonDeffinitions::getUnroutedIndexes_and_ConstraintsChi(const BairInstance& instance, const vector<FieldElement>& coeffs){
     const auto vecLen = instance.vectorsLen();
     const auto& CSystemPermutation = instance.constraintsPermutation();
 
@@ -142,7 +141,6 @@ pair<vector<size_t>,vector<unique_ptr<PolynomialInterface>>> commonDeffinitions:
     vector<unique_ptr<PolynomialInterface>> reorderedConstraints;
     reorderedUnusedIndexes = unusedIndexes;
     {
-        vector<FieldElement> coeffs(instance.constraintsAssignment().numMappings(),Algebra::one());
         reorderedConstraints.push_back(unique_ptr<PolynomialInterface>(instance.constraintsAssignment().getLinearComb(coeffs)));
     }
 

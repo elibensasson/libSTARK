@@ -30,6 +30,14 @@ using std::vector;
 
 namespace{
 
+    vector<FieldElement> genRandVector(const unsigned int len){
+    vector<FieldElement> res(len);
+    for(auto& e : res){
+        e = generateRandom();
+    }
+    return res;
+}
+
 typedef pair<BairInstance,BairWitness> BairPair;
 
 vector<pair<size_t,size_t>> constructNeighborsLocations(const vector<vector<unique_ptr<const UnivariatePolynomialInterface>>>& neighborsVec){
@@ -51,7 +59,7 @@ vector<pair<size_t,size_t>> constructNeighborsLocations(const vector<vector<uniq
 
 void verifyID(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     
-    const common defs(bair_pair.first);
+    const common defs(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
 
     //some constants
@@ -91,7 +99,7 @@ void verifyID(const BairPair& bair_pair, const AcspNeighbors& neighbors){
 
 void verifyTwinLayer(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     
-    const common defs(bair_pair.first);
+    const common defs(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
 
     //some constants
@@ -139,7 +147,7 @@ size_t cyclicShift(const size_t src, const char bitsAmount){
 
 void verifyDeBruijn(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     
-    const common defs(bair_pair.first);
+    const common defs(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
 
     //some constants
@@ -203,7 +211,7 @@ void verifyDeBruijn(const BairPair& bair_pair, const AcspNeighbors& neighbors){
 
 void verifyRoutingBit(const BairPair& bair_pair, const AcspNeighbors& neighbors){
     
-    const common defs(bair_pair.first);
+    const common defs(bair_pair.first,genRandVector(bair_pair.first.constraintsPermutation().numMappings()),genRandVector(bair_pair.first.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
 
     //some constants
@@ -246,7 +254,7 @@ void verifyRoutingBit(const BairPair& bair_pair, const AcspNeighbors& neighbors)
 void verifyPermutationConstraints(const BairPair& bair_pair, const AcspNeighbors& neighbors, const CS_testLocations& testLocations){
     
     const BairInstance& partialInstance = bair_pair.first;
-    const common defs(partialInstance);
+    const common defs(partialInstance,genRandVector(partialInstance.constraintsPermutation().numMappings()),genRandVector(partialInstance.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
     const instanceMappings& mappings_common(defs);
 
@@ -339,7 +347,7 @@ void verifyPermutationConstraints(const BairPair& bair_pair, const AcspNeighbors
 void verifyAssignmentConstraints(const BairPair& bair_pair, const AcspNeighbors& neighbors, const CS_testLocations& testLocations){
     
     const BairInstance& partialInstance = bair_pair.first;
-    const common defs(partialInstance);
+    const common defs(partialInstance,genRandVector(partialInstance.constraintsPermutation().numMappings()),genRandVector(partialInstance.constraintsAssignment().numMappings()));
     const witnessMappings mappings(defs);
     const instanceMappings& mappings_common(defs);
 
@@ -461,9 +469,9 @@ void verifyAssignmentConstraints(const BairPair& bair_pair, const AcspNeighbors&
 TEST(BairToAcspNeighbors,verifyID){
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
     
     verifyID(src,neighbors);
@@ -473,9 +481,9 @@ TEST(BairToAcspNeighbors,verifyTwinLayer){
 
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
@@ -489,9 +497,9 @@ TEST(BairToAcspNeighbors,verifyDeBruijn){
 
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
@@ -505,9 +513,9 @@ TEST(BairToAcspNeighbors,verifyRoutingBit){
 
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     //if there is no routing network, there is not expected a
@@ -521,9 +529,9 @@ TEST(BairToAcspNeighbors,verifyPermutationConstraintsSystem){
 
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
     
     verifyPermutationConstraints(src,neighbors,testLocations);
@@ -533,9 +541,9 @@ TEST(BairToAcspNeighbors,verifyAssignmentConstraintsSystem){
 
     //initialize neighbors instance	
     const BairPair src = PCP_UTESTS::generate_valid_constraints();
-    const common defs(src.first);
+    const common defs(src.first,genRandVector(src.first.constraintsPermutation().numMappings()),genRandVector(src.first.constraintsAssignment().numMappings()));
     const instanceMappings mappings(defs);
-    const CS_testLocations testLocations(src.first);
+    const CS_testLocations testLocations(defs);
     const AcspNeighbors neighbors(src.first,defs,mappings,testLocations);
 
     verifyAssignmentConstraints(src,neighbors,testLocations);

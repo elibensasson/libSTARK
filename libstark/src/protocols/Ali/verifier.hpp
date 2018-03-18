@@ -4,6 +4,7 @@
 #include "protocols/protocol.hpp"
 #include "common_details/common.hpp"
 #include "languages/Acsp/AcspInstance.hpp"
+#include "languages/Bair/BairInstance.hpp"
 
 #include "verifier_details/queriesGen.hpp"
 #include "protocols/Fri/verifier.hpp"
@@ -28,7 +29,7 @@ const RS_verifierFactory_t Biased_verifier = [](const std::vector<Algebra::Field
 
 class verifier_t : public verifierInterface{
     public:
-    verifier_t(const AcspInstance& instance, const RS_verifierFactory_t& RS_verifierFactory);
+    verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory);
     void receiveMessage(const TranscriptMessage& msg);
     msg_ptr_t sendMessage(); 
     bool doneInteracting()const;
@@ -40,7 +41,10 @@ class verifier_t : public verifierInterface{
 
     
     private:
-    const AcspInstance& instance_;
+    const BairInstance& bairInstance_;
+    std::vector<Algebra::FieldElement> coeffsPi_;
+    std::vector<Algebra::FieldElement> coeffsChi_;
+    std::unique_ptr<AcspInstance> instance_;
     const Ali::details::randomCoeffsSet_t randCoeffs_;
     
     std::vector<details::linearCombinationValue> linearComb_witness_;

@@ -376,7 +376,7 @@ namespace prn{
 
 bool executeProtocol(const BairInstance& instance, const BairWitness& witness, bool testBair, bool testAcsp, bool testPCP){
     prn::printBairInstanceSpec(instance);
-    unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance);
+    unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
 	prn::printAcspInstanceSpec(*acspInstance);
 	prn::printAprInstanceSpec(*acspInstance);
     
@@ -421,8 +421,8 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, b
         const auto RS_verifier = Biased_verifier;
         const auto RS_prover = Biased_prover;
 		
-        verifier_t verifier(*acspInstance, RS_verifier);
-		prover_t prover(*acspInstance,*acspWitness, RS_prover);
+        verifier_t verifier(instance, RS_verifier);
+		prover_t prover(instance,*acspWitness, RS_prover);
         return Protocols::executeProtocol(prover,verifier,false);
     }
 
@@ -431,7 +431,7 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, b
 
 void simulateProtocol(const BairInstance& instance){
     prn::printBairInstanceSpec(instance);
-    unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance);
+    unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
 	prn::printAcspInstanceSpec(*acspInstance);
     
     using namespace Ali::Verifier;
@@ -440,7 +440,7 @@ void simulateProtocol(const BairInstance& instance){
     const auto RS_verifier = Biased_verifier;
     const auto RS_prover = Biased_prover;
     
-    verifier_t verifier(*acspInstance, RS_verifier);
+    verifier_t verifier(instance, RS_verifier);
     prover_t* prover_dummy = nullptr;
     Protocols::executeProtocol(*prover_dummy,verifier,true);
 }

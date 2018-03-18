@@ -3,6 +3,7 @@
 #include "common/Utils/ErrorHandling.hpp"
 #include "common/Utils/TaskReporting.hpp"
 #include "protocols/Fri/prover.hpp"
+#include "reductions/BairToAcsp/BairToAcsp.hpp"
 
 #include <set>
 #if __GNUG__
@@ -771,11 +772,16 @@ namespace{
     }
 }
 
-prover_t::prover_t(const AcspInstance& instance, const AcspWitness& witness, const RS_proverFactory_t& RS_proverFactory):
-    instance_(instance),
+prover_t::prover_t(const BairInstance& bairInstance, const AcspWitness& witness, const RS_proverFactory_t& RS_proverFactory):
+    bairInstance_(bairInstance),
     witness_(witness),
     RS_proverFactory_(RS_proverFactory),
-    phase_(Ali::details::phase_t::START_PROTOCOL){};
+    phase_(Ali::details::phase_t::START_PROTOCOL){
+        
+        vector<FieldElement> coeffsPi(bairInstance.constraintsPermutation().numMappings());
+        vector<FieldElement> coeffsChi(bairInstance.constraintsAssignment().numMappings());
+        instance_ = CBairToAcsp::reduceInstance(bairInstance,coeffsPi,coeffsChi);
+    }
     
 void prover_t::receiveMessage(const TranscriptMessage& msg){
     const Ali::details::verifierMsg& vMsg = dynamic_cast<const Ali::details::verifierMsg&>(msg);
@@ -795,14 +801,16 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
     {
         TASK("Receiving randomness from verifier");
         
+        instance_ = CBairToAcsp::reduceInstance(bairInstance_,vMsg.coeffsPi,vMsg.coeffsChi);
+
         RS_prover_witness_ = RS_proverFactory_(
-                Ali::details::PCP_common::basisForWitness(instance_).basis, 
+                Ali::details::PCP_common::basisForWitness(*instance_).basis, 
                 computeUnivariateForRS_Proximity_Witness(vMsg.randomCoefficients),
                 true
             );
         
         RS_prover_composition_ = RS_proverFactory_(
-                Ali::details::PCP_common::basisForConsistency(instance_).basis, 
+                Ali::details::PCP_common::basisForConsistency(*instance_).basis, 
                 computeUnivariateForRS_Proximity_Composition(vMsg.randomCoefficients),
                 false
             );
@@ -868,23 +876,23 @@ msg_ptr_t prover_t::sendMessage(){
 }
 
 void prover_t::evaluateBoundryPolys(){
-    state_.boundaryPolysMatrix = boundaryPolysEvaluation(instance_,witness_,fftInstance_,entireWitnessKept_);
+    state_.boundaryPolysMatrix = boundaryPolysEvaluation(*instance_,witness_,fftInstance_,entireWitnessKept_);
 }
 
 void prover_t::evaluateZK_Composition_mask(){
-    state_.ZK_mask_composition = ZK_Composition_PolyEvaluation(instance_);
+    state_.ZK_mask_composition = ZK_Composition_PolyEvaluation(*instance_);
 }
 
 vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Witness(const Ali::details::randomCoeffsSet_t& randCoeffs)const{
-    return computeUnivariateForPCPP_Witness(instance_, *fftInstance_, randCoeffs);
+    return computeUnivariateForPCPP_Witness(*instance_, *fftInstance_, randCoeffs);
 }
 
 vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Composition(const Ali::details::randomCoeffsSet_t& randCoeffs)const{
-    return computeUnivariateForPCPP_Composition(instance_, witness_, state_, randCoeffs,entireWitnessKept_);
+    return computeUnivariateForPCPP_Composition(*instance_, witness_, state_, randCoeffs,entireWitnessKept_);
 }
 
 Ali::details::rawResults_t prover_t::answerQueries(const Ali::details::rawQueries_t& queries){
-    return fillResults(state_, *fftInstance_, instance_, queries, entireWitnessKept_);
+    return fillResults(state_, *fftInstance_, *instance_, queries, entireWitnessKept_);
 }
 
 

@@ -29,7 +29,7 @@ public:
     * @param[in]  partialInstance
     * @return a pointer to an AcspInstance.
     */
-    static ::std::unique_ptr<AcspInstance> reduceInstance(const BairInstance&  instance);
+    static ::std::unique_ptr<AcspInstance> reduceInstance(const BairInstance&  instance, const std::vector<Algebra::FieldElement>& coeffsPi, const std::vector<Algebra::FieldElement>& coeffsChi);
 
     /**
     * Reduces a BairExecutedWitness to an AcspWitness.
