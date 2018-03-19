@@ -21,6 +21,7 @@ using namespace gadgetlib;
 
 namespace{
 
+    const unsigned short securityParameter = 60;
 	//static const unsigned short TRANSCRIPT_LEN_LOG = 7;
 
 
@@ -119,7 +120,7 @@ void testProg(const TinyRAMProgram & prog, std::function<void(gadgetlib::Protobo
             std::vector<Algebra::FieldElement>(numVars,Algebra::zero()));
     const bool verifierOnly = 8 & flags;
     if(verifierOnly){
-        libstark::Protocols::simulateProtocol(instance);
+        libstark::Protocols::simulateProtocol(instance,securityParameter);
         return;
     }
     {
@@ -139,7 +140,7 @@ void testProg(const TinyRAMProgram & prog, std::function<void(gadgetlib::Protobo
         const bool testBair = 1 & flags;
         const bool testAcsp = 2 & flags;
         const bool testPCP = 4 & flags;
-        EXPECT_TRUE(libstark::Protocols::executeProtocol(instance,witness,testBair,testAcsp,testPCP));
+        EXPECT_TRUE(libstark::Protocols::executeProtocol(instance,witness,securityParameter,testBair,testAcsp,testPCP));
     }
 }
 	//example of run:

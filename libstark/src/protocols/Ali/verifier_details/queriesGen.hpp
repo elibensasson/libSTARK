@@ -24,11 +24,12 @@ public:
     mutable Algebra::FieldElement compositionEval_res;
     mutable Algebra::FieldElement ZK_mask_res;
 
-    void initLocation(const Algebra::FieldElement& x);
+    void initLocation(const Algebra::FieldElement& x, const unsigned int combId);
     void calculate_witness(const Protocols::Ali::details::randomCoeffsSet_t& coeffs)const;
     void addAnswerPtr(Algebra::FieldElement* answerPtr);
 private:
     Algebra::FieldElement x_;
+    unsigned int combId_;
     ResultLocation result_;
 };
 
@@ -37,13 +38,14 @@ public:
     mutable std::vector<std::vector<Algebra::FieldElement>> boundaryPoly_res;
     mutable Algebra::FieldElement ZK_mask_res;
     
-    void init(const AcspInstance& instance, const Algebra::FieldElement& consistencyPoint);
+    void init(const AcspInstance& instance, const Algebra::FieldElement& consistencyPoint, const unsigned int combId);
     void calculate(const Protocols::Ali::details::randomCoeffsSet_t& coeffs)const;
     void addAnswerPtr(Algebra::FieldElement* answerPtr);
 
 private:
     const AcspInstance* instance_;
     Algebra::FieldElement consistencyPoint_;
+    unsigned int combId_;
     std::vector<std::vector<Algebra::FieldElement>> boundaryVanishingVals_;
     std::vector<std::vector<Algebra::FieldElement>> boundaryPolyVals_;
     Algebra::FieldElement vanishingSpacePolyVal_;

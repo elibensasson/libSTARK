@@ -113,11 +113,11 @@ basisWithShift_t basisForConsistency(const AcspInstance& src){
     return res;
 }
 
-unsigned short boundaryPolysMatrix_logWidth(const AcspInstance& src){
-    return ceil(Log2(src.neighborPolys().size()+1)); //+1 for ZK mask
+unsigned short boundaryPolysMatrix_logWidth(const AcspInstance& src, const unsigned int numZkMasks){
+    return ceil(Log2(src.neighborPolys().size()+numZkMasks));
 }
-unsigned short boundaryPolysMatrix_logNumElements(const AcspInstance& src){
-    const unsigned short logNumWitnesses = boundaryPolysMatrix_logWidth(src);
+unsigned short boundaryPolysMatrix_logNumElements(const AcspInstance& src, const unsigned int numZkMasks){
+    const unsigned short logNumWitnesses = boundaryPolysMatrix_logWidth(src, numZkMasks);
     const unsigned short witnessSpaceDim = basisForWitness(src).basis.size();
     return witnessSpaceDim + logNumWitnesses;
 }

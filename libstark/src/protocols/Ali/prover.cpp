@@ -101,7 +101,7 @@ namespace{
         }
     }
 
-    unique_ptr<dataWithCommitment> boundaryPolysEvaluation(const AcspInstance& acspInstance, const AcspWitness& acspWitness, unique_ptr<novelFFT>& fftInstance,bool& entireWitnessKept){
+    unique_ptr<dataWithCommitment> boundaryPolysEvaluation(const AcspInstance& acspInstance, const AcspWitness& acspWitness, const unsigned int numRepetitions, unique_ptr<novelFFT>& fftInstance,bool& entireWitnessKept, const unsigned int numZkMasks){
         using std::vector;
         using Algebra::FieldElement;
 
@@ -110,7 +110,7 @@ namespace{
         /**************************************/
 
         const size_t numOfWitnesses = acspWitness.assignmentPolys().size();
-        const size_t numOfWitnessesWithZkMask = numOfWitnesses+1;
+        const size_t numOfWitnessesWithZkMask = numOfWitnesses+numRepetitions;
         const size_t degBound = PolynomialDegree::integral_t(acspInstance.witnessDegreeBound()[0]);
         for(const auto& d: acspInstance.witnessDegreeBound()){
             _COMMON_ASSERT(degBound == (size_t)PolynomialDegree::integral_t(d), "Degrees of witness columns are expected to be equal");
@@ -136,11 +136,13 @@ namespace{
         }
         {
             TASK("Generating Witnesses ZK Mask polynomial coefficients");
-            const size_t zkIdx = witnessCoeffs.size()-1;
-            vector<FieldElement>& zkMask = witnessCoeffs[zkIdx];
-            
-            zkMask.resize(witnessPow2Deg);
-            initWitness_ZkMask_coeffs(&zkMask[0], witnessPow2Deg);
+            for(unsigned int i=0; i< numRepetitions; i++){
+                const size_t zkIdx = numOfWitnesses+i;
+                vector<FieldElement>& zkMask = witnessCoeffs[zkIdx];
+
+                zkMask.resize(witnessPow2Deg);
+                initWitness_ZkMask_coeffs(&zkMask[0], witnessPow2Deg);
+            }
         }
 
         {
@@ -152,7 +154,7 @@ namespace{
             const size_t numShifts = POW2(shiftsBasis.size());
             const size_t cosetSize = POW2(cosetBasis.size());
             
-            const unsigned short widthLog = boundaryPolysMatrix_logWidth(acspInstance);
+            const unsigned short widthLog = boundaryPolysMatrix_logWidth(acspInstance, numZkMasks);
             const size_t width = POW2(widthLog);
             
             fftInstance = unique_ptr<novelFFT>(new novelFFT(cosetBasis,std::move(witnessCoeffs),width,Algebra::zero()));
@@ -353,7 +355,7 @@ namespace{
                 const bool hasBoundary_;
         };
 
-        AcspWitness getCachedWitness(const AcspInstance& instance, const AcspWitness& witness, const dataWithCommitment& boundaryPolysMatrix){
+        AcspWitness getCachedWitness(const AcspInstance& instance, const AcspWitness& witness, const dataWithCommitment& boundaryPolysMatrix, const unsigned int numZkMasks){
             const auto PCPP_space = Ali::details::PCP_common::basisForWitness(instance);
 
             vector<unique_ptr<const UnivariatePolynomialInterface>> res(witness.assignmentPolys().size());
@@ -377,14 +379,14 @@ namespace{
                 }
 
                 res[i] = unique_ptr<const UnivariatePolynomialInterface>(
-                        new cachedPoly_t(boundaryPolysMatrix,POW2(boundaryPolysMatrix_logWidth(instance)),i,*(witness.assignmentPolys()[i]),PCPP_space,vanishingPoly,boundValsPoly,hasBoundary));
+                        new cachedPoly_t(boundaryPolysMatrix,POW2(boundaryPolysMatrix_logWidth(instance, numZkMasks)),i,*(witness.assignmentPolys()[i]),PCPP_space,vanishingPoly,boundValsPoly,hasBoundary));
             }
 
             return AcspWitness(std::move(res));
         }
     }
 
-     vector<FieldElement> compositionPolysEvaluation(const AcspInstance& acspInstance, const AcspWitness& acspWitness, const vector<FieldElement>& basis, const FieldElement& shift, const dataWithCommitment& boundaryPolysMatrix, const bool entireWitnessKept){
+     vector<FieldElement> compositionPolysEvaluation(const AcspInstance& acspInstance, const AcspWitness& acspWitness, const vector<FieldElement>& basis, const FieldElement& shift, const dataWithCommitment& boundaryPolysMatrix, const bool entireWitnessKept, const unsigned int numZkMasks){
 
         using Algebra::zero;
         using std::unique_ptr;
@@ -407,7 +409,7 @@ namespace{
 
         vector<FieldElement> polyEval;
         if(entireWitnessKept){
-            const auto cachedWitness = getCachedWitness(acspInstance,acspWitness,boundaryPolysMatrix);
+            const auto cachedWitness = getCachedWitness(acspInstance,acspWitness,boundaryPolysMatrix, numZkMasks);
             polyEval = acspInstance.composeWithWitness_and_divideByVanishingSpacePoly(cachedWitness,basis,shift,true);
         }
         else{
@@ -431,7 +433,8 @@ namespace{
 
     vector<FieldElement> computeUnivariateForPCPP_Witness(const AcspInstance& acspInstance,
             const novelFFT& fftInstance,
-            const randomCoeffsSet_t& randCoeffs){
+            const randomCoeffsSet_t& randCoeffs,
+            const unsigned int rsCombId){
         
         TASK("Constructing univariate polynomial for Witness PCPP proof");
 
@@ -450,7 +453,7 @@ namespace{
         fftInstance.FFT({Algebra::zero()},&evaluation[0],0);
 
         vector<FieldElement> cosetVals(cosetSize);
-        const size_t zkMaskIdx = acspInstance.boundaryConstraints().size();
+        const size_t zkMaskIdx = acspInstance.boundaryConstraints().size() + rsCombId;
 
         const unsigned short logBlockLen = std::min(10,int(cosetBasis.size()));
         const size_t blockLen = POW2(logBlockLen);
@@ -469,9 +472,9 @@ namespace{
                 for(size_t wIndex =0; wIndex <acspInstance.boundaryConstraints().size(); wIndex++){
                     cosetVals[xIdx] += evaluation[xIdx*numColumns +wIndex]*
                         (
-                         randCoeffs.boundary[wIndex].coeffUnshifted
+                         randCoeffs.boundary[wIndex].coeffUnshifted[rsCombId]
                          +
-                         randCoeffs.boundary[wIndex].coeffShifted
+                         randCoeffs.boundary[wIndex].coeffShifted[rsCombId]
                          *
                          power(x,randCoeffs.boundary[wIndex].degShift)
                         );
@@ -497,7 +500,9 @@ namespace{
     vector<FieldElement> computeUnivariateForPCPP_Composition(const AcspInstance& acspInstance, const AcspWitness& acspWitness,
             const uniEvalsSet_t& uniEvals,
             const randomCoeffsSet_t& randCoeffs,
-            const bool entireWitnessKept){
+            const bool entireWitnessKept,
+            const unsigned int rsCombId,
+            const unsigned int numZkMasks){
         
         TASK("Constructing univariate polynomial for Composition PCPP proof");
 
@@ -507,13 +512,13 @@ namespace{
         const auto basisPCPP = Ali::details::PCP_common::basisForConsistency(acspInstance);
         const size_t spaceSize = POW2(basisPCPP.basis.size());
 
-        vector<FieldElement> evaluation = compositionPolysEvaluation(acspInstance,acspWitness, basisPCPP.basis, basisPCPP.shift, *uniEvals.boundaryPolysMatrix, entireWitnessKept);
+        vector<FieldElement> evaluation = compositionPolysEvaluation(acspInstance,acspWitness, basisPCPP.basis, basisPCPP.shift, *uniEvals.boundaryPolysMatrix, entireWitnessKept, numZkMasks);
 #pragma omp parallel for
 		  for (unsigned long long xIdx = 0; xIdx < spaceSize; xIdx++){
             
             //the ZK mask poly
-            evaluation[xIdx] *= randCoeffs.ZK_mask_composition.coeffUnshifted;
-            evaluation[xIdx] += uniEvals.ZK_mask_composition->getElement(xIdx);
+            evaluation[xIdx] *= randCoeffs.ZK_mask_composition[rsCombId].coeffUnshifted[0];
+            evaluation[xIdx] += uniEvals.ZK_mask_composition[rsCombId]->getElement(xIdx);
 
         }
 
@@ -528,7 +533,8 @@ namespace{
     vector<hashDigest_t> fillBoundaryResults(const novelFFT& fftInstance,
             const dataWithCommitment& merkleTop,
             const AcspInstance& instance,
-            const rawQueries_t& rawQueries){
+            const rawQueries_t& rawQueries,
+            const unsigned int numZkMasks){
 
         if(rawQueries.boundaryPolysMatrix.empty())return vector<hashDigest_t>(0);
 
@@ -544,7 +550,7 @@ namespace{
         const vector<FieldElement> shiftsBasis(basisPCPP.basis.begin()+witnessDegLog, basisPCPP.basis.end());
         const size_t numShifts = POW2(shiftsBasis.size());
         const size_t cosetSize = POW2(cosetBasis.size());
-        const unsigned short widthLog = boundaryPolysMatrix_logWidth(instance);
+        const unsigned short widthLog = boundaryPolysMatrix_logWidth(instance, numZkMasks);
         const unsigned short heightLog = basisPCPP.basis.size();
         const size_t width = POW2(widthLog);
 
@@ -746,14 +752,17 @@ namespace{
     rawResults_t fillResults(const uniEvalsSet_t& uniEvals,const novelFFT& fftInstance,
             const AcspInstance& instance,
             const rawQueries_t& rawQueries,
-            const bool entireWitnessKept){
+            const bool entireWitnessKept,
+            const unsigned int numZkMasks){
 
         rawResults_t results;
 
         {
             {
                 TASK("ZK Composition Mask polynomial");
-                results.ZK_mask_composition = uniEvals.ZK_mask_composition->answerQueries(rawQueries.ZK_mask_composition).toVector();
+                for(unsigned int i=0; i< uniEvals.ZK_mask_composition.size(); i++){
+                    results.ZK_mask_composition.push_back(uniEvals.ZK_mask_composition[i]->answerQueries(rawQueries.ZK_mask_composition[i]).toVector());
+                }
             }
 
             {
@@ -762,7 +771,7 @@ namespace{
                     results.boundaryPolysMatrix = uniEvals.boundaryPolysMatrix->answerQueries(rawQueries.boundaryPolysMatrix).toVector();
                 }
                 else{
-                    results.boundaryPolysMatrix = fillBoundaryResults(fftInstance, *uniEvals.boundaryPolysMatrix ,instance,rawQueries);
+                    results.boundaryPolysMatrix = fillBoundaryResults(fftInstance, *uniEvals.boundaryPolysMatrix ,instance,rawQueries, numZkMasks);
                 }
             }
         }
@@ -780,7 +789,7 @@ prover_t::prover_t(const BairInstance& bairInstance, const AcspWitness& witness,
         
         vector<FieldElement> coeffsPi(bairInstance.constraintsPermutation().numMappings());
         vector<FieldElement> coeffsChi(bairInstance.constraintsAssignment().numMappings());
-        instance_ = CBairToAcsp::reduceInstance(bairInstance,coeffsPi,coeffsChi);
+        instance_.push_back(CBairToAcsp::reduceInstance(bairInstance,coeffsPi,coeffsChi));
     }
     
 void prover_t::receiveMessage(const TranscriptMessage& msg){
@@ -790,8 +799,9 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
 
     case(Ali::details::phase_t::START_PROTOCOL):
     {
-        TASK("Received start protocol request)");
-        evaluateBoundryPolys();
+        TASK("Received start protocol request");
+        numRS_repetitions_ = vMsg.numRepetitions;
+        evaluateBoundryPolys(numRS_repetitions_);
         evaluateZK_Composition_mask();
         phase_ = Ali::details::advancePhase(phase_);
     }
@@ -800,32 +810,43 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
     case(Ali::details::phase_t::VERIFIER_RANDOMNESS):
     {
         TASK("Receiving randomness from verifier");
+       
+        instance_.resize(0);
+        for(unsigned int i=0; i<numRS_repetitions_; i++){
+            instance_.push_back(CBairToAcsp::reduceInstance(bairInstance_,vMsg.coeffsPi[i],vMsg.coeffsChi[i]));
+        }
+       
+        for(unsigned int i=0; i<numRS_repetitions_; i++){
+            RS_prover_witness_.push_back(RS_proverFactory_(
+                    Ali::details::PCP_common::basisForWitness(*(instance_[i])).basis, 
+                    computeUnivariateForRS_Proximity_Witness(vMsg.randomCoefficients, i),
+                    true
+                    ));
+        }
         
-        instance_ = CBairToAcsp::reduceInstance(bairInstance_,vMsg.coeffsPi,vMsg.coeffsChi);
-
-        RS_prover_witness_ = RS_proverFactory_(
-                Ali::details::PCP_common::basisForWitness(*instance_).basis, 
-                computeUnivariateForRS_Proximity_Witness(vMsg.randomCoefficients),
-                true
-            );
-        
-        RS_prover_composition_ = RS_proverFactory_(
-                Ali::details::PCP_common::basisForConsistency(*instance_).basis, 
-                computeUnivariateForRS_Proximity_Composition(vMsg.randomCoefficients),
+        for(unsigned int i=0; i<numRS_repetitions_; i++){
+        RS_prover_composition_.push_back(RS_proverFactory_(
+                Ali::details::PCP_common::basisForConsistency(*(instance_[i])).basis, 
+                computeUnivariateForRS_Proximity_Composition(vMsg.randomCoefficients, i),
                 false
-            );
+            ));
+        }
         
         phase_ = Ali::details::advancePhase(phase_);
     }
     
     default:
-    if(vMsg.RS_verifier_witness_msg){
-        TASK("Received message from Witness RS proximity verifier");
-        RS_prover_witness_->receiveMessage(*vMsg.RS_verifier_witness_msg);
+    for(unsigned int i=0; i<vMsg.RS_verifier_witness_msg.size(); i++){
+        if(vMsg.RS_verifier_witness_msg[i]){
+            TASK("Received message from Witness RS proximity verifier #" + std::to_string(i));
+            RS_prover_witness_[i]->receiveMessage(*(vMsg.RS_verifier_witness_msg[i]));
+        }
     }
-    if(vMsg.RS_verifier_composition_msg){
-        TASK("Received message from Composition RS proximity verifier");
-        RS_prover_composition_->receiveMessage(*vMsg.RS_verifier_composition_msg);
+    for(unsigned int i=0; i<vMsg.RS_verifier_composition_msg.size(); i++){
+        if(vMsg.RS_verifier_composition_msg[i]){
+            TASK("Received message from Composition RS proximity verifier #" + std::to_string(i));
+            RS_prover_composition_[i]->receiveMessage(*(vMsg.RS_verifier_composition_msg[i]));
+        }
     }
     {
         //Assume queries sent only at the end
@@ -833,8 +854,10 @@ void prover_t::receiveMessage(const TranscriptMessage& msg){
         if(!vMsg.queries.boundaryPolysMatrix.empty()){
             {
                 TASK("Deleting IOPP proofs");
-                dynamic_cast<Fri::Prover::prover_t*>(RS_prover_witness_.get())->deleteProof();
-                dynamic_cast<Fri::Prover::prover_t*>(RS_prover_composition_.get())->deleteProof();
+                for(unsigned int i=0; i< numRS_repetitions_; i++){
+                    dynamic_cast<Fri::Prover::prover_t*>(RS_prover_witness_[i].get())->deleteProof();
+                    dynamic_cast<Fri::Prover::prover_t*>(RS_prover_composition_[i].get())->deleteProof();
+                }
             }
             {
                 TASK("Answering queries");
@@ -857,8 +880,10 @@ msg_ptr_t prover_t::sendMessage(){
     {
         TASK("Sending commitments");
         
-        pMsg.commitments.push_back(state_.ZK_mask_composition->getCommitment());
         pMsg.commitments.push_back(state_.boundaryPolysMatrix->getCommitment());
+        for(const auto& f:state_.ZK_mask_composition){
+            pMsg.commitments.push_back(f->getCommitment());
+        }
         
         phase_ = Ali::details::advancePhase(phase_);
     }
@@ -867,32 +892,40 @@ msg_ptr_t prover_t::sendMessage(){
     default:
         TASK("Sending communication from RS proximity prover and queries results");
         
-        pMsg.RS_prover_witness_msg = RS_prover_witness_->sendMessage();
-        pMsg.RS_prover_composition_msg = RS_prover_composition_->sendMessage();
+        for(unsigned int i=0; i< numRS_repetitions_; i++){
+            pMsg.RS_prover_witness_msg.push_back(RS_prover_witness_[i]->sendMessage());
+        }
+        
+        for(unsigned int i=0; i< numRS_repetitions_; i++){
+            pMsg.RS_prover_composition_msg.push_back(RS_prover_composition_[i]->sendMessage());
+        }
+        
         pMsg.results = nextResults_;
     }
 
     return pMsgPtr;
 }
 
-void prover_t::evaluateBoundryPolys(){
-    state_.boundaryPolysMatrix = boundaryPolysEvaluation(*instance_,witness_,fftInstance_,entireWitnessKept_);
+void prover_t::evaluateBoundryPolys(const unsigned int numRepetitions){
+    state_.boundaryPolysMatrix = boundaryPolysEvaluation(*(instance_[0]),witness_,numRepetitions,fftInstance_,entireWitnessKept_, numRS_repetitions_);
 }
 
 void prover_t::evaluateZK_Composition_mask(){
-    state_.ZK_mask_composition = ZK_Composition_PolyEvaluation(*instance_);
+    for(unsigned int i=0; i< numRS_repetitions_; i++){
+        state_.ZK_mask_composition.push_back(ZK_Composition_PolyEvaluation(*(instance_[0])));
+    }
 }
 
-vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Witness(const Ali::details::randomCoeffsSet_t& randCoeffs)const{
-    return computeUnivariateForPCPP_Witness(*instance_, *fftInstance_, randCoeffs);
+vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Witness(const Ali::details::randomCoeffsSet_t& randCoeffs, const unsigned int rsCombId)const{
+    return computeUnivariateForPCPP_Witness(*(instance_[0]), *fftInstance_, randCoeffs, rsCombId);
 }
 
-vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Composition(const Ali::details::randomCoeffsSet_t& randCoeffs)const{
-    return computeUnivariateForPCPP_Composition(*instance_, witness_, state_, randCoeffs,entireWitnessKept_);
+vector<FieldElement> prover_t::computeUnivariateForRS_Proximity_Composition(const Ali::details::randomCoeffsSet_t& randCoeffs, const unsigned int rsCombId)const{
+    return computeUnivariateForPCPP_Composition(*(instance_[rsCombId]), witness_, state_, randCoeffs,entireWitnessKept_, rsCombId, numRS_repetitions_);
 }
 
 Ali::details::rawResults_t prover_t::answerQueries(const Ali::details::rawQueries_t& queries){
-    return fillResults(state_, *fftInstance_, *instance_, queries, entireWitnessKept_);
+    return fillResults(state_, *fftInstance_, *(instance_[0]), queries, entireWitnessKept_, numRS_repetitions_);
 }
 
 

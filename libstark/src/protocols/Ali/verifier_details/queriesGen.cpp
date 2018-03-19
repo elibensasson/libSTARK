@@ -16,8 +16,9 @@ using Algebra::FieldElement;
 using Algebra::zero;
 using Infrastructure::POW2;
 
-void linearCombinationValue::initLocation(const FieldElement& x){
+void linearCombinationValue::initLocation(const FieldElement& x, const unsigned int combId){
     x_ = x;
+    combId_ = combId;
 }
 
 void linearCombinationValue::addAnswerPtr(FieldElement* answerPtr){
@@ -28,7 +29,7 @@ void linearCombinationValue::calculate_witness(const Protocols::Ali::details::ra
     FieldElement res = ZK_mask_res;
 
     for(size_t i=0; i< coeffs.boundary.size(); i++){
-        res += (coeffs.boundary[i].coeffUnshifted + (power(x_, coeffs.boundary[i].degShift) * coeffs.boundary[i].coeffShifted)) * boundaryEval_res[i];
+        res += (coeffs.boundary[i].coeffUnshifted[combId_] + (power(x_, coeffs.boundary[i].degShift) * coeffs.boundary[i].coeffShifted[combId_])) * boundaryEval_res[i];
     }
 
     result_.answer(res);
@@ -39,14 +40,15 @@ void compositionWithZK_Value::addAnswerPtr(FieldElement* answerPtr){
 }
 
 void compositionWithZK_Value::calculate(const Protocols::Ali::details::randomCoeffsSet_t& coeffs)const{
-    FieldElement res = coeffs.ZK_mask_composition.coeffUnshifted * calculateCompositionValue() + ZK_mask_res;
+    FieldElement res = coeffs.ZK_mask_composition[combId_].coeffUnshifted[0] * calculateCompositionValue() + ZK_mask_res;
 
     result_.answer(res);
 }
 
-void compositionWithZK_Value::init(const AcspInstance& instance, const FieldElement& consistencyPoint){
+void compositionWithZK_Value::init(const AcspInstance& instance, const FieldElement& consistencyPoint, const unsigned int combId){
     instance_ = &instance;
     consistencyPoint_ = consistencyPoint;
+    combId_ = combId;
    
     const size_t numWitnesses = instance.neighborPolys().size();
 

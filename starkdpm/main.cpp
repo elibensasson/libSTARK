@@ -15,19 +15,22 @@ using AES160LOCIhashchain::dpmpair_t;
 using AES160LOCIhashchain::fingerprint_t;
 using AES160LOCIhashchain::database_t;
 
+const string securityPrefix = "-s";
+
+
 void printHelp(const string exeName){
     cout<<"Usage:"<<endl;
-    cout<<"$>"<<exeName<<" <database file path> <fingerprint file path>"<<endl;
+    cout<<"$>"<<exeName<<" <database file path> <fingerprint file path> [" + securityPrefix + "<security parameter>]"<<endl;
     cout<<endl<<"Example:"<<endl;
-    cout<<"$>"<<exeName<<" examples-dpm/database.txt examples-dpm/fp_no_match.txt"<<std::endl;
+    cout<<"$>"<<exeName<<" examples-dpm/database.txt examples-dpm/fp_no_match.txt "+securityPrefix+"120"<<std::endl;
     cout<<endl<<"The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt,";
-    cout<<"and the suspects fingerprint in examples-dpm/fp_nomatch.txt. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database."<<endl;
+    cout<<" the suspects fingerprint in examples-dpm/fp_nomatch.txt, with soundness error at most 2^-120. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database."<<endl;
     cout<<endl<<"A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 8 bit numbers in hexadecimal basis, separated by a single period. A database is a file where each line represents a fingerprint."<<endl;
     cout<<endl<<"In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it. During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
 
 }
 
-void execute(const fingerprint_t& fprint,const database_t& db){
+void execute(const fingerprint_t& fprint,const database_t& db, const unsigned int securityParameter){
     AES160LOCIhashcCommonParams params;
     params.length = db.size()*2;
     params.seed = 127;
@@ -39,7 +42,7 @@ void execute(const fingerprint_t& fprint,const database_t& db){
     AES160LOCIhashchain::evalp::setParams(Result, Algebra::power(xFE(), params.length), fprint);
     libstark::BairWitness bair_witness = buildBairWitness(params, hashC, fprint);
 
-    libstark::Protocols::executeProtocol(bair_instance, bair_witness,false,false,true);
+    libstark::Protocols::executeProtocol(bair_instance, bair_witness,securityParameter,false,false,true);
 }
 
 dpmpair_t readPair(const string pairStr){
@@ -95,7 +98,7 @@ database_t readDatabaseFromFile(const string filename){
 }
 
 int main(int argc, char *argv[]) {
-    if(argc != 3){
+    if(argc < 3){
         printHelp(argv[0]);
         return 0;
     }
@@ -110,8 +113,29 @@ int main(int argc, char *argv[]) {
         }
         fprint = tmp[0];
     }
+    
+    unsigned int securityParameter = 60;
+    for(int i=3; i< argc; i++){
+        const string currArg(argv[i]);
+        if(currArg.length()<3){
+            continue;
+        }
 
-    execute(fprint,db);
+        const string prefix = currArg.substr(0,2);
+        const unsigned int num(stoul(currArg.substr(2)));
+        
+        if(prefix == securityPrefix){
+            securityParameter = num;
+        }
+    }
+
+    if(securityParameter == 0){
+        printHelp(argv[0]);
+        return 0;
+    }
+
+
+    execute(fprint,db, securityParameter);
 
     return 0;
 }

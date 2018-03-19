@@ -118,7 +118,7 @@ void printSpecsCSV(const double proverTime, const double verifierTime, const siz
 
 }
 
-bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const bool onlyVerifierData){
+bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const unsigned short securityParameter, const bool onlyVerifierData){
     
     double verifierTime = 0;
     double proverTime = 0;
@@ -149,7 +149,7 @@ bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const
                            sleepTime*=2;
                         }
                     });
-            TASK("interaction round #" + std::to_string(msgNum++));
+            //TASK("interaction round #" + std::to_string(msgNum++));
 
             startVerifier();
             const auto vMsg = verifier.sendMessage();
@@ -175,6 +175,7 @@ bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const
             verifier.receiveMessage(*pMsg);
 
             startCicleCount();
+
         }
     }
    
@@ -374,7 +375,7 @@ namespace prn{
 
 }
 
-bool executeProtocol(const BairInstance& instance, const BairWitness& witness, bool testBair, bool testAcsp, bool testPCP){
+bool executeProtocol(const BairInstance& instance, const BairWitness& witness, const unsigned short securityParameter, bool testBair, bool testAcsp, bool testPCP){
     prn::printBairInstanceSpec(instance);
     unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
 	prn::printAcspInstanceSpec(*acspInstance);
@@ -421,7 +422,7 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, b
         const auto RS_verifier = Biased_verifier;
         const auto RS_prover = Biased_prover;
 		
-        verifier_t verifier(instance, RS_verifier);
+        verifier_t verifier(instance, RS_verifier,securityParameter);
 		prover_t prover(instance,*acspWitness, RS_prover);
         return Protocols::executeProtocol(prover,verifier,false);
     }
@@ -429,7 +430,7 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, b
     return true;
 }
 
-void simulateProtocol(const BairInstance& instance){
+void simulateProtocol(const BairInstance& instance, const unsigned short securityParameter){
     prn::printBairInstanceSpec(instance);
     unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
 	prn::printAcspInstanceSpec(*acspInstance);
@@ -440,7 +441,7 @@ void simulateProtocol(const BairInstance& instance){
     const auto RS_verifier = Biased_verifier;
     const auto RS_prover = Biased_prover;
     
-    verifier_t verifier(instance, RS_verifier);
+    verifier_t verifier(instance, RS_verifier,securityParameter);
     prover_t* prover_dummy = nullptr;
     Protocols::executeProtocol(*prover_dummy,verifier,true);
 }

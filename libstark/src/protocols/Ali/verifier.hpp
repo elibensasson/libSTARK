@@ -29,7 +29,7 @@ const RS_verifierFactory_t Biased_verifier = [](const std::vector<Algebra::Field
 
 class verifier_t : public verifierInterface{
     public:
-    verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory);
+    verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory, const unsigned short securityParameter);
     void receiveMessage(const TranscriptMessage& msg);
     msg_ptr_t sendMessage(); 
     bool doneInteracting()const;
@@ -42,16 +42,17 @@ class verifier_t : public verifierInterface{
     
     private:
     const BairInstance& bairInstance_;
-    std::vector<Algebra::FieldElement> coeffsPi_;
-    std::vector<Algebra::FieldElement> coeffsChi_;
-    std::unique_ptr<AcspInstance> instance_;
+    std::vector<unsigned int> combSoundness_;
+    std::vector<std::vector<Algebra::FieldElement>> coeffsPi_;
+    std::vector<std::vector<Algebra::FieldElement>> coeffsChi_;
+    std::vector<std::unique_ptr<AcspInstance>> instance_;
     const Ali::details::randomCoeffsSet_t randCoeffs_;
     
     std::vector<details::linearCombinationValue> linearComb_witness_;
     std::vector<details::compositionWithZK_Value> polyEvaluation_composition_;
     Ali::details::partyState<uniEvalView_t> state_;
-    std::unique_ptr<IOPP_verifierInterface> RS_verifier_witness_;
-    std::unique_ptr<IOPP_verifierInterface> RS_verifier_composition_;
+    std::vector<std::unique_ptr<IOPP_verifierInterface>> RS_verifier_witness_;
+    std::vector<std::unique_ptr<IOPP_verifierInterface>> RS_verifier_composition_;
     Ali::details::phase_t phase_;
 
     //
@@ -64,10 +65,10 @@ class verifier_t : public verifierInterface{
     void generateQueries(const RS_verifierFactory_t& RS_verifierFactory);
     
     void keepZK_Witness_maskCommitment(const CryptoCommitment::hashDigest_t& commitment);
-    void keepZK_Composition_maskCommitment(const CryptoCommitment::hashDigest_t& commitment);
+    void keepZK_Composition_maskCommitment(const CryptoCommitment::hashDigest_t& commitment, const unsigned int maskIdx);
     void keepWitnessCommitment(const CryptoCommitment::hashDigest_t& commitment);
     
-    void digestQueries(const queriesToInp_t& queriesToInput_witness, const queriesToInp_t& queriesToInput_composition);
+    void digestQueries(const std::vector<const queriesToInp_t*>& queriesToInput_witness, const std::vector<const queriesToInp_t*>& queriesToInput_composition);
     Ali::details::rawQueries_t getRawQueries()const;
     void digestResults(const Ali::details::rawResults_t& rawResults);
     bool verifyComitment()const;

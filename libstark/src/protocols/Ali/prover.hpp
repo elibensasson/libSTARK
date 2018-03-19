@@ -40,26 +40,27 @@ public:
 
 private:
     const BairInstance& bairInstance_;
-    std::unique_ptr<AcspInstance> instance_;
+    std::vector<std::unique_ptr<AcspInstance>> instance_;
     const AcspWitness& witness_;
     const RS_proverFactory_t RS_proverFactory_;
     std::unique_ptr<Algebra::novelFFT> fftInstance_;
+    unsigned int numRS_repetitions_;
     
     uniEvalsSet_t state_;
     bool entireWitnessKept_;
-    std::unique_ptr<PartieInterface> RS_prover_witness_;
-    std::unique_ptr<PartieInterface> RS_prover_composition_;
+    std::vector<std::unique_ptr<PartieInterface>> RS_prover_witness_;
+    std::vector<std::unique_ptr<PartieInterface>> RS_prover_composition_;
     Ali::details::phase_t phase_;
     Ali::details::rawResults_t nextResults_;
 
     //
     // methods
     //
-    void evaluateBoundryPolys();
+    void evaluateBoundryPolys(const unsigned int numRepetitions);
     void evaluateZK_Witness_mask();
     void evaluateZK_Composition_mask();
-    std::vector<Algebra::FieldElement> computeUnivariateForRS_Proximity_Witness(const Ali::details::randomCoeffsSet_t& randCoeffs)const;
-    std::vector<Algebra::FieldElement> computeUnivariateForRS_Proximity_Composition(const Ali::details::randomCoeffsSet_t& randCoeffs)const;
+    std::vector<Algebra::FieldElement> computeUnivariateForRS_Proximity_Witness(const Ali::details::randomCoeffsSet_t& randCoeffs, const unsigned int rsCombId)const;
+    std::vector<Algebra::FieldElement> computeUnivariateForRS_Proximity_Composition(const Ali::details::randomCoeffsSet_t& randCoeffs, const unsigned int rsCombId)const;
     Ali::details::rawResults_t answerQueries(const Ali::details::rawQueries_t& queries);
 };
 

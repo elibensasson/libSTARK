@@ -31,29 +31,41 @@ vector<FieldElement> getRandVector(const unsigned int len){
     return res;
 }
 
-verifier_t::verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory) : 
+verifier_t::verifier_t(const BairInstance& bairInstance, const RS_verifierFactory_t& RS_verifierFactory, const unsigned short securityParameter) : 
     bairInstance_(bairInstance),
     phase_(Ali::details::phase_t::START_PROTOCOL)
     {
     
     TASK("Constructing verifier");
 
+    //Soundness per random linear combination
+    {
+        unsigned int s = securityParameter;
+        while (s>0){
+            const unsigned soundnessGained = std::min(Ali::details::SoundnessParameters::maxSoundnessPerComb,s);
+            combSoundness_.push_back(soundnessGained+1);
+            s -= soundnessGained;
+        }
+    }
+
     //Random coefficients for constraints
     {
-        coeffsPi_ = getRandVector(bairInstance.constraintsPermutation().numMappings());
-        coeffsChi_ = getRandVector(bairInstance.constraintsAssignment().numMappings());
-        instance_ = CBairToAcsp::reduceInstance(bairInstance,coeffsPi_,coeffsChi_);
+        for(unsigned int i=0; i<combSoundness_.size(); i++){
+            coeffsPi_.push_back(getRandVector(bairInstance.constraintsPermutation().numMappings()));
+            coeffsChi_.push_back(getRandVector(bairInstance.constraintsAssignment().numMappings()));
+            instance_.push_back(CBairToAcsp::reduceInstance(bairInstance,coeffsPi_[i],coeffsChi_[i]));
+        }
     }
 
     {
-        verifyParams(*instance_);
+        verifyParams(*(instance_[0]));
     }
 
     //Initialize
     {
     //Boundary - aka Witness
     {
-        const short logSizeWitnesses = Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*instance_) + Log2(sizeof(FieldElement));
+        const short logSizeWitnesses = Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*(instance_[0]), combSoundness_.size()) + Log2(sizeof(FieldElement));
 
         //boundary
         state_.boundaryPolysMatrix = uniEvalView_t(logSizeWitnesses);
@@ -61,11 +73,13 @@ verifier_t::verifier_t(const BairInstance& bairInstance, const RS_verifierFactor
 
     //composition
     {
-        const size_t basisPCPP_size = Ali::details::PCP_common::basisForConsistency(*instance_).basis.size();
+        const size_t basisPCPP_size = Ali::details::PCP_common::basisForConsistency(*(instance_[0])).basis.size();
         const short logSizeBytes =  basisPCPP_size + Log2(sizeof(FieldElement));
 
         //ZK_Composition_mask
-        state_.ZK_mask_composition = uniEvalView_t(logSizeBytes);
+        for(unsigned int i=0; i< combSoundness_.size(); i++){
+            state_.ZK_mask_composition.push_back(uniEvalView_t(logSizeBytes));
+        }
     }
     }
 
@@ -85,8 +99,10 @@ void verifier_t::receiveMessage(const TranscriptMessage& msg){
     {
         TASK("Received commitments");
         
-        keepZK_Composition_maskCommitment(pMsg.commitments[0]);
-        keepWitnessCommitment(pMsg.commitments[1]);
+        keepWitnessCommitment(pMsg.commitments[0]);
+        for(unsigned int i=1; i< pMsg.commitments.size(); i++){
+            keepZK_Composition_maskCommitment(pMsg.commitments[i],i-1);
+        }
        
         phase_ = Ali::details::advancePhase(phase_);
     }
@@ -96,15 +112,23 @@ void verifier_t::receiveMessage(const TranscriptMessage& msg){
     {
         TASK("Received message for RS proximity prover");
         
-        if(!RS_verifier_witness_->doneInteracting()){
-            RS_verifier_witness_->receiveMessage(*pMsg.RS_prover_witness_msg);
+        bool RS_Done = true;
+        
+        for(unsigned int i=0; i<RS_verifier_witness_.size(); i++){
+            if(!RS_verifier_witness_[i]->doneInteracting()){
+                RS_verifier_witness_[i]->receiveMessage(*pMsg.RS_prover_witness_msg[i]);
+                RS_Done = false;
+            }
         }
         
-        if(!RS_verifier_composition_->doneInteracting()){
-            RS_verifier_composition_->receiveMessage(*pMsg.RS_prover_composition_msg);
+        for(unsigned int i=0; i<RS_verifier_composition_.size(); i++){
+            if(!RS_verifier_composition_[i]->doneInteracting()){
+                RS_verifier_composition_[i]->receiveMessage(*pMsg.RS_prover_composition_msg[i]);
+                RS_Done = false;
+            }
         }
         
-        if(RS_verifier_witness_->doneInteracting() && RS_verifier_composition_->doneInteracting()){
+        if(RS_Done){
             phase_ = Ali::details::advancePhase(phase_);
         }
     }
@@ -132,6 +156,7 @@ msg_ptr_t verifier_t::sendMessage(){
     case(Ali::details::phase_t::START_PROTOCOL):
     {
         TASK("Sending start protocol request)");
+        vMsg.numRepetitions = combSoundness_.size();
         phase_ = Ali::details::advancePhase(phase_);
     }
     break;
@@ -148,8 +173,13 @@ msg_ptr_t verifier_t::sendMessage(){
     case(Ali::details::phase_t::RS_PROXIMITY):
     {
             TASK("Sending message from RS proximity verifier");
-            vMsg.RS_verifier_witness_msg = RS_verifier_witness_->sendMessage();
-            vMsg.RS_verifier_composition_msg = RS_verifier_composition_->sendMessage();
+            for(auto& v : RS_verifier_witness_){
+                vMsg.RS_verifier_witness_msg.push_back(v->sendMessage());
+            }
+            
+            for(auto& v : RS_verifier_composition_){
+                vMsg.RS_verifier_composition_msg.push_back(v->sendMessage());
+            }
     }
     break;
     
@@ -169,62 +199,70 @@ msg_ptr_t verifier_t::sendMessage(){
     return vMsgPtr;
 }
 
-void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, const queriesToInp_t& queriesToInput_composition){
+void verifier_t::digestQueries(const vector<const queriesToInp_t*>& queriesToInput_witness, const vector<const queriesToInp_t*>& queriesToInput_composition){
     TASK("Verifier digests queries");
 
-    const auto basisPCPP(Ali::details::PCP_common::basisForWitness(*instance_));
-    const size_t numWitnesses = instance_->witnessDegreeBound().size();
-    const size_t numWitnessColumns = Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logWidth(*instance_));
+    const auto basisPCPP(Ali::details::PCP_common::basisForWitness(*(instance_[0])));
+    const size_t numWitnesses = instance_[0]->witnessDegreeBound().size();
+    const size_t numWitnessColumns = Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logWidth(*(instance_[0]), combSoundness_.size()));
     
     //
     // Digest queries made to univariate of Witness PCPP
     //
     {
         TASK("Digest queries to Witness (aka boundary) RS PCPP univariate");
-       
+      
         //calculate total number of queries
-
-        linearComb_witness_.resize(queriesToInput_witness.size());
-        size_t currCombIdx = 0;
-        
-        for(const auto& q : queriesToInput_witness){
-            
-            const size_t x = q.first;
-            const auto& resultsAddressList = q.second;
-
-            auto& currComb = linearComb_witness_[currCombIdx++];
-            {
-                currComb.initLocation(getSpaceElementByIndex(basisPCPP.basis,basisPCPP.shift,x));
-                for(FieldElement* location : resultsAddressList){
-                    currComb.addAnswerPtr(location);
-                }
+        {
+            unsigned int numLinearCombinations = 0;
+            for(const auto& qSet : queriesToInput_witness){
+                numLinearCombinations += qSet->size();
             }
+            linearComb_witness_.resize(numLinearCombinations);
+        }
 
-            {
+        unsigned int combIdx = 0;
+        for(unsigned int ldeCombinationId =0; ldeCombinationId< queriesToInput_witness.size(); ldeCombinationId++){
+            for(const auto& q : *(queriesToInput_witness[ldeCombinationId])){
+
+                const size_t x = q.first;
+                const auto& resultsAddressList = q.second;
+
+                auto& currComb = linearComb_witness_[combIdx++];
                 {
-                    const size_t zkMaskColumnIdx = numWitnesses; //last column, right after the witnesses
-                    const size_t x_matrix = (x*numWitnessColumns) + zkMaskColumnIdx;
-                    const size_t blockIndex_matrix = CryptoCommitment::getBlockIndex(x_matrix);
-                    const short offsetInBlock_matrix = CryptoCommitment::getOffsetInBlock(x_matrix);
-                    auto setValFunc = [&](const FieldElement& res){ currComb.ZK_mask_res = res; };
-                    
-                    state_.boundaryPolysMatrix.queries[blockIndex_matrix][offsetInBlock_matrix].push_back(setValFunc);
+                    currComb.initLocation(getSpaceElementByIndex(basisPCPP.basis,basisPCPP.shift,x), ldeCombinationId);
+                    for(FieldElement* location : resultsAddressList){
+                        currComb.addAnswerPtr(location);
+                    }
                 }
 
                 {
-                    currComb.boundaryEval_res.resize(numWitnesses);
-                    for(size_t wIdx = 0; wIdx < numWitnesses; wIdx++){
-                        const size_t x_matrix = (x*numWitnessColumns) + wIdx;
+                    {
+                        const size_t zkMaskColumnIdx = numWitnesses + ldeCombinationId; //The zk mask of the i'th LDE is the i'th poly after witness
+                        const size_t x_matrix = (x*numWitnessColumns) + zkMaskColumnIdx;
                         const size_t blockIndex_matrix = CryptoCommitment::getBlockIndex(x_matrix);
                         const short offsetInBlock_matrix = CryptoCommitment::getOffsetInBlock(x_matrix);
-                        
-                        auto setValFunc = [=,&currComb](const FieldElement& res){ currComb.boundaryEval_res[wIdx] = res; };
+                        auto setValFunc = [&](const FieldElement& res){ currComb.ZK_mask_res = res; };
+
                         state_.boundaryPolysMatrix.queries[blockIndex_matrix][offsetInBlock_matrix].push_back(setValFunc);
+                    }
+
+                    {
+                        currComb.boundaryEval_res.resize(numWitnesses);
+                        for(size_t wIdx = 0; wIdx < numWitnesses; wIdx++){
+                            const size_t x_matrix = (x*numWitnessColumns) + wIdx;
+                            const size_t blockIndex_matrix = CryptoCommitment::getBlockIndex(x_matrix);
+                            const short offsetInBlock_matrix = CryptoCommitment::getOffsetInBlock(x_matrix);
+
+                            auto setValFunc = [=,&currComb](const FieldElement& res){ currComb.boundaryEval_res[wIdx] = res; };
+                            state_.boundaryPolysMatrix.queries[blockIndex_matrix][offsetInBlock_matrix].push_back(setValFunc);
+                        }
                     }
                 }
             }
         }
     }
+
     
     //
     // Digest queries made to univariate of Composition PCPP
@@ -232,53 +270,61 @@ void verifier_t::digestQueries(const queriesToInp_t& queriesToInput_witness, con
     {
         TASK("Digest queries to Composition RS PCPP univariate");
        
-        const auto consistencySpace(Ali::details::PCP_common::basisForConsistency(*instance_));
+        const auto consistencySpace(Ali::details::PCP_common::basisForConsistency(*(instance_[0])));
 
         //calculate total number of queries
-        polyEvaluation_composition_.resize(queriesToInput_composition.size());
+        {
+            unsigned int numLinearCombinations = 0;
+            for(const auto& qSet : queriesToInput_composition){
+                numLinearCombinations += qSet->size();
+            }
+            polyEvaluation_composition_.resize(numLinearCombinations);
+        }
         size_t currCombIdx = 0;
         
-        for(const auto& q : queriesToInput_composition){
-            const size_t x = q.first;
-            const FieldElement alpha = getSpaceElementByIndex(consistencySpace.basis, consistencySpace.shift, x);
-            const size_t blockIndex = CryptoCommitment::getBlockIndex(x);
-            const short offsetInBlock = CryptoCommitment::getOffsetInBlock(x);
-            const auto& resultsAddressList = q.second;
+        for(unsigned int ldeCombinationId =0; ldeCombinationId< queriesToInput_composition.size(); ldeCombinationId++){
+            for(const auto& q : *(queriesToInput_composition[ldeCombinationId])){
+                const size_t x = q.first;
+                const FieldElement alpha = getSpaceElementByIndex(consistencySpace.basis, consistencySpace.shift, x);
+                const size_t blockIndex = CryptoCommitment::getBlockIndex(x);
+                const short offsetInBlock = CryptoCommitment::getOffsetInBlock(x);
+                const auto& resultsAddressList = q.second;
 
-            auto& currComb = polyEvaluation_composition_[currCombIdx++];
-            {
-                currComb.init(*instance_,alpha);
-                for(FieldElement* location : resultsAddressList){
-                    currComb.addAnswerPtr(location);
-                }
-            }
-
-            {
-                //ZK mask
+                auto& currComb = polyEvaluation_composition_[currCombIdx++];
                 {
-                    auto setValFunc = [&](const FieldElement& res){ currComb.ZK_mask_res = res; };
-                    state_.ZK_mask_composition.queries[blockIndex][offsetInBlock].push_back(setValFunc);
+                    currComb.init(*(instance_[ldeCombinationId]),alpha,ldeCombinationId);
+                    for(FieldElement* location : resultsAddressList){
+                        currComb.addAnswerPtr(location);
+                    }
                 }
-                
-                //Witness polys
+
                 {
-                    
-                    for (size_t wIndex = 0; wIndex < numWitnesses; wIndex++){
+                    //ZK mask
+                    {
+                        auto setValFunc = [&](const FieldElement& res){ currComb.ZK_mask_res = res; };
+                        state_.ZK_mask_composition[ldeCombinationId].queries[blockIndex][offsetInBlock].push_back(setValFunc);
+                    }
 
-                        const auto& neighbours = instance_->neighborPolys()[wIndex];
-                        size_t nsize = neighbours.size();
+                    //Witness polys
+                    {
 
-                        for (unsigned int affine_num = 0; affine_num < nsize; affine_num++){
-                            const FieldElement currNeighborVal = neighbours[affine_num]->eval(alpha);
+                        for (size_t wIndex = 0; wIndex < numWitnesses; wIndex++){
 
-                            { 
-                                const size_t neighborValIndex = mapFieldElementToInteger(0,basisPCPP.basis.size(), currNeighborVal + basisPCPP.shift);//getSpaceIndexOfElement(basisPCPP.basis,basisPCPP.shift,currNeighborVal);
-                                const size_t x_matrix = (neighborValIndex*numWitnessColumns) + wIndex;
-                                const size_t blockIndex_matrix = CryptoCommitment::getBlockIndex(x_matrix);
-                                const short offsetInBlock_matrix = CryptoCommitment::getOffsetInBlock(x_matrix);
+                            const auto& neighbours = instance_[0]->neighborPolys()[wIndex];
+                            size_t nsize = neighbours.size();
 
-                                auto setValFunc = [=,&currComb](const FieldElement& res){ currComb.boundaryPoly_res[wIndex][affine_num] = res; };
-                                state_.boundaryPolysMatrix.queries[blockIndex_matrix][offsetInBlock_matrix].push_back(setValFunc);
+                            for (unsigned int affine_num = 0; affine_num < nsize; affine_num++){
+                                const FieldElement currNeighborVal = neighbours[affine_num]->eval(alpha);
+
+                                { 
+                                    const size_t neighborValIndex = mapFieldElementToInteger(0,basisPCPP.basis.size(), currNeighborVal + basisPCPP.shift);//getSpaceIndexOfElement(basisPCPP.basis,basisPCPP.shift,currNeighborVal);
+                                    const size_t x_matrix = (neighborValIndex*numWitnessColumns) + wIndex;
+                                    const size_t blockIndex_matrix = CryptoCommitment::getBlockIndex(x_matrix);
+                                    const short offsetInBlock_matrix = CryptoCommitment::getOffsetInBlock(x_matrix);
+
+                                    auto setValFunc = [=,&currComb](const FieldElement& res){ currComb.boundaryPoly_res[wIndex][affine_num] = res; };
+                                    state_.boundaryPolysMatrix.queries[blockIndex_matrix][offsetInBlock_matrix].push_back(setValFunc);
+                                }
                             }
                         }
                     }
@@ -296,7 +342,9 @@ rawQueries_t verifier_t::getRawQueries()const{
     //ZK Composition mask 
     {
         TASK("ZK Composition Mask polynomial");
-        res.ZK_mask_composition = state_.ZK_mask_composition.getRawQuery();
+        for (const auto& v : state_.ZK_mask_composition){
+            res.ZK_mask_composition.push_back(v.getRawQuery());
+        }
     }
     
     //boundry 
@@ -314,7 +362,9 @@ void verifier_t::digestResults(const rawResults_t& rawResults){
     //ZK Composition mask 
     {
         TASK("ZK Composition Mask polynomial");
-        state_.ZK_mask_composition.digestResults(rawResults.ZK_mask_composition);
+        for(unsigned int i=0; i< state_.ZK_mask_composition.size(); i++){
+            state_.ZK_mask_composition[i].digestResults(rawResults.ZK_mask_composition[i]);
+        }
     }
     
     //boundary 
@@ -331,7 +381,9 @@ bool verifier_t::verifyComitment()const{
     //ZK Composition mask
     {
         TASK("ZK Composition Mask polynomial");
-        res &= state_.ZK_mask_composition.verifyComitment();
+        for(const auto& v: state_.ZK_mask_composition){
+            res &= v.verifyComitment();
+        }
     }
     
     //boundary
@@ -350,9 +402,11 @@ void verifier_t::fetchResults()const{
     //ZK Composition mask
     {
         TASK("ZK Composition Mask polynomial");
-        state_.ZK_mask_composition.fetchResults();
+        for (auto& v: state_.ZK_mask_composition){
+            v.fetchResults();
+        }
     }
-    
+   
     //boundary
     {
         TASK("Boundary polynomials");
@@ -383,11 +437,19 @@ void verifier_t::fetchResults()const{
 void verifier_t::fillResultsAndCommitmentRandomly(){
     
     //random results for local proofs
-    state_.ZK_mask_composition.fillResultsAndCommitmentRandomly();
+    for(auto& v : state_.ZK_mask_composition){
+        v.fillResultsAndCommitmentRandomly();
+    }
+    
     state_.boundaryPolysMatrix.fillResultsAndCommitmentRandomly();
     
-    RS_verifier_composition_->fillResultsAndCommitmentRandomly();
-    RS_verifier_witness_->fillResultsAndCommitmentRandomly();
+    for(auto& v : RS_verifier_composition_){
+        v->fillResultsAndCommitmentRandomly();
+    }
+    
+    for(auto& v : RS_verifier_witness_){
+        v->fillResultsAndCommitmentRandomly();
+    }
 
 
     fetchResults();
@@ -403,8 +465,8 @@ void verifier_t::verifyParams(const AcspInstance& instance){
             );
 }
 
-void verifier_t::keepZK_Composition_maskCommitment(const CryptoCommitment::hashDigest_t& commitment){
-    state_.ZK_mask_composition.commitment = commitment;
+void verifier_t::keepZK_Composition_maskCommitment(const CryptoCommitment::hashDigest_t& commitment, const unsigned int maskIdx){
+    state_.ZK_mask_composition[maskIdx].commitment = commitment;
 }
 
 void verifier_t::keepWitnessCommitment(const CryptoCommitment::hashDigest_t& commitment){
@@ -416,45 +478,53 @@ void verifier_t::generateQueries(const RS_verifierFactory_t& RS_verifierFactory)
 
     {
         TASK("RS proximity of witness (aka boundary)");
-        const auto PCPP_Basis(Ali::details::PCP_common::basisForWitness(*instance_));
-        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*instance_));
+        const auto PCPP_Basis(Ali::details::PCP_common::basisForWitness(*(instance_[0])));
+        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*(instance_[0])));
         const short deg_log_composition = ceil(Infrastructure::Log2(deg_composition));
         {
-            specsPrinter witnessFriSpecs("FRI for witness (f) specifications");
-            RS_verifier_witness_ = RS_verifierFactory(PCPP_Basis.basis, Ali::details::SoundnessParameters::SecurityParameter, deg_log_composition,true, witnessFriSpecs);
-            witnessFriSpecs.print();
+            for(const auto& s: combSoundness_){
+                specsPrinter witnessFriSpecs("FRI for witness (f) specifications #" + std::to_string(RS_verifier_witness_.size()+1));
+                RS_verifier_witness_.push_back(RS_verifierFactory(PCPP_Basis.basis, s, deg_log_composition,true, witnessFriSpecs));
+                witnessFriSpecs.print();
+            }
         }
     }
     
     {
         TASK("RS proximity of composition");
-        const auto PCPP_Basis(Ali::details::PCP_common::basisForConsistency(*instance_));
-        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::composition_div_ZH_degreeBound(*instance_));
+        const auto PCPP_Basis(Ali::details::PCP_common::basisForConsistency(*(instance_[0])));
+        const auto deg_composition = Algebra::PolynomialDegree::integral_t(Ali::details::PCP_common::composition_div_ZH_degreeBound(*(instance_[0])));
         const short deg_log_composition = ceil(Infrastructure::Log2(deg_composition));
         {
-            specsPrinter compFriSpecs("FRI for constraints (g) specifications");
-            RS_verifier_composition_ = RS_verifierFactory(PCPP_Basis.basis, Ali::details::SoundnessParameters::SecurityParameter, deg_log_composition,false,compFriSpecs);
-            compFriSpecs.print();
+            for(const auto& s: combSoundness_){
+                specsPrinter compFriSpecs("FRI for constraints (g) specifications #" + std::to_string(RS_verifier_composition_.size()+1));
+                RS_verifier_composition_.push_back(RS_verifierFactory(PCPP_Basis.basis, s, deg_log_composition,false,compFriSpecs));
+                compFriSpecs.print();
+            }
         }
     }
 
-    digestQueries(RS_verifier_witness_->queriesToInput(),RS_verifier_composition_->queriesToInput());
+    {
+        vector<const queriesToInp_t*> queriesWitness;
+        vector<const queriesToInp_t*> queriesComposition;
+        for (unsigned int i=0; i< combSoundness_.size(); i++){
+            queriesWitness.push_back(&(RS_verifier_witness_[i]->queriesToInput()));
+            queriesComposition.push_back(&(RS_verifier_composition_[i]->queriesToInput()));
+        }
+        digestQueries(queriesWitness,queriesComposition);
+    }
 }
 
 void verifier_t::generateRandomCoefficients(Ali::details::randomCoeffsSet_t& randCoeffs){
     TASK("Verifier generates random coefficients");
 
-    //a coefficient for the ZK masks
-    randCoeffs.ZK_mask_boundary.coeffUnshifted = Algebra::generateRandom();
-    randCoeffs.ZK_mask_composition.coeffUnshifted = Algebra::generateRandom();
-
     {
     //get degree bounds
-    const PolynomialDegree::integral_t requiredDegreeBound = PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*instance_));
+    const PolynomialDegree::integral_t requiredDegreeBound = PolynomialDegree::integral_t(Ali::details::PCP_common::maximalPolyDegSupported_Witness(*(instance_[0])));
 
     //boundary witnesses
-    const auto& degBounds = Ali::details::PCP_common::witness_div_Z_Boundery_degreeBound(*instance_);
-    for(size_t wIndex =0 ; wIndex < instance_->witnessDegreeBound().size(); wIndex++){
+    const auto& degBounds = Ali::details::PCP_common::witness_div_Z_Boundery_degreeBound(*(instance_[0]));
+    for(size_t wIndex =0 ; wIndex < instance_[0]->witnessDegreeBound().size(); wIndex++){
 
         Protocols::Ali::details::randomCoeefs currCoeffs;
 
@@ -464,13 +534,23 @@ void verifier_t::generateRandomCoefficients(Ali::details::randomCoeffsSet_t& ran
         //init degree shifts to fit to the bounds
         currCoeffs.degShift = requiredDegreeBound - bounderyPoly_bound;
 
+        currCoeffs.coeffUnshifted.resize(combSoundness_.size());
+        currCoeffs.coeffShifted.resize(combSoundness_.size());
+
         //fill random coefficients
-        currCoeffs.coeffUnshifted = Algebra::generateRandom();
-        currCoeffs.coeffShifted = Algebra::generateRandom();
+        for(size_t combId=0; combId < combSoundness_.size(); combId++){
+            currCoeffs.coeffUnshifted[combId] = Algebra::generateRandom();
+            currCoeffs.coeffShifted[combId] = Algebra::generateRandom();
+        }
 
         //add random coefficient to list
         randCoeffs.boundary.push_back(currCoeffs);
     }
+    }
+
+    randCoeffs.ZK_mask_composition.resize(combSoundness_.size());
+    for(auto& e : randCoeffs.ZK_mask_composition){
+        e.coeffUnshifted.push_back(Algebra::generateRandom());
     }
 }
 
@@ -479,12 +559,16 @@ bool verifier_t::verify()const{
     
     {
         TASK("Calling Witness RS Proximity verifier");
-        res &= RS_verifier_witness_->verify();
+        for (const auto& v : RS_verifier_witness_){
+            res &= v->verify();
+        }
     }
     
     {
         TASK("Calling Composition RS Proximity verifier");
-        res &= RS_verifier_composition_->verify();
+        for (const auto& v : RS_verifier_composition_){
+            res &= v->verify();
+        }
     }
 
     return res;
@@ -495,17 +579,24 @@ bool verifier_t::doneInteracting()const{
 }
 
 size_t verifier_t::expectedCommitedProofBytes()const{
-    const size_t basisPCPP_size = Ali::details::PCP_common::basisForWitness(*instance_).basis.size();
+    const size_t basisPCPP_size = Ali::details::PCP_common::basisForWitness(*(instance_[0])).basis.size();
     const size_t evaluationBytes = Infrastructure::POW2(basisPCPP_size) * sizeof(FieldElement);
     const size_t evaluationWithCommitmentBytes = 2UL * evaluationBytes;
     
     // *2 for merkle 
-    const size_t witnessMatrixSize = 2UL*Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*instance_)) * sizeof(FieldElement);
+    const size_t witnessMatrixSize = 2UL*Infrastructure::POW2(Ali::details::PCP_common::boundaryPolysMatrix_logNumElements(*(instance_[0]), combSoundness_.size())) * sizeof(FieldElement);
     
     //Witness matrix + witness ZK mask
     const size_t localProofsBytes = evaluationWithCommitmentBytes + witnessMatrixSize;
-    const size_t RS_proximityProofBytes_witness = RS_verifier_witness_->expectedCommitedProofBytes();
-    const size_t RS_proximityProofBytes_composition = RS_verifier_composition_->expectedCommitedProofBytes();
+    size_t RS_proximityProofBytes_witness = 0;
+    for (const auto& v : RS_verifier_witness_){
+        RS_proximityProofBytes_witness += v->expectedCommitedProofBytes();
+    }
+    
+    size_t RS_proximityProofBytes_composition = 0;
+    for (const auto& v : RS_verifier_composition_){
+        RS_proximityProofBytes_composition += v->expectedCommitedProofBytes();
+    }
     
     const size_t evaluationWithCommitmentBytes_composition = 2UL * evaluationBytes;
     
@@ -520,13 +611,22 @@ size_t verifier_t::expectedSentProofBytes()const{
 
     {
         //Adding 1 for the commitments
-        numExpectedHashes += 1UL + state_.ZK_mask_composition.expectedResultsLenght();
+        for(const auto& v : state_.ZK_mask_composition){
+            numExpectedHashes += 1UL + v.expectedResultsLenght();
+        }
         numExpectedHashes += 1UL + state_.boundaryPolysMatrix.expectedResultsLenght();
     }
 
     const size_t localBytes = numExpectedHashes * sizeof(CryptoCommitment::hashDigest_t);
-    const size_t RS_proximityBytes_witness = RS_verifier_witness_->expectedSentProofBytes();
-    const size_t RS_proximityBytes_composition = RS_verifier_composition_->expectedSentProofBytes();
+    size_t RS_proximityBytes_witness = 0;
+    for(const auto& v : RS_verifier_witness_){
+        RS_proximityBytes_witness += v->expectedSentProofBytes();
+    }
+    
+    size_t RS_proximityBytes_composition = 0;
+    for(const auto& v : RS_verifier_composition_){
+        RS_proximityBytes_composition += v->expectedSentProofBytes();
+    }
     
     return localBytes + RS_proximityBytes_witness + RS_proximityBytes_composition;
 }
@@ -536,13 +636,22 @@ size_t verifier_t::expectedQueriedDataBytes()const{
     size_t numExpectedHashes = 0;
 
     {
-        numExpectedHashes += state_.ZK_mask_composition.expectedQueriedFieldElementsNum();
+        for (const auto& v : state_.ZK_mask_composition){
+            numExpectedHashes += v.expectedQueriedFieldElementsNum();
+        }
         numExpectedHashes += state_.boundaryPolysMatrix.expectedQueriedFieldElementsNum();
     }
     
     const size_t localBytes = numExpectedHashes * sizeof(FieldElement);
-    const size_t RS_proximityBytes_witness = RS_verifier_witness_->expectedQueriedDataBytes();
-    const size_t RS_proximityBytes_composition = RS_verifier_composition_->expectedQueriedDataBytes();
+    size_t RS_proximityBytes_witness =0;
+    for(const auto& v : RS_verifier_witness_){
+        RS_proximityBytes_witness += v->expectedQueriedDataBytes();
+    }
+    
+    size_t RS_proximityBytes_composition =0;
+    for(const auto& v : RS_verifier_composition_){
+        RS_proximityBytes_composition += v->expectedQueriedDataBytes();
+    }
     
     return localBytes + RS_proximityBytes_witness + RS_proximityBytes_composition;
 }

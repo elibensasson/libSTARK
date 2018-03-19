@@ -7,18 +7,22 @@
 
 using std::cout;
 using std::endl;
+using std::to_string;
 using std::string;
 using std::stoul;
 using std::shared_ptr;
 using std::vector;
 using std::move;
 
+const string timePrefix = "-t";
+const string securityPrefix = "-s";
+
 void printHelp(const string exeName){
     cout<<"Usage:"<<endl;
-    cout<<"$>"<<exeName<<" <TinyRAM assembly file path> <trace length log_2>"<<endl;
+    cout<<"$>"<<exeName<<" <TinyRAM assembly file path> "<<timePrefix<<"<trace length log_2> ["<<securityPrefix<<"<security parameter]>"<<endl;
     cout<<endl<<"Example:"<<endl;
-    cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm 10"<<endl;
-    cout<<endl<<"The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2^10-1) machine steps."<<endl;
+    cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm "<<timePrefix<<"10 "<<securityPrefix<<"120"<<endl;
+    cout<<endl<<"The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2^10-1) machine steps, and soundness error at most 2^-120."<<endl;
     cout<<endl<<"In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it. During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
 }
 
@@ -53,25 +57,49 @@ libstark::BairWitness constructWitness(const TinyRAMProgram& prog, const unsigne
     return libstark::BairWitness(move(cs2bairColoring_), move(cs2bairMemory_));
 }
 
-void execute(const string assemblyFile, const unsigned int t){
+void execute(const string assemblyFile, const unsigned int t, const unsigned int securityParameter){
+    cout<<"Executing simulation with assembly from " + assemblyFile + " over 2^" + to_string(t) +"-1 steps, and soundness error at most 2^-" +to_string(securityParameter)<<endl;
     initTinyRAMParamsFromEnvVariables();
 	TinyRAMProgram program(assemblyFile, REGISTERS_NUMBER, trRegisterLen);
     program.addInstructionsFromFile(assemblyFile);
 
     const auto bairInstance = constructInstance(program,t);
     const auto bairWitness = constructWitness(program,t);
-    libstark::Protocols::executeProtocol(bairInstance,bairWitness,false,false,true);
+    libstark::Protocols::executeProtocol(bairInstance,bairWitness,securityParameter,false,false,true);
 }
 
 int main(int argc, char *argv[]) {
-    if(argc != 3){
+    if(argc < 2){
         printHelp(argv[0]);
         return 0;
     }
 
     string assemblyFile(argv[1]);
-    unsigned int executionLenLog(stoul(argv[2]));
-    execute(assemblyFile,executionLenLog);
+    unsigned int executionLenLog = 0;
+    unsigned int securityParameter = 60;
+    for(int i=2; i< argc; i++){
+        const string currArg(argv[i]);
+        if(currArg.length()<3){
+            continue;
+        }
+
+        const string prefix = currArg.substr(0,2);
+        const unsigned int num(stoul(currArg.substr(2)));
+
+        if(prefix == timePrefix){
+            executionLenLog = num;
+        }
+        if(prefix == securityPrefix){
+            securityParameter = num;
+        }
+    }
+
+    if((executionLenLog == 0) || (securityParameter == 0)){
+        printHelp(argv[0]);
+        return 0;
+    }
+
+    execute(assemblyFile,executionLenLog,securityParameter);
 
     return 0;
 }

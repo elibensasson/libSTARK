@@ -21,13 +21,13 @@ public:
     std::vector<T_univariate> boundary;
     T_univariate boundaryPolysMatrix;
     T_univariate ZK_mask_boundary;
-    T_univariate ZK_mask_composition;
+    std::vector<T_univariate> ZK_mask_composition;
 };
 
 struct randomCoeefs{
     size_t degShift;
-    Algebra::FieldElement coeffUnshifted;
-    Algebra::FieldElement coeffShifted;
+    std::vector<Algebra::FieldElement> coeffUnshifted;
+    std::vector<Algebra::FieldElement> coeffShifted;
     //multiplyes the polynomial by the polynomial:
     // <coeffUnshifted> + <coeffShifted>*x^<degShift>
 
@@ -45,12 +45,13 @@ phase_t advancePhase(const phase_t& currPhase);
 class verifierMsg : public TranscriptMessage{
 public:
     virtual ~verifierMsg(){};
+    unsigned int numRepetitions;
     randomCoeffsSet_t randomCoefficients;
-    std::vector<Algebra::FieldElement> coeffsPi;
-    std::vector<Algebra::FieldElement> coeffsChi;
+    std::vector<std::vector<Algebra::FieldElement>> coeffsPi;
+    std::vector<std::vector<Algebra::FieldElement>> coeffsChi;
     Ali::details::rawQueries_t queries;
-    std::unique_ptr<TranscriptMessage> RS_verifier_witness_msg;
-    std::unique_ptr<TranscriptMessage> RS_verifier_composition_msg;
+    std::vector<std::unique_ptr<TranscriptMessage>> RS_verifier_witness_msg;
+    std::vector<std::unique_ptr<TranscriptMessage>> RS_verifier_composition_msg;
 };
 
 class proverMsg : public TranscriptMessage{
@@ -58,8 +59,8 @@ public:
     virtual ~proverMsg(){};
     std::vector<CryptoCommitment::hashDigest_t> commitments;
     Ali::details::rawResults_t results;
-    std::unique_ptr<TranscriptMessage> RS_prover_witness_msg;
-    std::unique_ptr<TranscriptMessage> RS_prover_composition_msg;
+    std::vector<std::unique_ptr<TranscriptMessage>> RS_prover_witness_msg;
+    std::vector<std::unique_ptr<TranscriptMessage>> RS_prover_composition_msg;
 };
 
 namespace PCP_common {
@@ -91,15 +92,16 @@ Algebra::PolynomialDegree maximalPolyDegSupported_Witness(const AcspInstance& sr
  */
 basisWithShift_t basisForConsistency(const AcspInstance& src);
 
-unsigned short boundaryPolysMatrix_logWidth(const AcspInstance& src);
-unsigned short boundaryPolysMatrix_logNumElements(const AcspInstance& src);
+unsigned short boundaryPolysMatrix_logWidth(const AcspInstance& src, const unsigned int numZkMasks);
+unsigned short boundaryPolysMatrix_logNumElements(const AcspInstance& src, const unsigned int numZkMasks);
 
 } // namespace PCP_common
 
 namespace SoundnessParameters{
 
-    const short Eta = 3;
-    const short SecurityParameter = 80;
+    const unsigned short Eta = 3;
+    const unsigned int FieldExtensionDegree = 64;
+    const unsigned int maxSoundnessPerComb = FieldExtensionDegree-1;
 
 } // namespace SoundnessParameters
 

@@ -46,22 +46,22 @@ Arguments format:
 ```
 for example:
 ```
-./stark-dpm examples-dpm/database.txt examples-dpm/fp_no_match.txt
+./stark-dpm examples-dpm/database.txt examples-dpm/fp_no_match.txt [-s<security parameter>]
 ```
-The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt,and the suspects fingerprint in examples-dpm/fp_nomatch.txt. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database.
+The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt, the suspect's fingerprint in examples-dpm/fp_nomatch.txt, and soundness error at most 2<sup>-120</sup>. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database.
 
 A single fingerprint is represented by a single line, each line contains 20 pairs delimited by spaces, each pair contains two 8 bit numbers in hexadecimal basis, separated by a single period. A database is a file where each line represents a fingerprint.
 
 ### STARK for TinyRAM programs
 Arguments format:
 ```
-./stark-tinyram <TinyRAM assembly file path> <number of machine steps indicator>
+./stark-tinyram <TinyRAM assembly file path> -t<trace length log_2> [-s<security parameter]>
 ```
 for example:
 ```
-./stark-tinyram examples-tinyram/collatz.asm 10
+./stark-tinyram examples-tinyram/collatz.asm -t10 -s120
 ```
-The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2<sup>10</sup>-1) machine steps.
+The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2<sup>10</sup>-1) machine steps, and soundness error at most 2<sup>-120</sup>.
 
 ### Execution results
 In the simulation the Prover and Verifier interact, the Prover generates a proof and the Verifier verifies it.
