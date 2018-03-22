@@ -118,7 +118,7 @@ void printSpecsCSV(const double proverTime, const double verifierTime, const siz
 
 }
 
-bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const unsigned short securityParameter, const bool onlyVerifierData){
+bool executeProtocol(PartieInterface& prover, verifierInterface& verifier, const bool onlyVerifierData){
     
     double verifierTime = 0;
     double proverTime = 0;
@@ -376,9 +376,12 @@ namespace prn{
 }
 
 bool executeProtocol(const BairInstance& instance, const BairWitness& witness, const unsigned short securityParameter, bool testBair, bool testAcsp, bool testPCP){
+    const bool noWitness = !(testBair || testAcsp || testPCP);
+    
     prn::printBairInstanceSpec(instance);
     unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
-	prn::printAcspInstanceSpec(*acspInstance);
+        
+    prn::printAcspInstanceSpec(*acspInstance);
 	prn::printAprInstanceSpec(*acspInstance);
     
     if(testBair){
@@ -387,63 +390,62 @@ bool executeProtocol(const BairInstance& instance, const BairWitness& witness, c
         }
     }
     
-    
-    std::cout<<"Constructing APR (ACSP) witness:";
-    bool doStatusLoop = true;
-    Timer reductionTimer;
-    std::thread barManager(
-            [&](){
-               unsigned int sleepInterval = 10;
-               unsigned int sleepTime = 10;
-               while(doStatusLoop){
-                   std::cout<<"."<<std::flush;
-                   for(unsigned int i=0; (i< sleepTime) && doStatusLoop; i++){
-                       std::this_thread::sleep_for(std::chrono::milliseconds(sleepInterval));
-                   }
-                   sleepTime*=2;
+   
+    //Reduce BAIR witness to ACSP witness
+    unique_ptr<AcspWitness> acspWitness (nullptr);
+    if(!noWitness){
+        std::cout<<"Constructing APR (ACSP) witness:";
+        bool doStatusLoop = true;
+        Timer reductionTimer;
+        std::thread barManager(
+                [&](){
+                unsigned int sleepInterval = 10;
+                unsigned int sleepTime = 10;
+                while(doStatusLoop){
+                std::cout<<"."<<std::flush;
+                for(unsigned int i=0; (i< sleepTime) && doStatusLoop; i++){
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleepInterval));
+                }
+                sleepTime*=2;
                 }
                 }
-            );
-    unique_ptr<AcspWitness> acspWitness = CBairToAcsp::reduceWitness(instance, witness);
-    doStatusLoop = false;
-    barManager.join();
-    std::cout<<"("<<reductionTimer.getElapsed()<<" seconds)"<<std::endl;
+                );
+        acspWitness = CBairToAcsp::reduceWitness(instance, witness);
+        doStatusLoop = false;
+        barManager.join();
+        std::cout<<"("<<reductionTimer.getElapsed()<<" seconds)"<<std::endl;
 
-    if(testAcsp){
-        if(!AcspWitnessChecker::verify(*acspInstance, *acspWitness)){
-            return false;
+        if(testAcsp){
+            if(!AcspWitnessChecker::verify(*acspInstance, *acspWitness)){
+                return false;
+            }
         }
     }
 
-    if(testPCP){
+    {
         using namespace Ali::Verifier;
         using namespace Ali::Prover;
-        
+
         const auto RS_verifier = Biased_verifier;
-        const auto RS_prover = Biased_prover;
-		
         verifier_t verifier(instance, RS_verifier,securityParameter);
-		prover_t prover(instance,*acspWitness, RS_prover);
-        return Protocols::executeProtocol(prover,verifier,false);
+    
+        if(testPCP){
+            const auto RS_prover = Biased_prover;
+            prover_t prover(instance,*acspWitness, RS_prover);
+            return Protocols::executeProtocol(prover,verifier,false);
+        }
+        else if(noWitness){
+            prover_t* prover_dummy = nullptr;
+            return Protocols::executeProtocol(*prover_dummy,verifier,true);
+        }
     }
 
     return true;
 }
 
 void simulateProtocol(const BairInstance& instance, const unsigned short securityParameter){
-    prn::printBairInstanceSpec(instance);
-    unique_ptr<AcspInstance> acspInstance = CBairToAcsp::reduceInstance(instance, vector<FieldElement>(instance.constraintsPermutation().numMappings(),one()), vector<FieldElement>(instance.constraintsAssignment().numMappings(),one()));
-	prn::printAcspInstanceSpec(*acspInstance);
-    
-    using namespace Ali::Verifier;
-    using namespace Ali::Prover;
-    
-    const auto RS_verifier = Biased_verifier;
-    const auto RS_prover = Biased_prover;
-    
-    verifier_t verifier(instance, RS_verifier,securityParameter);
-    prover_t* prover_dummy = nullptr;
-    Protocols::executeProtocol(*prover_dummy,verifier,true);
+    BairWitness* witness_dummy = nullptr;
+    Protocols::executeProtocol(instance,*witness_dummy,securityParameter,false,false,false);
 }
 
 } //namespace Protocols
