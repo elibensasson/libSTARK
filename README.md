@@ -42,11 +42,11 @@ make -j8
 ### STARK for DPM (DNA fingerprint blacklist)
 Arguments format:
 ```
-./stark-dpm <database file path> <fingerprint file path>
+./stark-dpm <database file path> <fingerprint file path> [-s<security parameter>]
 ```
 for example:
 ```
-./stark-dpm examples-dpm/database.txt examples-dpm/fp_no_match.txt [-s<security parameter>]
+./stark-dpm examples-dpm/database.txt examples-dpm/fp_no_match.txt
 ```
 The above execution results in execution of STARK simulation over the DPM blacklist program, with the database represented by examples-dpm/database.txt, the suspect's fingerprint in examples-dpm/fp_nomatch.txt, and soundness error at most 2<sup>-120</sup>. The prover generates in this case a proof for the claim that the fingerprint does not perfectly match any entry in the database.
 
