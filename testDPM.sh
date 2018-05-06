@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [[ ("$#" -lt 3) || ($1 -lt 6) ]]; then
+if [[ ("$#" -lt 3) || ($1 -lt 7) ]]; then
    echo "usage: min max repeat seed dry verifier_only securityparam"
    exit
 fi
 
 function calcn {
-	len=$(( (2**i)/62 ))
+	len=$(( (2**(i-1))/62 ))
 }
 
 if [ "$5" = 0 ]; then
