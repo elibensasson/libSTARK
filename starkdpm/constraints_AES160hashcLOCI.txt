@@ -1,0 +1,2046 @@
+(ST3 + (ST2 + 1)*(ST2 + X))
+&
+(L1_next + L1)
+&
+(L2_next + L2)
+&
+(L3_next + L3)
+&
+(L4_next + L4)
+&
+(L5_next + L5)
+&
+(L6_next + L6)
+&
+(
+(PHASE + 1)*
+(
+	(K00_next + K00)
+	&
+	(K01_next + K01)
+	&
+	(K02_next + K02)
+	&
+	(K03_next + K03)
+	&
+	(K04_next + K04)
+	&
+	(K10_next + K10)
+	&
+	(K11_next + K11)
+	&
+	(K12_next + K12)
+	&
+	(K13_next + K13)
+	&
+	(K14_next + K14)
+	&
+	(K20_next + K20)
+	&
+	(K21_next + K21)
+	&
+	(K22_next + K22)
+	&
+	(K23_next + K23)
+	&
+	(K24_next + K24)
+	&
+	(K30_next + K30)
+	&
+	(K31_next + K31)
+	&
+	(K32_next + K32)
+	&
+	(K33_next + K33)
+	&
+	(K34_next + K34)
+)
++
+PHASE*
+(
+	(ST2_next + 1)
+	&
+	(isSecondPhaseComparingLOCI_next + isSecondPhaseComparingLOCI)
+	&
+	(
+	(STATE + X)*
+	(
+		(A_next + A)
+		&
+		(B_next + B)
+		&
+		(C_next + C)
+		&
+		(K_next + K)
+		&
+		(PHASE_next + PHASE)
+		&
+		(W11 + inv1*inv1*inv1*inv1)
+		&
+		(W12 + W11*W11*W11*W11)
+		&
+		(W13 + W12*W12*W12*W12)
+		&
+		(W21 + inv2*inv2*inv2*inv2)
+		&
+		(W22 + W21*W21*W21*W21)
+		&
+		(W23 + W22*W22*W22*W22)
+		&
+		(W31 + inv3*inv3*inv3*inv3)
+		&
+		(W32 + W31*W31*W31*W31)
+		&
+		(W33 + W32*W32*W32*W32)
+		&
+		(W41 + inv4*inv4*inv4*inv4)
+		&
+		(W42 + W41*W41*W41*W41)
+		&
+		(W43 + W42*W42*W42*W42)
+		&
+		(W51 + inv5*inv5*inv5*inv5)
+		&
+		(W52 + W51*W51*W51*W51)
+		&
+		(W53 + W52*W52*W52*W52)
+		&
+		(
+			(FLAG1 + X)*
+			(
+				(STATE_next + 1)
+				&
+				(RC_next + RC)
+				&
+				(K00_next + K00)
+				&
+				(K01_next + K01)
+				&
+				(K02_next + K02)
+				&
+				(K03_next + K03)
+				&
+				(K04_next + K04)
+				&
+				(K10_next + K10)
+				&
+				(K11_next + K11)
+				&
+				(K12_next + K12)
+				&
+				(K13_next + K13)
+				&
+				(K14_next + K14)
+				&
+				(K20_next + K20)
+				&
+				(K21_next + K21)
+				&
+				(K22_next + K22)
+				&
+				(K23_next + K23)
+				&
+				(K24_next + K24)
+				&
+				(K30_next + K30)
+				&
+				(K31_next + K31)
+				&
+				(K32_next + K32)
+				&
+				(K33_next + K33)
+				&
+				(K34_next + K34)
+				&
+				(FLAG1 + 1)*(FLAG2 + 1)*
+				(
+					FLAG1_next
+					&
+					(FLAG2_next + 1)
+					&
+					(B10_next + B10)
+					&
+					(B11_next + B11)
+					&
+					(B12_next + B12)
+					&
+					(B13_next + B13)
+					&
+					(B14_next + B14)
+					&
+					(B20_next + B20)
+					&
+					(B21_next + B21)
+					&
+					(B22_next + B22)
+					&
+					(B23_next + B23)
+					&
+					(B24_next + B24)
+					&
+					(B30_next + B30)
+					&
+					(B31_next + B31)
+					&
+					(B32_next + B32)
+					&
+					(B33_next + B33)
+					&
+					(B34_next + B34)
+					&
+					(inv1*B00 + 1)*(B00 & inv1)
+					&
+					(B00_next +
+						inv1 * polyFromMatrix_0 +
+						inv1 * inv1 * polyFromMatrix_1 +
+						W11 * polyFromMatrix_2 +
+						W11 * W11 * polyFromMatrix_3 +
+						W12 * polyFromMatrix_4 +
+						W12 * W12 * polyFromMatrix_5 +
+						W13 * polyFromMatrix_6 +
+						W13 * W13 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv2*B01 + 1)*(B01 & inv2)
+					&
+					(B01_next +
+						inv2 * polyFromMatrix_0 +
+						inv2 * inv2 * polyFromMatrix_1 +
+						W21 * polyFromMatrix_2 +
+						W21 * W21 * polyFromMatrix_3 +
+						W22 * polyFromMatrix_4 +
+						W22 * W22 * polyFromMatrix_5 +
+						W23 * polyFromMatrix_6 +
+						W23 * W23 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv3*B02 + 1)*(B02 & inv3)
+					&
+					(B02_next +
+						inv3 * polyFromMatrix_0 +
+						inv3 * inv3 * polyFromMatrix_1 +
+						W31 * polyFromMatrix_2 +
+						W31 * W31 * polyFromMatrix_3 +
+						W32 * polyFromMatrix_4 +
+						W32 * W32 * polyFromMatrix_5 +
+						W33 * polyFromMatrix_6 +
+						W33 * W33 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv4*B03 + 1)*(B03 & inv4)
+					&
+					(B03_next +
+						inv4 * polyFromMatrix_0 +
+						inv4 * inv4 * polyFromMatrix_1 +
+						W41 * polyFromMatrix_2 +
+						W41 * W41 * polyFromMatrix_3 +
+						W42 * polyFromMatrix_4 +
+						W42 * W42 * polyFromMatrix_5 +
+						W43 * polyFromMatrix_6 +
+						W43 * W43 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv5*B04 + 1)*(B04 & inv5)
+					&
+					(B04_next +
+						inv5 * polyFromMatrix_0 +
+						inv5 * inv5 * polyFromMatrix_1 +
+						W51 * polyFromMatrix_2 +
+						W51 * W51 * polyFromMatrix_3 +
+						W52 * polyFromMatrix_4 +
+						W52 * W52 * polyFromMatrix_5 +
+						W53 * polyFromMatrix_6 +
+						W53 * W53 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+				)	
+				&
+				(FLAG1 + 1)*FLAG2*
+				(
+					(FLAG1_next + 1)
+					&
+					FLAG2_next
+					&
+					(B00_next + B00)
+					&           
+					(B01_next + B01)
+					&           
+					(B02_next + B02)
+					&           
+					(B03_next + B03)
+					&           
+					(B04_next + B04)
+					&
+					(B20_next + B20)
+					&
+					(B21_next + B21)
+					&
+					(B22_next + B22)
+					&
+					(B23_next + B23)
+					&
+					(B24_next + B24)
+					&
+					(B30_next + B30)
+					&
+					(B31_next + B31)
+					&
+					(B32_next + B32)
+					&
+					(B33_next + B33)
+					&
+					(B34_next + B34)
+					&
+					(inv1*B10 + 1)*(B10 & inv1)
+					&
+					(B14_next +
+						inv1 * polyFromMatrix_0 +
+						inv1 * inv1 * polyFromMatrix_1 +
+						W11 * polyFromMatrix_2 +
+						W11 * W11 * polyFromMatrix_3 +
+						W12 * polyFromMatrix_4 +
+						W12 * W12 * polyFromMatrix_5 +
+						W13 * polyFromMatrix_6 +
+						W13 * W13 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv2*B11 + 1)*(B11 & inv2)
+					&
+					(B10_next +
+						inv2 * polyFromMatrix_0 +
+						inv2 * inv2 * polyFromMatrix_1 +
+						W21 * polyFromMatrix_2 +
+						W21 * W21 * polyFromMatrix_3 +
+						W22 * polyFromMatrix_4 +
+						W22 * W22 * polyFromMatrix_5 +
+						W23 * polyFromMatrix_6 +
+						W23 * W23 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv3*B12 + 1)*(B12 & inv3)
+					&
+					(B11_next +
+						inv3 * polyFromMatrix_0 +
+						inv3 * inv3 * polyFromMatrix_1 +
+						W31 * polyFromMatrix_2 +
+						W31 * W31 * polyFromMatrix_3 +
+						W32 * polyFromMatrix_4 +
+						W32 * W32 * polyFromMatrix_5 +
+						W33 * polyFromMatrix_6 +
+						W33 * W33 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv4*B13 + 1)*(B13 & inv4)
+					&
+					(B12_next +
+						inv4 * polyFromMatrix_0 +
+						inv4 * inv4 * polyFromMatrix_1 +
+						W41 * polyFromMatrix_2 +
+						W41 * W41 * polyFromMatrix_3 +
+						W42 * polyFromMatrix_4 +
+						W42 * W42 * polyFromMatrix_5 +
+						W43 * polyFromMatrix_6 +
+						W43 * W43 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv5*B14 + 1)*(B14 & inv5)
+					&
+					(B13_next +
+						inv5 * polyFromMatrix_0 +
+						inv5 * inv5 * polyFromMatrix_1 +
+						W51 * polyFromMatrix_2 +
+						W51 * W51 * polyFromMatrix_3 +
+						W52 * polyFromMatrix_4 +
+						W52 * W52 * polyFromMatrix_5 +
+						W53 * polyFromMatrix_6 +
+						W53 * W53 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+				)
+				&
+				FLAG1*(FLAG2 + 1)*
+				(
+					(FLAG1_next + 1)
+					&
+					(FLAG2_next + 1)
+					&
+					(B00_next + B00)
+					&           
+					(B01_next + B01)
+					&           
+					(B02_next + B02)
+					&           
+					(B03_next + B03)
+					&           
+					(B04_next + B04)
+					&
+					(B10_next + B10)
+					&
+					(B11_next + B11)
+					&
+					(B12_next + B12)
+					&
+					(B13_next + B13)
+					&
+					(B14_next + B14)
+					&
+					(B30_next + B30)
+					&
+					(B31_next + B31)
+					&
+					(B32_next + B32)
+					&
+					(B33_next + B33)
+					&
+					(B34_next + B34)
+					&
+					(inv1*B20 + 1)*(B20 & inv1)
+					&
+					(B23_next +
+						inv1 * polyFromMatrix_0 +
+						inv1 * inv1 * polyFromMatrix_1 +
+						W11 * polyFromMatrix_2 +
+						W11 * W11 * polyFromMatrix_3 +
+						W12 * polyFromMatrix_4 +
+						W12 * W12 * polyFromMatrix_5 +
+						W13 * polyFromMatrix_6 +
+						W13 * W13 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv2*B21 + 1)*(B21 & inv2)
+					&
+					(B24_next +
+						inv2 * polyFromMatrix_0 +
+						inv2 * inv2 * polyFromMatrix_1 +
+						W21 * polyFromMatrix_2 +
+						W21 * W21 * polyFromMatrix_3 +
+						W22 * polyFromMatrix_4 +
+						W22 * W22 * polyFromMatrix_5 +
+						W23 * polyFromMatrix_6 +
+						W23 * W23 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv3*B22 + 1)*(B22 & inv3)
+					&
+					(B20_next +
+						inv3 * polyFromMatrix_0 +
+						inv3 * inv3 * polyFromMatrix_1 +
+						W31 * polyFromMatrix_2 +
+						W31 * W31 * polyFromMatrix_3 +
+						W32 * polyFromMatrix_4 +
+						W32 * W32 * polyFromMatrix_5 +
+						W33 * polyFromMatrix_6 +
+						W33 * W33 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv4*B23 + 1)*(B23 & inv4)
+					&
+					(B21_next +
+						inv4 * polyFromMatrix_0 +
+						inv4 * inv4 * polyFromMatrix_1 +
+						W41 * polyFromMatrix_2 +
+						W41 * W41 * polyFromMatrix_3 +
+						W42 * polyFromMatrix_4 +
+						W42 * W42 * polyFromMatrix_5 +
+						W43 * polyFromMatrix_6 +
+						W43 * W43 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv5*B24 + 1)*(B24 & inv5)
+					&
+					(B22_next +
+						inv5 * polyFromMatrix_0 +
+						inv5 * inv5 * polyFromMatrix_1 +
+						W51 * polyFromMatrix_2 +
+						W51 * W51 * polyFromMatrix_3 +
+						W52 * polyFromMatrix_4 +
+						W52 * W52 * polyFromMatrix_5 +
+						W53 * polyFromMatrix_6 +
+						W53 * W53 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+				)
+				
+				&
+				FLAG1*FLAG2*
+				(
+					(FLAG1_next + X)
+					&
+					(B00_next + B00)
+					&           
+					(B01_next + B01)
+					&           
+					(B02_next + B02)
+					&           
+					(B03_next + B03)
+					&           
+					(B04_next + B04)
+					&
+					(B10_next + B10)
+					&
+					(B11_next + B11)
+					&
+					(B12_next + B12)
+					&
+					(B13_next + B13)
+					&
+					(B14_next + B14)
+					&
+					(B20_next + B20)
+					&
+					(B21_next + B21)
+					&
+					(B22_next + B22)
+					&
+					(B23_next + B23)
+					&
+					(B24_next + B24)
+					&
+					(inv1*B30 + 1)*(B30 & inv1)
+					&
+					(B32_next +
+						inv1 * polyFromMatrix_0 +
+						inv1 * inv1 * polyFromMatrix_1 +
+						W11 * polyFromMatrix_2 +
+						W11 * W11 * polyFromMatrix_3 +
+						W12 * polyFromMatrix_4 +
+						W12 * W12 * polyFromMatrix_5 +
+						W13 * polyFromMatrix_6 +
+						W13 * W13 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv2*B31 + 1)*(B31 & inv2)
+					&
+					(B33_next +
+						inv2 * polyFromMatrix_0 +
+						inv2 * inv2 * polyFromMatrix_1 +
+						W21 * polyFromMatrix_2 +
+						W21 * W21 * polyFromMatrix_3 +
+						W22 * polyFromMatrix_4 +
+						W22 * W22 * polyFromMatrix_5 +
+						W23 * polyFromMatrix_6 +
+						W23 * W23 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv3*B32 + 1)*(B32 & inv3)
+					&
+					(B34_next +
+						inv3 * polyFromMatrix_0 +
+						inv3 * inv3 * polyFromMatrix_1 +
+						W31 * polyFromMatrix_2 +
+						W31 * W31 * polyFromMatrix_3 +
+						W32 * polyFromMatrix_4 +
+						W32 * W32 * polyFromMatrix_5 +
+						W33 * polyFromMatrix_6 +
+						W33 * W33 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv4*B33 + 1)*(B33 & inv4)
+					&
+					(B30_next +
+						inv4 * polyFromMatrix_0 +
+						inv4 * inv4 * polyFromMatrix_1 +
+						W41 * polyFromMatrix_2 +
+						W41 * W41 * polyFromMatrix_3 +
+						W42 * polyFromMatrix_4 +
+						W42 * W42 * polyFromMatrix_5 +
+						W43 * polyFromMatrix_6 +
+						W43 * W43 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+					&
+					(inv5*B34 + 1)*(B34 & inv5)
+					&
+					(B31_next +
+						inv5 * polyFromMatrix_0 +
+						inv5 * inv5 * polyFromMatrix_1 +
+						W51 * polyFromMatrix_2 +
+						W51 * W51 * polyFromMatrix_3 +
+						W52 * polyFromMatrix_4 +
+						W52 * W52 * polyFromMatrix_5 +
+						W53 * polyFromMatrix_6 +
+						W53 * W53 * polyFromMatrix_7 + 
+						B_Transformed
+					)
+				)
+			)
+			+
+			FLAG1*(FLAG1 + 1)*
+			(
+				FLAG1_next
+				&	
+				(FLAG2_next)
+				&		
+				(inv1*K14 + 1)*(K14 & inv1)
+				&
+				(inv2*K24 + 1)*(K24 & inv2)
+				&
+				(inv3*K34 + 1)*(K34 & inv3)
+				&
+				(inv4*K04 + 1)*(K04 & inv4)
+				&
+				(RC + Rcon_round11)*
+				(
+					(RC_next + xFETransformed*RC)
+					&
+					(STATE_next + 1)
+					&
+					(K00_next + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC
+					)
+					&
+					(K10_next + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10
+					)
+					&
+					(K20_next + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20
+					)
+					&
+					(K30_next + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30
+					)
+					&
+					(K01_next + K00_next + K01)
+					&
+					(K11_next + K10_next + K11)
+					&
+					(K21_next + K20_next + K21)
+					&
+					(K31_next + K30_next + K31)
+					&
+					(K02_next + K01_next + K02)
+					&  
+					(K12_next + K11_next + K12)
+					&  
+					(K22_next + K21_next + K22)
+					& 
+					(K32_next + K31_next + K32)
+					&
+					(K03_next + K02_next + K03)
+					& 
+					(K13_next + K12_next + K13)
+					& 
+					(K23_next + K22_next + K23)
+					& 
+					(K33_next + K32_next + K33)
+					&
+					(K04_next + K03_next + K04)
+					&
+					(K14_next + K13_next + K14)
+					&
+					(K24_next + K23_next + K24)
+					&
+					(K34_next + K33_next + K34)
+					&
+					(B00_next 
+							+ MixColMat_0_0 * B00 + MixColMat_0_1 * B10
+							+ MixColMat_0_2 * B20 + MixColMat_0_3 * B30 + K00_next
+					)
+					&
+					(B01_next 
+							+ MixColMat_0_0 * B01 + MixColMat_0_1 * B11
+							+ MixColMat_0_2 * B21 + MixColMat_0_3 * B31 + K01_next
+					)
+					&
+					(B02_next 
+							+ MixColMat_0_0 * B02 + MixColMat_0_1 * B12
+							+ MixColMat_0_2 * B22 + MixColMat_0_3 * B32 + K02_next
+					)
+					&
+					(B03_next 
+							+ MixColMat_0_0 * B03 + MixColMat_0_1 * B13
+							+ MixColMat_0_2 * B23 + MixColMat_0_3 * B33 + K03_next
+					)
+					&
+					(B04_next 
+							+ MixColMat_0_0 * B04 + MixColMat_0_1 * B14
+							+ MixColMat_0_2 * B24 + MixColMat_0_3 * B34 + K04_next
+					)
+					&
+					(B10_next 
+							+ MixColMat_1_0 * B00 + MixColMat_1_1 * B10
+							+ MixColMat_1_2 * B20 + MixColMat_1_3 * B30 + K10_next
+					)
+					&
+					(B11_next 
+							+ MixColMat_1_0 * B01 + MixColMat_1_1 * B11
+							+ MixColMat_1_2 * B21 + MixColMat_1_3 * B31 + K11_next
+					)
+					&
+					(B12_next 
+							+ MixColMat_1_0 * B02 + MixColMat_1_1 * B12
+							+ MixColMat_1_2 * B22 + MixColMat_1_3 * B32 + K12_next
+					)
+					&
+					(B13_next 
+							+ MixColMat_1_0 * B03 + MixColMat_1_1 * B13
+							+ MixColMat_1_2 * B23 + MixColMat_1_3 * B33 + K13_next
+					)
+					&
+					(B14_next 
+							+ MixColMat_1_0 * B04 + MixColMat_1_1 * B14
+							+ MixColMat_1_2 * B24 + MixColMat_1_3 * B34 + K14_next
+					)
+					&
+					(B20_next 
+							+ MixColMat_2_0 * B00 + MixColMat_2_1 * B10
+							+ MixColMat_2_2 * B20 + MixColMat_2_3 * B30 + K20_next
+					)
+					&
+					(B21_next 
+							+ MixColMat_2_0 * B01 + MixColMat_2_1 * B11
+							+ MixColMat_2_2 * B21 + MixColMat_2_3 * B31 + K21_next
+					)
+					&
+					(B22_next 
+							+ MixColMat_2_0 * B02 + MixColMat_2_1 * B12
+							+ MixColMat_2_2 * B22 + MixColMat_2_3 * B32 + K22_next
+					)
+					&
+					(B23_next 
+							+ MixColMat_2_0 * B03 + MixColMat_2_1 * B13
+							+ MixColMat_2_2 * B23 + MixColMat_2_3 * B33 + K23_next
+					)
+					&
+					(B24_next 
+							+ MixColMat_2_0 * B04 + MixColMat_2_1 * B14
+							+ MixColMat_2_2 * B24 + MixColMat_2_3 * B34 + K24_next
+					)
+					&
+					(B30_next 
+							+ MixColMat_3_0 * B00 + MixColMat_3_1 * B10
+							+ MixColMat_3_2 * B20 + MixColMat_3_3 * B30 + K30_next
+					)
+					&
+					(B31_next 
+							+ MixColMat_3_0 * B01 + MixColMat_3_1 * B11
+							+ MixColMat_3_2 * B21 + MixColMat_3_3 * B31 + K31_next
+					)
+					&
+					(B32_next 
+							+ MixColMat_3_0 * B02 + MixColMat_3_1 * B12
+							+ MixColMat_3_2 * B22 + MixColMat_3_3 * B32 + K32_next
+					)
+					&
+					(B33_next 
+							+ MixColMat_3_0 * B03 + MixColMat_3_1 * B13
+							+ MixColMat_3_2 * B23 + MixColMat_3_3 * B33 + K33_next
+					)
+					&
+					(B34_next 
+							+ MixColMat_3_0 * B04 + MixColMat_3_1 * B14
+							+ MixColMat_3_2 * B24 + MixColMat_3_3 * B34 + K34_next
+					)
+				)
+				+
+				(1 + (RC + Rcon_round11)*invRC)*
+				(
+					(STATE_next + X)
+					&
+					(B00_next + B00 + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC
+					)
+					&
+					(B10_next + B10 + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10
+					)
+					&
+					(B20_next + B20 + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20
+					)
+					&
+					(B30_next + B30 + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30
+					)
+					&
+					(B01_next + B01 + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC + K01
+					)
+					&
+					(B11_next + B11 + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10 + K11
+					)
+					&
+					(B21_next + B21 + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20 + K21
+					)
+					&
+					(B31_next + B31 + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30 + K31
+					)
+					&
+					(B02_next + B02 + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC + K01 + K02
+					)
+					&
+					(B12_next + B12 + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10 + K11 + K12
+					)
+					&
+					(B22_next + B22 + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20 + K21 + K22
+					)
+					&
+					(B32_next + B32 + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30 + K31 + K32
+					)
+					&
+					(B03_next + B03 + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC + K01 + K02 + K03
+					)
+					&
+					(B13_next + B13 + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10 + K11 + K12 + K13
+					)
+					&
+					(B23_next + B23 + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20 + K21 + K22 + K23
+					)
+					&
+					(B33_next + B33 + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30 + K31 + K32 + K33
+					)
+					&
+					(B04_next + B04 + inv1 * polyFromMatrix_0 +
+							inv1 * inv1 * polyFromMatrix_1 +
+							W11 * polyFromMatrix_2 +
+							W11 * W11 * polyFromMatrix_3 +
+							W12 * polyFromMatrix_4 +
+							W12 * W12 * polyFromMatrix_5 +
+							W13 * polyFromMatrix_6 +
+							W13 * W13 * polyFromMatrix_7 + 
+								B_Transformed + K00 + RC + K01 + K02 + K03 + K04
+					)
+					&
+					(B14_next + B14 + inv2 * polyFromMatrix_0 +
+							inv2 * inv2 * polyFromMatrix_1 +
+							W21 * polyFromMatrix_2 +
+							W21 * W21 * polyFromMatrix_3 +
+							W22 * polyFromMatrix_4 +
+							W22 * W22 * polyFromMatrix_5 +
+							W23 * polyFromMatrix_6 +
+							W23 * W23 * polyFromMatrix_7 + 
+								B_Transformed + K10 + K11 + K12 + K13 + K14
+					)
+					&
+					(B24_next + B24 + inv3 * polyFromMatrix_0 +
+							inv3 * inv3 * polyFromMatrix_1 +
+							W31 * polyFromMatrix_2 +
+							W31 * W31 * polyFromMatrix_3 +
+							W32 * polyFromMatrix_4 +
+							W32 * W32 * polyFromMatrix_5 +
+							W33 * polyFromMatrix_6 +
+							W33 * W33 * polyFromMatrix_7 + 
+								B_Transformed + K20 + K21 + K22 + K23 + K24
+					)
+					&
+					(B34_next + B34 + inv4 * polyFromMatrix_0 +
+							inv4 * inv4 * polyFromMatrix_1 +
+							W41 * polyFromMatrix_2 +
+							W41 * W41 * polyFromMatrix_3 +
+							W42 * polyFromMatrix_4 +
+							W42 * W42 * polyFromMatrix_5 +
+							W43 * polyFromMatrix_6 +
+							W43 * W43 * polyFromMatrix_7 + 
+								B_Transformed + K30 + K31 + K32 + K33 + K34
+					)
+				)
+			)
+		)
+	)
+	+ 
+	(STATE + 1)*
+	(
+		(FLAG1 + 1) * 
+		(
+			(K_next + K)
+			&
+			(STATE_next + X)
+			&
+			(K01 + K00*K00*K00*K00)
+			&
+			(K02 + K01*K01*K01*K01)
+			&
+			(K03 + K02*K02*K02*K02)
+			&
+			(K00 + K03*K03*K03*K03)
+			&
+			(K10 + K04*K04*K04*K04)
+			&
+			(K11 + K10*K10*K10*K10)
+			&
+			(K12 + K11*K11*K11*K11)
+			&
+			(K04 + K12*K12*K12*K12)
+			&
+			(K14 + K13*K13*K13*K13)
+			&
+			(K20 + K14*K14*K14*K14)
+			&
+			(K21 + K20*K20*K20*K20)
+			&
+			(K13 + K21*K21*K21*K21)
+			&
+			(K23 + K22*K22*K22*K22)
+			&
+			(K24 + K23*K23*K23*K23)
+			&
+			(K30 + K24*K24*K24*K24)
+			&
+			(K22 + K30*K30*K30*K30)
+			&
+			(K32 + K31*K31*K31*K31)
+			&
+			(K33 + K32*K32*K32*K32)
+			&
+			(K34 + K33*K33*K33*K33)
+			&
+			(K31 + K34*K34*K34*K34)
+			&
+			(inv2 + inv1*inv1*inv1*inv1)
+			&
+			(inv3 + inv2*inv2*inv2*inv2)
+			&
+			(inv4 + inv3*inv3*inv3*inv3)
+			&
+			(inv1 + inv4*inv4*inv4*inv4)
+			&
+			(W11 + inv5*inv5*inv5*inv5)
+			&
+			(W12 + W11*W11*W11*W11)
+			&
+			(W13 + W12*W12*W12*W12)
+			&
+			(inv5 + W13*W13*W13*W13)
+			&
+			(W22 + W21*W21*W21*W21)
+			&
+			(W23 + W22*W22*W22*W22)
+			&
+			(W31 + W23*W23*W23*W23)
+			&
+			(W21 + W31*W31*W31*W31)
+			&
+			(W33 + W32*W32*W32*W32)
+			&
+			(W41 + W33*W33*W33*W33)
+			&
+			(W42 + W41*W41*W41*W41)
+			&
+			(W32 + W42*W42*W42*W42)
+			&
+			(W51 + W43*W43*W43*W43)
+			&
+			(W52 + W51*W51*W51*W51)
+			&
+			(W53 + W52*W52*W52*W52)
+			&
+			(W43 + W53*W53*W53*W53)
+			&
+			(
+				(FLAG2 + 1)*
+				(
+					(B_next + B)
+					&
+					(C_next + C)
+					&
+					FLAG1_next
+					&
+					(FLAG2_next + 1)
+					&
+					(A_next + W32 + X*W43)
+					&
+					(A + K00
+						+ X * (K04
+						+ X * (K13
+						+ X * (K22
+						+ X * (K31
+						+ X * (inv1
+						+ X * (inv5
+						+ X * (W21
+						)))))))
+					)
+					&
+					(B00_next + B00 + K00)
+					&
+					(B10_next + B10 + K04)
+					&
+					(B20_next + B20 + K13)
+					&
+					(B30_next + B30 + K22)
+					&
+					(B01_next + B01 + K31)
+					&
+					(B11_next + B11 + inv1)
+					&
+					(B21_next + B21 + inv5)
+					&
+					(B31_next + B31 + W21)
+					&
+					(B04_next + B04 + W32)
+					&
+					(B14_next + B14 + W43)
+					&
+					(B02_next + B02)
+					&
+					(B12_next + B12)
+					&
+					(B22_next + B22)
+					&
+					(B32_next + B32)
+					&
+					(B03_next + B03)
+					&
+					(B13_next + B13)
+					&
+					(B23_next + B23)
+					&
+					(B33_next + B33)
+					&
+					(B24_next + B24)
+					&
+					(B34_next + B34)
+					
+				)
+				+
+				FLAG2*
+				(
+					(FLAG1_next + 1)
+					&
+					(FLAG2_next + 1)
+					&
+					(C + A + X*X*(W32 + X*W43))
+					&
+					(B + K00
+						+ X * (K04
+						+ X * (K13
+						+ X * (K22
+						+ X * (K31
+						+ X * (inv1
+						+ X * (inv5
+						+ X * (W21
+						)))))))
+					)
+					&
+					(B02_next + B02 + K00)
+					&
+					(B12_next + B12 + K04)
+					&
+					(B22_next + B22 + K13)
+					&
+					(B32_next + B32 + K22)
+					&
+					(B03_next + B03 + K31)
+					&
+					(B13_next + B13 + inv1)
+					&
+					(B23_next + B23 + inv5)
+					&
+					(B33_next + B33 + W21)
+					&
+					(B24_next + B24 + W32)
+					&
+					(B34_next + B34 + W43)
+					&
+					(B00_next + B00)
+					&
+					(B10_next + B10)
+					&
+					(B20_next + B20)
+					&
+					(B30_next + B30)
+					&
+					(B01_next + B01)
+					&
+					(B11_next + B11)
+					&
+					(B21_next + B21)
+					&
+					(B31_next + B31)
+					&
+					(B04_next + B04)
+					&
+					(B14_next + B14)				
+				)
+			)
+		)
+		+
+		FLAG1 * 
+		(
+			FLAG2*
+			(
+				(X*K + last_pow)*
+				(
+					(K_next + K*X)
+					&
+					(
+					(K + 1)*
+					(
+						PHASE_next
+						&
+						(K00_next + B00)
+						&     
+						(K01_next + B01)
+						&     
+						(K02_next + B02)
+						&     
+						(K03_next + B03)
+						&     
+						(K04_next + B04)
+						&     
+						(K10_next + B10)
+						&     
+						(K11_next + B11)
+						&     
+						(K12_next + B12)
+						&     
+						(K13_next + B13)
+						&     
+						(K14_next + B14)
+						&     
+						(K20_next + B20)
+						&     
+						(K21_next + B21)
+						&     
+						(K22_next + B22)
+						&     
+						(K23_next + B23)
+						&     
+						(K24_next + B24)
+						&     
+						(K30_next + B30)
+						&     
+						(K31_next + B31)
+						&     
+						(K32_next + B32)
+						&     
+						(K33_next + B33)
+						&     
+						(K34_next + B34)
+					)
+					)
+				)
+				+
+				((X*K + last_pow)*A + 1)*
+				(
+					(PHASE_next + 1)
+					&
+					(K_next + K)
+					&
+					(STATE_next + X)
+					&
+					(FLAG1_next + 1)
+					&
+					(FLAG2_next + 1)
+					&
+					B00 + ROOT_HASH_00
+					&
+					B01 + ROOT_HASH_01
+					&
+					B02 + ROOT_HASH_02
+					&
+					B03 + ROOT_HASH_03
+					&
+					B04 + ROOT_HASH_04
+					&
+					B10 + ROOT_HASH_05
+					&
+					B11 + ROOT_HASH_06
+					&
+					B12 + ROOT_HASH_07
+					&
+					B13 + ROOT_HASH_08
+					&
+					B14 + ROOT_HASH_09
+					&
+					B20 + ROOT_HASH_10
+					&                
+					B21 + ROOT_HASH_11
+					&                
+					B22 + ROOT_HASH_12
+					&                
+					B23 + ROOT_HASH_13
+					&                
+					B24 + ROOT_HASH_14
+					&                
+					B30 + ROOT_HASH_15
+					&                
+					B31 + ROOT_HASH_16
+					&                 
+					B32 + ROOT_HASH_17
+					&                
+					B33 + ROOT_HASH_18
+					&                
+					B34 + ROOT_HASH_19	
+				)
+			)
+			
+		)
+	)
+	)
+)
+)
+&
+(
+(PHASE + 1)*(ST2 + X)*(ST2 + 1+X)*(ST2 + X*X)*
+(
+	PHASE_next
+	&
+	(ST2_next + X)
+	&
+	(isSecondPhaseComparingLOCI_next + isSecondPhaseComparingLOCI)
+	&
+	(B00 + B00_next*B00_next*B00_next*B00_next)
+	&
+	(W11 + B00*B00*B00*B00)
+	&
+	(W12 + W11*W11*W11*W11)
+	&
+	(B00_next + W12*W12*W12*W12)
+	&
+	(B01 + B01_next*B01_next*B01_next*B01_next)
+	&
+	(W13 + B01*B01*B01*B01)
+	&
+	(W21 + W13*W13*W13*W13)
+	&
+	(B01_next + W21*W21*W21*W21)
+	&
+	(B10 + B10_next*B10_next*B10_next*B10_next)
+	&
+	(W22 + B10*B10*B10*B10)
+	&
+	(W23 + W22*W22*W22*W22)
+	&
+	(B10_next + W23*W23*W23*W23)
+	&
+	(B11 + B11_next*B11_next*B11_next*B11_next)
+	&
+	(W31 + B11*B11*B11*B11)
+	&
+	(W32 + W31*W31*W31*W31)
+	&
+	(B11_next + W32*W32*W32*W32)
+	&
+	(B20 + B20_next*B20_next*B20_next*B20_next)
+	&
+	(W33 + B20*B20*B20*B20)
+	&
+	(W41 + W33*W33*W33*W33)
+	&
+	(B20_next + W41*W41*W41*W41)
+	&
+	(B21 + B21_next*B21_next*B21_next*B21_next)
+	&
+	(W42 + B21*B21*B21*B21)
+	&
+	(W43 + W42*W42*W42*W42)
+	&
+	(B21_next + W43*W43*W43*W43)
+	&
+	(B30 + B30_next*B30_next*B30_next*B30_next)
+	&
+	(W51 + B30*B30*B30*B30)
+	&
+	(W52 + W51*W51*W51*W51)
+	&
+	(B30_next + W52*W52*W52*W52)
+	&
+	(B31 + B31_next*B31_next*B31_next*B31_next)
+	&
+	(W53 + B31*B31*B31*B31)
+	&
+	(W11_next + W53*W53*W53*W53)
+	&
+	(B31_next + W11_next*W11_next*W11_next*W11_next)
+	&
+	(B02 + B02_next*B02_next*B02_next*B02_next)
+	&
+	(W12_next + B02*B02*B02*B02)
+	&
+	(W13_next + W12_next*W12_next*W12_next*W12_next)
+	&
+	(B02_next + W13_next*W13_next*W13_next*W13_next)
+	&
+	(B03 + B03_next*B03_next*B03_next*B03_next)
+	&
+	(W21_next + B03*B03*B03*B03)
+	&
+	(W22_next + W21_next*W21_next*W21_next*W21_next)
+	&
+	(B03_next + W22_next*W22_next*W22_next*W22_next)
+	&
+	(B12 + B12_next*B12_next*B12_next*B12_next)
+	&
+	(W23_next + B12*B12*B12*B12)
+	&
+	(W31_next + W23_next*W23_next*W23_next*W23_next)
+	&
+	(B12_next + W31_next*W31_next*W31_next*W31_next)
+	&
+	(B13 + B13_next*B13_next*B13_next*B13_next)
+	&
+	(W32_next + B13*B13*B13*B13)
+	&
+	(W33_next + W32_next*W32_next*W32_next*W32_next)
+	&
+	(B13_next + W33_next*W33_next*W33_next*W33_next)
+	&
+	(B22 + B22_next*B22_next*B22_next*B22_next)
+	&
+	(W41_next + B22*B22*B22*B22)
+	&
+	(W42_next + W41_next*W41_next*W41_next*W41_next)
+	&
+	(B22_next + W42_next*W42_next*W42_next*W42_next)
+	&
+	(B23 + B23_next*B23_next*B23_next*B23_next)
+	&
+	(W43_next + B23*B23*B23*B23)
+	&
+	(W51_next + W43_next*W43_next*W43_next*W43_next)
+	&
+	(B23_next + W51_next*W51_next*W51_next*W51_next)
+	&
+	(B32 + B32_next*B32_next*B32_next*B32_next)
+	&
+	(W52_next + B32*B32*B32*B32)
+	&
+	(W53_next + W52_next*W52_next*W52_next*W52_next)
+	&
+	(B32_next + W53_next*W53_next*W53_next*W53_next)
+	&
+	(B33 + B33_next*B33_next*B33_next*B33_next)
+	&
+	(inv1 + B33*B33*B33*B33)
+	&
+	(inv2 + inv1*inv1*inv1*inv1)
+	&
+	(B33_next + inv2*inv2*inv2*inv2)
+	&
+	(B04 + B04_next*B04_next*B04_next*B04_next)
+	&
+	(inv3 + B04*B04*B04*B04)
+	&
+	(inv4 + inv3*inv3*inv3*inv3)
+	&
+	(B04_next + inv4*inv4*inv4*inv4)
+	&
+	(B14 + B14_next*B14_next*B14_next*B14_next)
+	&
+	(inv5 + B14*B14*B14*B14)
+	&
+	(inv1_next + inv5*inv5*inv5*inv5)
+	&
+	(B14_next + inv1_next*inv1_next*inv1_next*inv1_next)
+	&
+	(B24 + B24_next*B24_next*B24_next*B24_next)
+	&
+	(inv2_next + B24*B24*B24*B24)
+	&
+	(inv3_next + inv2_next*inv2_next*inv2_next*inv2_next)
+	&
+	(B24_next + inv3_next*inv3_next*inv3_next*inv3_next)
+	&
+	(B34 + B34_next*B34_next*B34_next*B34_next)
+	&
+	(inv4_next + B34*B34*B34*B34)
+	&
+	(inv5_next + inv4_next*inv4_next*inv4_next*inv4_next)
+	&
+	(B34_next + inv5_next*inv5_next*inv5_next*inv5_next)
+	&
+	(
+	isSecondPhaseComparingLOCI*
+	(
+		(L4 + B00_next
+			+ X * (B10_next
+			+ X * (B20_next
+			+ X * (B30_next
+			+ X * (B01_next
+			+ X * (B11_next
+			+ X * (B21_next
+			+ X * (B31_next
+			))))))))
+		&
+		(L5 + B02_next
+			+ X * (B12_next
+			+ X * (B22_next
+			+ X * (B32_next
+			+ X * (B03_next
+			+ X * (B13_next
+			+ X * (B23_next
+			+ X * (B33_next
+			))))))))
+		&
+		(L6 + B04_next
+			+ X * (B14_next
+			+ X * (B24_next
+			+ X * (B34_next
+			))))
+	)
+	+ (isSecondPhaseComparingLOCI + 1)*
+	(
+		(L1 + B00_next
+			+ X * (B10_next
+			+ X * (B20_next
+			+ X * (B30_next
+			+ X * (B01_next
+			+ X * (B11_next
+			+ X * (B21_next
+			+ X * (B31_next
+			))))))))
+		&
+		(L2 + B02_next
+			+ X * (B12_next
+			+ X * (B22_next
+			+ X * (B32_next
+			+ X * (B03_next
+			+ X * (B13_next
+			+ X * (B23_next
+			+ X * (B33_next
+			))))))))
+		&
+		(L3 + B04_next
+			+ X * (B14_next
+			+ X * (B24_next
+			+ X * (B34_next
+			))))
+	)
+	)
+)
++
+(ST2 + 1)*(ST2 + 1+X)*(ST2 + X*X)*
+(
+	PHASE_next
+	&
+	(isSecondPhaseComparingLOCI_next + isSecondPhaseComparingLOCI)
+	&
+	(ST2_next + 1+X)
+	&
+	(B00_next + B00)
+	&
+	(B01_next + B01)
+	&
+	(B02_next + B02)
+	&
+	(B03_next + B03)
+	&
+	(B04_next + B04)
+	&
+	(B10_next + B10)
+	&
+	(B11_next + B11)
+	&
+	(B12_next + B12)
+	&
+	(B13_next + B13)
+	&
+	(B14_next + B14)
+	&
+	(B20_next + B20)
+	&
+	(B21_next + B21)
+	&
+	(B22_next + B22)
+	&
+	(B23_next + B23)
+	&
+	(B24_next + B24)
+	&
+	(B30_next + B30)
+	&
+	(B31_next + B31)
+	&
+	(B32_next + B32)
+	&
+	(B33_next + B33)
+	&
+	(B34_next + B34)
+)
++
+ST3*(ST2 + X*X)*
+(
+	PHASE_next
+	&
+	(ST2_next + X*X)
+	&
+	(isSecondPhaseComparingLOCI_next + isSecondPhaseComparingLOCI)
+	&
+	(isSecondPhaseComparingLOCI + 1)*(PartialMATCH + X)
+	&
+	(B00_next + B00)*(B00_next + B20)*
+	(
+		(B20_next + B00)*(B20_next + B20)*FLAG1
+		&
+		PartialMATCH*(FLAG1 + 1)*
+		(
+			((B20_next + B00)*inv3_next + 1)
+			&
+			((B20_next + B20)*inv4_next + 1)
+		)
+	)
+	&
+	(B20_next + B00)*(B20_next + B20)*
+	(
+		PartialMATCH*(FLAG1 + 1)*
+		(
+			((B00_next + B00)*inv1_next + 1)
+			&
+			((B00_next + B20)*inv2_next + 1)
+		)
+	)
+	&
+	((B00_next + B20)*inv2_next + 1)*((B20_next + B00)*inv3_next + 1)*(FLAG1 + PartialMATCH)
+	&
+	((B00_next + B00)*inv1_next + 1)*((B20_next + B20)*inv4_next + 1)*(FLAG1 + PartialMATCH)
+	&
+	(PartialMATCH + 1)*(PartialMATCH + X)*FLAG1
+	&
+	(B01_next + B01)*(B01_next + B21)*
+	(
+		(B21_next + B01)*(B21_next + B21)*FLAG2
+		&
+		FLAG1*(FLAG2 + 1)*
+		(
+			((B21_next + B01)*W12_next + 1)
+			&
+			((B21_next + B21)*W13_next + 1)
+		)
+	)
+	&
+	(B21_next + B01)*(B21_next + B21)*
+	(
+		FLAG1*(FLAG2 + 1)*
+		(
+			((B01_next + B01)*inv5_next + 1)
+			&
+			((B01_next + B21)*W11_next + 1)
+		)
+	)
+	&
+	((B01_next + B21)*W11_next + 1)*((B21_next + B01)*W12_next + 1)*(FLAG2 + FLAG1)
+	&
+	((B01_next + B01)*inv5_next + 1)*((B21_next + B21)*W13_next + 1)*(FLAG2 + FLAG1)
+	&
+	(FLAG1 + 1)*(FLAG1 + X)*FLAG2
+	&
+	(B02_next + B02)*(B02_next + B22)*
+	(
+		(B22_next + B02)*(B22_next + B22)*RC
+		&
+		FLAG2*(RC + 1)*
+		(
+			((B22_next + B02)*W23_next + 1)
+			&
+			((B22_next + B22)*W31_next + 1)
+		)
+	)
+	&
+	(B22_next + B02)*(B22_next + B22)*
+	(
+		FLAG2*(RC + 1)*
+		(
+			((B02_next + B02)*W21_next + 1)
+			&
+			((B02_next + B22)*W22_next + 1)
+		)
+	)
+	&
+	((B02_next + B22)*W22_next + 1)*((B22_next + B02)*W23_next + 1)*(RC + FLAG2)
+	&
+	((B02_next + B02)*W21_next + 1)*((B22_next + B22)*W31_next + 1)*(RC + FLAG2)
+	&
+	(FLAG2 + 1)*(FLAG2 + X)*RC
+	&
+	(B03_next + B03)*(B03_next + B23)*
+	(
+		(B23_next + B03)*(B23_next + B23)*invRC
+		&
+		RC*(invRC + 1)*
+		(
+			((B23_next + B03)*W41_next + 1)
+			&
+			((B23_next + B23)*W42_next + 1)
+		)
+	)
+	&
+	(B23_next + B03)*(B23_next + B23)*
+	(
+		RC*(invRC + 1)*
+		(
+			((B03_next + B03)*W32_next + 1)
+			&
+			((B03_next + B23)*W33_next + 1)
+		)
+	)
+	&
+	((B03_next + B23)*W33_next + 1)*((B23_next + B03)*W41_next + 1)*(invRC + RC)
+	&
+	((B03_next + B03)*W32_next + 1)*((B23_next + B23)*W42_next + 1)*(invRC + RC)
+	&
+	(RC + 1)*(RC + X)*invRC
+	&
+	(B04_next + B04)*(B04_next + B24)*
+	(
+		(B24_next + B04)*(B24_next + B24)*A
+		&
+		invRC*(A + 1)*
+		(
+			((B24_next + B04)*W52_next + 1)
+			&
+			((B24_next + B24)*W53_next + 1)
+		)
+	)
+	&
+	(B24_next + B04)*(B24_next + B24)*
+	(
+		invRC*(A + 1)*
+		(
+			((B04_next + B04)*W43_next + 1)
+			&
+			((B04_next + B24)*W51_next + 1)
+		)
+	)
+	&
+	((B04_next + B24)*W51_next + 1)*((B24_next + B04)*W52_next + 1)*(A + invRC)
+	&
+	((B04_next + B04)*W43_next + 1)*((B24_next + B24)*W53_next + 1)*(A + invRC)
+	&
+	(invRC + 1)*(invRC + X)*A
+	&
+	(B10_next + B10)*(B10_next + B30)*
+	(
+		(B30_next + B10)*(B30_next + B30)*B
+		&
+		A*(B + 1)*
+		(
+			((B30_next + B10)*inv3 + 1)
+			&
+			((B30_next + B30)*inv4 + 1)
+		)
+	)
+	&
+	(B30_next + B10)*(B30_next + B30)*
+	(
+		A*(B + 1)*
+		(
+			((B10_next + B10)*inv1 + 1)
+			&
+			((B10_next + B30)*inv2 + 1)
+		)
+	)
+	&
+	((B10_next + B30)*inv2 + 1)*((B30_next + B10)*inv3 + 1)*(B + A)
+	&
+	((B10_next + B10)*inv1 + 1)*((B30_next + B30)*inv4 + 1)*(B + A)
+	&
+	(A + 1)*(A + X)*B
+	&
+	(B11_next + B11)*(B11_next + B31)*
+	(
+		(B31_next + B11)*(B31_next + B31)*C
+		&
+		B*(C + 1)*
+		(
+			((B31_next + B11)*W12 + 1)
+			&
+			((B31_next + B31)*W13 + 1)
+		)
+	)
+	&
+	(B31_next + B11)*(B31_next + B31)*
+	(
+		B*(C + 1)*
+		(
+			((B11_next + B11)*inv5 + 1)
+			&
+			((B11_next + B31)*W11 + 1)
+		)
+	)
+	&
+	((B11_next + B31)*W11 + 1)*((B31_next + B11)*W12 + 1)*(C + B)
+	&
+	((B11_next + B11)*inv5 + 1)*((B31_next + B31)*W13 + 1)*(C + B)
+	&
+	(B + 1)*(B + X)*C
+	&
+	(B12_next + B12)*(B12_next + B32)*
+	(
+		(B32_next + B12)*(B32_next + B32)*STATE
+		&
+		C*(STATE + 1)*
+		(
+			((B32_next + B12)*W23 + 1)
+			&
+			((B32_next + B32)*W31 + 1)
+		)
+	)
+	&
+	(B32_next + B12)*(B32_next + B32)*
+	(
+		C*(STATE + 1)*
+		(
+			((B12_next + B12)*W21 + 1)
+			&
+			((B12_next + B32)*W22 + 1)
+		)
+	)
+	&
+	((B12_next + B32)*W22 + 1)*((B32_next + B12)*W23 + 1)*(STATE + C)
+	&
+	((B12_next + B12)*W21 + 1)*((B32_next + B32)*W31 + 1)*(STATE + C)
+	&
+	(C + 1)*(C + X)*STATE
+	&
+	(B13_next + B13)*(B13_next + B33)*
+	(
+		(B33_next + B13)*(B33_next + B33)*RC_next
+		&
+		STATE*(RC_next + 1)*
+		(
+			((B33_next + B13)*W41 + 1)
+			&
+			((B33_next + B33)*W42 + 1)
+		)
+	)
+	&
+	(B33_next + B13)*(B33_next + B33)*
+	(
+		STATE*(RC_next + 1)*
+		(
+			((B13_next + B13)*W32 + 1)
+			&
+			((B13_next + B33)*W33 + 1)
+		)
+	)
+	&
+	((B13_next + B33)*W33 + 1)*((B33_next + B13)*W41 + 1)*(RC_next + STATE)
+	&
+	((B13_next + B13)*W32 + 1)*((B33_next + B33)*W42 + 1)*(RC_next + STATE)
+	&
+	(STATE + 1)*(STATE + X)*RC_next
+	&
+	(B14_next + B14)*(B14_next + B34)*
+	(
+		(B34_next + B14)*(B34_next + B34)*PartialMATCH_next
+		&
+		RC_next*(PartialMATCH_next + 1)*
+		(
+			((B34_next + B14)*W52 + 1)
+			&
+			((B34_next + B34)*W53 + 1)
+		)
+	)
+	&
+	(B34_next + B14)*(B34_next + B34)*
+	(
+		RC_next*(PartialMATCH_next + 1)*
+		(
+			((B14_next + B14)*W43 + 1)
+			&
+			((B14_next + B34)*W51 + 1)
+		)
+	)
+	&
+	((B14_next + B34)*W51 + 1)*((B34_next + B14)*W52 + 1)*(PartialMATCH_next + RC_next)
+	&
+	((B14_next + B14)*W43 + 1)*((B34_next + B34)*W53 + 1)*(PartialMATCH_next + RC_next)
+	&
+	(RC_next + 1)*(RC_next + X)*PartialMATCH_next
+)
++
+ST3*(ST2 + 1+X)*
+(
+	(PHASE_next + 1)
+	&
+	(STATE_next + 1)
+	&
+	FLAG1_next
+	&
+	FLAG2_next
+	&
+	(
+	isSecondPhaseComparingLOCI*
+	(
+		isSecondPhaseComparingLOCI_next
+		&
+		PartialMATCH_next*(PartialMATCH_next + 1)*(MATCH_next + X)
+		&
+		MATCH*(MATCH + 1)*(MATCH_next + X)
+		&
+		PartialMATCH_next*(PartialMATCH_next + X)*(MATCH + X)*(MATCH_next + 1)
+		&
+		(PartialMATCH_next + 1)*(PartialMATCH_next + X)*(MATCH + 1)*(MATCH + X)*MATCH_next
+	)
+	+ (isSecondPhaseComparingLOCI + 1)*
+	(
+		(isSecondPhaseComparingLOCI_next +1)
+		&
+		(MATCH_next + MATCH)
+		&
+		(PartialMATCH_next + PartialMATCH)
+	)
+	)
+	&
+	(B00_next + B00)
+	&
+	(B01_next + B01)
+	&
+	(B02_next + B02)
+	&
+	(B03_next + B03)
+	&
+	(B04_next + B04)
+	&
+	(B10_next + B10)
+	&
+	(B11_next + B11)
+	&
+	(B12_next + B12)
+	&
+	(B13_next + B13)
+	&
+	(B14_next + B14)
+	&
+	(B20_next + B20)
+	&
+	(B21_next + B21)
+	&
+	(B22_next + B22)
+	&
+	(B23_next + B23)
+	&
+	(B24_next + B24)
+	&
+	(B30_next + B30)
+	&
+	(B31_next + B31)
+	&
+	(B32_next + B32)
+	&
+	(B33_next + B33)
+	&
+	(B34_next + B34)
+	&
+	(A_next + B00
+		+ X * (B10
+		+ X * (B20
+		+ X * (B30
+		+ X * (B01
+		+ X * (B11
+		+ X * (B21
+		+ X * (B31
+		)))))))
+	)
+	&
+	(B_next + B02
+		+ X * (B12
+		+ X * (B22
+		+ X * (B32
+		+ X * (B03
+		+ X * (B13
+		+ X * (B23
+		+ X * (B33
+		)))))))
+	)
+	&
+	(C_next + B04
+		+ X * (B14
+		+ X * (B24
+		+ X * (B34
+		)))
+	)
+	&
+	((K + 1)*STATE + 1)* //store Li at start for all the next cycles
+	(
+		(L1 + A_next)
+		&
+		(L2 + B_next)
+		&
+		(L3 + C_next)
+		&
+		(L4 + K00
+			+ X * (K10
+			+ X * (K20
+			+ X * (K30
+			+ X * (K01
+			+ X * (K11
+			+ X * (K21
+			+ X * (K31
+			))))))))
+		&
+		(L5 + K02
+			+ X * (K12
+			+ X * (K22
+			+ X * (K32
+			+ X * (K03
+			+ X * (K13
+			+ X * (K23
+			+ X * (K33
+			))))))))
+		&
+		(L6 + K04
+			+ X * (K14
+			+ X * (K24
+			+ X * (K34
+			))))
+	)
+)
+)
