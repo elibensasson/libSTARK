@@ -25,7 +25,7 @@ void printHelp(const string exeName){
     cout<<"$>"<<exeName<<" examples-tinyram/collatz.asm "<<timePrefix<<"10 "<<securityPrefix<<"120"<<endl;
     cout<<endl<<"The above execution results in execution of STARK simulation over the collatz program, using at most 1023 (which is 2^10-1) machine steps, and soundness error at most 2^-120."<<endl;
     cout<<endl<<"In the simulation the Prover and Verify interact, the Prover generates a proof and the Verifier verifies it. During the executions the specifications of generated BAIR and APR, measurements, and Verifiers decision, are printed to the standard output."<<endl;
-    cout<<"adding '-p0' to the arguments couses execution of verifier only, without the prover, simulating its execution time and measuring proof length"<<std::endl;
+    cout<<"adding '-p0' to the arguments causes execution of verifier only, without the prover, simulating its execution time and measuring proof length"<<std::endl;
 }
 
 libstark::BairInstance constructInstance(const TinyRAMProgram& prog, const unsigned int t){
