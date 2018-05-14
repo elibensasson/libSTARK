@@ -23,8 +23,8 @@ The code is **academic grade**, meant for academic peer review and evaluation. I
 
 ### Compiler
 The code was tested with gcc version 7.3.0 (https://gcc.gnu.org), using c++11 standard. But should probably work with most common versions of gcc.
-#### Compilation on MAC
-In order to compile on Mac please use this thread:
+#### Compilation on macOS
+In order to compile on macOS please use this thread:
 https://github.com/elibensasson/libSTARK/issues/2
 
 ### Libraries (all should be available in standard linux distribution package managers)
