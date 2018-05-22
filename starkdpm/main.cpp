@@ -33,13 +33,12 @@ void printHelp(const string exeName){
 void execute(const fingerprint_t& fprint,const database_t& db, const unsigned int securityParameter){
     AES160hashcLOCICommonParams params;
     params.length = db.size()*2;
-    params.seed = 127;
 
     libstark::BairInstance bair_instance = buildBairInstance(params);
 
     std::vector<std::vector<Algebra::FieldElement>> hashC;
     std::vector<Algebra::FieldElement> Result = AES160hashcLOCI::genHashchain(hashC, db);
-    AES160hashcLOCI::evalp::setParams(Result, Algebra::power(xFE(), params.length), params.seed);
+    AES160hashcLOCI::evalp::setParams(Result, Algebra::power(xFE(), params.length), 1234); //TODO: seed arg instead of 1234 for randcoeffs
     libstark::BairWitness bair_witness = buildBairWitness(params, hashC, fprint);
 
     libstark::Protocols::executeProtocol(bair_instance, bair_witness,securityParameter,false,false,true);
