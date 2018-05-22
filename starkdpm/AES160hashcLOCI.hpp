@@ -155,7 +155,6 @@ namespace stark_dpm{
 	namespace ACSP_FOR_AES160hashcLOCI{
 		typedef struct{
 			long long length;
-			int seed;
 			std::vector<Algebra::FieldElement> head;
 		}AES160hashcLOCICommonParams;
 
