@@ -15,6 +15,9 @@
 using namespace Algebra;
 
 namespace AES160hashcLOCI {
+    typedef std::array<uint8_t,2> dpmpair_t;
+    typedef std::array<dpmpair_t,20> fingerprint_t;
+	typedef std::vector<fingerprint_t> database_t;
 
 	//FieldElement eval(const std::vector<FieldElement>& vars, const std::vector<FieldElement> RootHash, const FieldElement values[][2], FieldElement lastPow);
 	FieldElement evalCPoly(const std::vector<FieldElement> & vars,
@@ -65,8 +68,8 @@ namespace AES160hashcLOCI {
 
 	typedef std::vector< std::vector<FieldElement> > & witnessType;
 	short getDim(long long);
-	std::vector<FieldElement> genHashchain(witnessType, int, int);
-	void genWitnessLOCIHashcAES160WithPadding(witnessType, const witnessType, int, const int);
+    std::vector<FieldElement> genHashchain(witnessType, const database_t&);
+	void genWitnessLOCIHashcAES160WithPadding(witnessType, const witnessType, int, const fingerprint_t&);
 
 	namespace consts {
 #define zFE (mapIntegerToFieldElement(0, EXTDIM, 0))
@@ -157,7 +160,7 @@ namespace stark_dpm{
 		}AES160hashcLOCICommonParams;
 
         libstark::BairInstance buildBairInstance(const AES160hashcLOCICommonParams&);
-        libstark::BairWitness buildBairWitness(const AES160hashcLOCICommonParams&, const AES160hashcLOCI::witnessType&);
+        libstark::BairWitness buildBairWitness(const AES160hashcLOCICommonParams&, const AES160hashcLOCI::witnessType&, const AES160hashcLOCI::fingerprint_t&);
 	}
 }
 
