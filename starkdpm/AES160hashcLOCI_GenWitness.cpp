@@ -4,7 +4,6 @@
 
 //#define DBGwitness
 #define CYCLES 62
-#define LOCIseed 123
 
 using namespace Algebra;
 
@@ -529,17 +528,18 @@ namespace AES160hashcLOCI {
 		DBGGET(arr, t, reg::STATE) = (arr[t][reg::K]+one()).inverse();
 	}
 
-	std::vector<FieldElement> genHashchain(witnessType HashChain, int len, int prngseed){
-		HashChain.resize(len);
+	std::vector<FieldElement> genHashchain(witnessType HashChain, const database_t& db){
+		const unsigned int len = db.size()*2;
+        HashChain.resize(len);
 		for (auto &i : HashChain) i.resize(20);
 
-		Algebra::rng.seed(prngseed+1);
-
-		for (int k = 0; k < len; k++){
+		for (unsigned int k = 0; k < db.size(); k++){
 			for (int i = 0; i < 20; i++){
-				int randval = Algebra::rng() & 255;
-				HashChain[k][i] = (255 == randval) ? Algebra::zero() : power(consts::xFETransformed, randval);
-			}
+                for(int j=0; j<2; j++){
+				int val = db[k][i][j];
+				HashChain[2*k+j][i] = (255 == val) ? Algebra::zero() : power(consts::xFETransformed, val);
+                }
+            }
 		}
 		std::vector< std::vector<FieldElement> > myArr2(12, std::vector<FieldElement>(NUMREGS));
 		size_t t = 0;
@@ -548,7 +548,7 @@ namespace AES160hashcLOCI {
 			myArr2[0][reg::K00 + j] = zero();
 			}
 		
-		for (int k = 0; k < len; k++){
+		for (unsigned int k = 0; k < len; k++){
 
 			for (int j = 0; j < 20; j++){
 				myArr2[0][reg::K00 + j] = myArr2[t][reg::B00 + j];
@@ -676,22 +676,15 @@ namespace AES160hashcLOCI {
 		return t + 1;
 	}
 
-	inline void pairsPRNG(FieldElement LOCIpairs[][2], const int prngseed){
-		Algebra::rng.seed(prngseed);
+	void genWitnessLOCIHashcAES160WithPadding(witnessType arr, const witnessType HashChain, const int LEN, const fingerprint_t& fprint){
+		FieldElement loci_pairs[20][2];
 		for (int i = 0; i < 20; i++){
-			unsigned long long rfull = Algebra::rng();
-			unsigned int rbits = rfull & 255;
-			LOCIpairs[i][0] = (255 == rbits) ? Algebra::zero() : power(consts::xFETransformed, rbits);
-			rbits = (rfull >> 8) & 255;
-			LOCIpairs[i][1] = (255 == rbits) ? Algebra::zero() : power(consts::xFETransformed, rbits);
+            for(int j=0; j<2; j++){
+			unsigned int bits = fprint[i][j];
+			loci_pairs[i][j] = (255 == bits) ? Algebra::zero() : power(consts::xFETransformed, bits);
+            }
 		}
-	}
-
-	void genWitnessLOCIHashcAES160WithPadding(witnessType arr, const witnessType HashChain, const int LEN, const int prngseed){
-		FieldElement LOCI_pairs[20][2];
-	
-		pairsPRNG(LOCI_pairs, prngseed);
-		size_t t = genWitness(arr, HashChain, LEN, LOCI_pairs);
+		size_t t = genWitness(arr, HashChain, LEN, loci_pairs);
 		DBGMSG("t = " << t << std::endl);
 		DBGGET(arr, t, reg::PHASE) = one();
 		DBGGET(arr, t, reg::STATE) = xFE();
@@ -715,105 +708,4 @@ namespace AES160hashcLOCI {
 		return ceil(Infrastructure::Log2((long long)CYCLES * (len + 1) -2));
 	}
 
-#if 0
-	TEST(ACSPWitnessChecker, AES160LOCIh) {
-		using namespace std;
-		
-		vector<string> rr = Configuration::getInstance().getRandomArgs();
-		int len = 5;
-		if (1 == rr.size())
-			len = stoi(rr[0]);
-
-		vector< vector<FieldElement> > HashChain;
-
-		vector<FieldElement> Result = genHashchain(HashChain, len, LOCIseed);
-		
-		//size_t steps = CYCLES * (len + 1) - 2;
-		size_t total_t = pow(2, getDim(len));
-
-		vector< vector<FieldElement> > myArr(total_t, vector<FieldElement>(NUMREGS));
-
-		genWitnessLOCIHashcAES160WithPadding(myArr, HashChain, len, LOCIseed);
-
-		vector<FieldElement> RootHash(20);
-		for (int i = 0; i < 20; i++){
-			RootHash[i] = Result[reg::B00 + i];
-		}
-
-		vector<FieldElement> vvals(2 * NUMREGS);
-#if 0
-		Algebra::rng.seed(126);
-		for (int j = 0; j < 9; ++j){
-			for (int u = 0; u < vvals.size(); u++)
-				vvals[u] = Algebra::generateRandom();
-
-			FieldElement polyVal = eval(vvals, RootHash, NULL, power(xFE(), len));
-			FieldElement polyCVal = evalCPoly(vvals, RootHash, power(xFE(), len));
-
-			//std::cout << "polyPVal: " << polyVal << std::endl;
-			//std::cout << "polyCVal: " << polyCVal << std::endl;
-
-			std::cout << "polyDiff: " << polyVal + polyCVal << std::endl;
-		}
-		return;
-#endif
-		clock_t measureTime = clock();
-		for (int i = 0; i < total_t - 1; ++i) {
-		
-			auto v = vvals.begin();
-			for (auto &k : myArr[i])
-				*(v++) = k;
-			for (auto &k : myArr[i + 1])
-				*(v++) = k;
-
-			
-			//FieldElement polyVal = eval(vvals, RootHash, NULL, power(xFE(), len+1));
-			FieldElement polyVal = evalCPoly(vvals, RootHash, power(xFE(), len+1));
-			if (polyVal != zero()){
-				cout << std::hex;
-				const char* regtxt[] = {"B00", "B01", "B02", "B03", "B04",
-					"B10", "B11", "B12", "B13", "B14",
-					"B20", "B21", "B22", "B23", "B24",
-					"B30", "B31", "B32", "B33", "B34",
-
-					"K00", "K01", "K02", "K03", "K04",
-					"K10", "K11", "K12", "K13", "K14",
-					"K20", "K21", "K22", "K23", "K24",
-					"K30", "K31", "K32", "K33", "K34",			
-
-					"inv1", "inv2", "inv3", "inv4", "inv5",
-					"W11", "W12", "W13",
-					"W21", "W22", "W23",
-					"W31", "W32", "W33",
-					"W41", "W42", "W43",
-					"W51", "W52", "W53",
-
-					"FLAG1", "FLAG2", "RC", "invRC",
-
-					"A", "B", "C", "STATE",
-					"K",
-					"MATCH", "isSecondPhaseComparingLOCI", "PartialMATCH", "PHASE",
-					"L1", "L2", "L3", "L4", "L5", "L6",
-					"ST2", "ST3"};
-				for (int j = 0; j < NUMREGS; j++){
-					PRNMSG(regtxt[j] << ": " /*<< mapFieldElementToInteger(0, 64, myArr[i-1][j]) << " , "*/ << mapFieldElementToInteger(0, 64, myArr[i][j]) << " , " << mapFieldElementToInteger(0, 64, myArr[i + 1][j]));
-				}
-				cout << dec <<  "i	=" << i << std::endl;
-				return;
-			}
-		}
-		measureTime = clock() - measureTime;
-		std::cout << "eval() time: " << (measureTime / ((double)CLOCKS_PER_SEC)) << std::endl;
-
-#ifdef DBGwitness
-		for (size_t i = 0; i < total_t; ++i)
-			for (int j = 0; j < NUMREGS; ++j) {
-				std::pair<size_t, int> tmp = std::pair<size_t, int>(i, j);
-				if (dbgSet.find(tmp) == dbgSet.end())
-					cout << "missing: " << i << "," << j << endl;
-			}
-#endif
-		
-	}
-#endif
 } //namespace
