@@ -168,6 +168,7 @@
 					case Opcode::MOV:
 					case Opcode::SHL:
 					case Opcode::SHR:
+					case Opcode::MULL:
 					case Opcode::RESERVED_OPCODE_24:
 						selectorToConstraint[j] = 0;
 						//constraintPoly = constraintPoly + (selector_j * (regiSecond + aluOutput_.result_));
@@ -302,6 +303,7 @@
 				case Opcode::SHL:
 				case Opcode::SHR:
 				case Opcode::MOV:
+				case Opcode::MULL:
 				case Opcode::RESERVED_OPCODE_24:
 					pb_->val(regiSecond) = pb_->val(aluOutput_.result_);
 					break;
