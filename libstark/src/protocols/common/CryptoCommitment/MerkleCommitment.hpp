@@ -12,7 +12,7 @@ namespace Protocols{
 namespace CryptoCommitment{
 
 struct hashDigest_t{
-    char buffer[128/8];
+    char buffer[32];
     
     std::string toString()const;
 };
@@ -27,7 +27,7 @@ typedef std::vector<hashDigest_t> path_t;
 void hash(void const* const src, void * const dst); 
 hashDigest_t hash(void const* const src); 
 
-const short logBytesPerHash = 4;
+const short logBytesPerHash = 5;
 
 unsigned short getBlockSize();
 unsigned short getDualBlockSize();

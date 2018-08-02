@@ -20,7 +20,7 @@ OBJDIR  = $(BLDDIR)/obj
 
 SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
-OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
+OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS)) $(BLAKELINK)/libb2_la-blake2s.o
 
 TARGET=$(BLDDIR)/libstark-tests
 all: $(TARGET)

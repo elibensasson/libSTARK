@@ -16,7 +16,7 @@ LIBFLAGS=$(addprefix -l, $(LIBS))
 LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -L"$(GADGET3LNKDIR)" -L"$(LIBSTARKLINKDIR)" -lgomp
 
 SRCS:=	$(shell ls *.cpp)
-OBJS=$(addprefix $(BLDDIR)/, $(SRCS:.cpp=.o))
+OBJS=$(addprefix $(BLDDIR)/, $(SRCS:.cpp=.o)) $(BLAKELINK)/libb2_la-blake2s.o
 TINYRAMOBJS := $(shell find $(TINYRAMOBJ_DIR) -name '*.o' ! -name 'main.o')
 
 TARGET=$(BLDDIR)/stark-tinyram-tests

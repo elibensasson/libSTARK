@@ -8,7 +8,7 @@ INCFLAGS=-I. -I$(LIBSTARKINC) -I$(ALGEBRAINC) -I$(FFTINC)
 LIBS=						\
 	stark					\
 	algebralib				\
-	FFT
+	FFT					
 
 LIBFLAGS=$(addprefix -l, $(LIBS))
 LNKFLAGS=-L"$(ALGEBRALNKDIR)" -L"$(FFTLIBLNKDIR)" -L"$(LIBSTARKLINKDIR)" -lgomp
@@ -17,9 +17,10 @@ SRCDIR  = .
 SRCEXT  = cpp
 OBJDIR  = $(BLDDIR)/obj
 
-SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
+SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)') $(BLAKELINK)/libb2.a
+
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
-OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
+OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS)) $(BLAKELINK)/libb2_la-blake2s.o
 
 TARGET=$(BLDDIR)/stark-dpm
 DST=$(EXEDIR)/stark-dpm

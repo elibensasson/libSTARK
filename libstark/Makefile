@@ -1,6 +1,6 @@
 include ../flags.mk
 
-INCFLAGS=-Isrc -I$(ALGEBRAINC) -I$(FFTINC)
+INCFLAGS=-Isrc -I$(ALGEBRAINC) -I$(FFTINC) -I$(BLAKEINC)
 
 SRCDIR  = src
 SRCEXT  = cpp
