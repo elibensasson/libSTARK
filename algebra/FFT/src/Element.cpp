@@ -9,8 +9,8 @@
  */
 
 #ifdef WIN32
-//#include <wmmintrin.h>
-#include <emmintrin.h>
+#include <wmmintrin.h>
+//#include <emmintrin.h>
 #endif	// #ifdef WIN32
 #ifdef __GNUC__
 #include <x86intrin.h>

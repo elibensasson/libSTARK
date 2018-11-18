@@ -470,7 +470,7 @@ void FFT::AlgIFFT(Element* P){
             const size_t step = 1UL << (size - min_log_general_level);
             const size_t bound = 1UL<<size;
 #pragma omp parallel for
-			for (unsigned long long i = 0; i < bound; i+=step){
+			for (plooplongtype i = 0; i < bound; i+=step){
 				FFT::ifft_serial(P+i,size-min_log_general_level,c_p_cpy_local+i);
 			}
 		}
@@ -576,7 +576,7 @@ void FFT::AlgIFFT(Element* P){
             const size_t step = 1UL << (size - min_log_general_levels);
             const size_t bound = 1UL<<size;
 #pragma omp parallel for
-			for (unsigned long long i = 0; i < bound; i += step){
+			for (plooplongtype i = 0; i < bound; i += step){
 				FFT::fft_serial(p_cpy+i,size-min_log_general_levels,it+i);
 			}
 		}
@@ -597,7 +597,7 @@ void FFT::AlgIFFT(Element* P){
         free(c_p_cpy_local);
 		if(min_log_general_levels > size-1){
 #pragma omp parallel for schedule(static,(1UL<<(size-1))/omp_max_threads)//MAX
-			for (unsigned long long i = 1; i <= (1UL << size); i += 2){
+			for (plooplongtype i = 1; i <= (1UL << size); i += 2){
 				Element::c_mulXor(P[i],lastShift,P[i-1]);
 				Element::c_mul(P[i],lastD,P[i]);
 				Element::c_add(P[i],P[i-1],P[i]);

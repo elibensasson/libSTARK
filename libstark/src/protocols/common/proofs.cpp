@@ -83,7 +83,7 @@ namespace{
         //
         if(multyThreading){
 #pragma omp parallel for
-            for(unsigned long long currSigmentIdx = 0; currSigmentIdx < numSigments; currSigmentIdx++){
+            for(plooplongtype currSigmentIdx = 0; currSigmentIdx < numSigments; currSigmentIdx++){
                 sigmentConstructor(currSigmentIdx,&data[currSigmentIdx*sigmentLength]);
                 commitment.constructSubtree(&data[0], logSigmentLength, currSigmentIdx);
             }

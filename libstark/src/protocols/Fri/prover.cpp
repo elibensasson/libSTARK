@@ -328,7 +328,7 @@ rawResults_t prover_t::responceToDataQueries(const rawQueries_t& queries)const{
         auto serialQueries = serializeQueries(state_, queries, results, 0);
 
 #pragma omp parallel for
-        for(unsigned int i=0; i<serialQueries.size(); i++){
+        for(ploopinttype i=0; i<serialQueries.size(); i++){
             auto currQ = serialQueries[i];
             
             const SparceMerkleTree currTree = currQ.proof->answerQueries(*currQ.rawQueries);

@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\starkdpm\AES160hashcLOCI_constraints.cpp" />
+    <ClCompile Include="..\starkdpm\AES160hashcLOCI_EvalPoly.cpp" />
+    <ClCompile Include="..\starkdpm\AES160hashcLOCI_GenWitness.cpp" />
+    <ClCompile Include="..\starkdpm\AES160hashcLOCI_instance.cpp" />
+    <ClCompile Include="..\starkdpm\AES160hashcLOCI_witness.cpp" />
+    <ClCompile Include="..\starkdpm\main.cpp" />
+    <ClCompile Include="src/common/Algebra/LinearSpace.cpp" />
+    <ClCompile Include="src/common/Algebra/MultiVarPoly.cpp" />
+    <ClCompile Include="src/common/Algebra/ShiftedSubspacePolynomial.cpp" />
+    <ClCompile Include="src/common/Infrastructure/Infrastructure.cpp" />
+    <ClCompile Include="src/common/Utils/ErrorHandling.cpp" />
+    <ClCompile Include="src/common/Utils/specsPrint.cpp" />
+    <ClCompile Include="src/common/Utils/Timing.cpp" />
+    <ClCompile Include="src/languages/Acsp/AcspWitnessChecker.cpp" />
+    <ClCompile Include="src/languages/Bair/BairWitnessChecker.cpp" />
+    <ClCompile Include="src/languages/Bair/ConstraintsSys.cpp" />
+    <ClCompile Include="src/protocols/Ali/common_details/common.cpp" />
+    <ClCompile Include="src/protocols/Ali/prover.cpp" />
+    <ClCompile Include="src/protocols/Ali/verifier.cpp" />
+    <ClCompile Include="src/protocols/Ali/verifier_details/queriesGen.cpp" />
+    <ClCompile Include="src/protocols/common/CryptoCommitment/MerkleCommitment.cpp" />
+    <ClCompile Include="src/protocols/common/proofs.cpp" />
+    <ClCompile Include="src/protocols/common/verifier.cpp" />
+    <ClCompile Include="src/protocols/Fri/common/common.cpp" />
+    <ClCompile Include="src/protocols/Fri/prover.cpp" />
+    <ClCompile Include="src/protocols/Fri/verifier.cpp" />
+    <ClCompile Include="src/protocols/Fri/verifier_details/queryGenerator.cpp" />
+    <ClCompile Include="src/protocols/protocol.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/BairToAcsp.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/AcspSummandsPolynomial.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/commonDeffinitions.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/commonMappings.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/constraints.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/constraintSystemsTestLocations.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/instanceMappings.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/neighborsConstructor.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/spaces.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/witnessMappings.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Details/witnessReduction.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/BenesNetwork.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/BitReverseButterfliesNetwork.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/BtrflyBasedPermutation.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/DeBruijnPermutationNet.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/FoldNetwork.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/LongDeBruijnPermutationNet.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/LongSymmetricDeBruijnNetwork.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/PermutationRoutingNet.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/SymmetricDeBruijnNetwork.cpp" />
+    <ClCompile Include="src/reductions/BairToAcsp/Routing/TandemNetwork.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\starkdpm\AES160hashcLOCI.hpp" />
+    <ClInclude Include="..\starkdpm\AES160hashcLOCI_instance.hpp" />
+    <ClInclude Include="src\protocols\RS_IOPP_Biased\verifier_details\queryGenerator.hpp" />
+    <ClInclude Include="src/common/Algebra/FieldElementPredicate.hpp" />
+    <ClInclude Include="src/common/Algebra/FiniteSetInterface.hpp" />
+    <ClInclude Include="src/common/Algebra/LinearSpace.hpp" />
+    <ClInclude Include="src/common/Algebra/MultiVarPoly.hpp" />
+    <ClInclude Include="src/common/Algebra/MultiVarPolyIddo.hpp" />
+    <ClInclude Include="src/common/Algebra/ShiftedSubspacePolynomial.hpp" />
+    <ClInclude Include="src/common/Infrastructure/Infrastructure.hpp" />
+    <ClInclude Include="src/common/langCommon/Sequence.hpp" />
+    <ClInclude Include="src/common/Utils/ErrorHandling.hpp" />
+    <ClInclude Include="src/common/Utils/specsPrint.hpp" />
+    <ClInclude Include="src/common/Utils/TaskReporting.hpp" />
+    <ClInclude Include="src/common/Utils/Timing.hpp" />
+    <ClInclude Include="src/languages/Acsp/AcspInstance.hpp" />
+    <ClInclude Include="src/languages/Acsp/AcspWitness.hpp" />
+    <ClInclude Include="src/languages/Acsp/AcspWitnessChecker.hpp" />
+    <ClInclude Include="src/languages/Acsp/RationalConstraintsSys.hpp" />
+    <ClInclude Include="src/languages/Bair/BairInstance.hpp" />
+    <ClInclude Include="src/languages/Bair/BairWitness.hpp" />
+    <ClInclude Include="src/languages/Bair/BairWitnessChecker.hpp" />
+    <ClInclude Include="src/languages/Bair/ConstraintsSys.hpp" />
+    <ClInclude Include="src/protocols/Ali/common_details/common.hpp" />
+    <ClInclude Include="src/protocols/Ali/prover.hpp" />
+    <ClInclude Include="src/protocols/Ali/verifier.hpp" />
+    <ClInclude Include="src/protocols/Ali/verifier_details/queriesGen.hpp" />
+    <ClInclude Include="src/protocols/common/CryptoCommitment/MerkleCommitment.hpp" />
+    <ClInclude Include="src/protocols/common/proofs.hpp" />
+    <ClInclude Include="src/protocols/common/queries.hpp" />
+    <ClInclude Include="src/protocols/common/verifier.hpp" />
+    <ClInclude Include="src/protocols/Fri/common/common.hpp" />
+    <ClInclude Include="src/protocols/Fri/prover.hpp" />
+    <ClInclude Include="src/protocols/Fri/verifier.hpp" />
+    <ClInclude Include="src/protocols/Fri/verifier_details/queryGenerator.hpp" />
+    <ClInclude Include="src/protocols/protocol.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/BairToAcsp.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/AcspRationalSystem.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/AcspSummandsPolynomial.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/boundaryConstraints.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/common.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/commonDeffinitions.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/commonInformation.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/commonMappings.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/constraints.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/constraintSystemsTestLocations.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/instanceMappings.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/neighborsConstructor.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/spaces.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/witnessMappings.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Details/witnessReduction.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/BenesNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/BitReverseButterfliesNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/BtrflyBasedPermutation.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/DeBruijnPermutationNet.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/Deg2PermutationRoutingNet.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/FoldNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/LongDeBruijnPermutationNet.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/LongSymmetricDeBruijnNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/MatrixNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/PermutationRoutingNet.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/RoutingNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/SymmetricDeBruijnNetwork.hpp" />
+    <ClInclude Include="src/reductions/BairToAcsp/Routing/TandemNetwork.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8EC88E78-D700-4E10-9235-696A6C435DD4}</ProjectGuid>
+    <RootNamespace>stark</RootNamespace>
+    <ProjectName>stark</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\libstark\src;$(IncludePath)</IncludePath>
+    <TargetName>stark</TargetName>
+    <OutDir>$(SolutionDir)\libstark\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\libstark\$(Configuration)\$(Platform)\build\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\libstark\src;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\libstark\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\libstark\$(Configuration)\$(Platform)\build\</IntDir>
+    <TargetName>stark</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\algebra\FFT\src;$(SolutionDir)\libstark\src;%(AdditionalIncludeDirectories);$(SolutionDir)\algebra\algebraLib\headers</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PreprocessorDefinitions>OLD_OPENMP;WIN32;_CRT_SECURE_NO_WARNINGS;LEGACY_PRINT_INSTRUCTION_SUPPORT;SCIPR_NUM_THREADS=16;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/D _VARIADIC_MAX=10 %(AdditionalOptions)</AdditionalOptions>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\algebra\FFT\$(Configuration)\$(Platform);%(AdditionalLibraryDirectories);$(Configuration)\$(Platform);$(SolutionDir)\algebra\algebraLib\$(Configuration)\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);FFT.lib;algebraLib.lib</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\algebra\FFT\src;$(SolutionDir)\libstark\src;%(AdditionalIncludeDirectories);$(SolutionDir)\algebra\algebraLib\headers</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <Optimization>Disabled</Optimization>
+      <OpenMPSupport>true</OpenMPSupport>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>LEGACY_PRINT_INSTRUCTION_SUPPORT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/D _VARIADIC_MAX=10 /D SCIPR_NUM_THREADS=1 %(AdditionalOptions)</AdditionalOptions>
+      <BrowseInformation>false</BrowseInformation>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\algebra\FFT\$(Configuration)\$(Platform);%(AdditionalLibraryDirectories);$(Configuration)\$(Platform);$(SolutionDir)\algebra\algebraLib\$(Configuration)\$(Platform)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);FFT.lib;algebraLib.lib</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <Bscmake>
+      <PreserveSbr>false</PreserveSbr>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
+    </Bscmake>
+    <Xdcmake>
+      <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
+    </Xdcmake>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -12,6 +12,14 @@
 //#define __GPU
 //#define __MEASURE
 
+#ifdef OLD_OPENMP
+typedef long long plooplongtype;
+typedef int ploopinttype;
+#else
+typedef unsigned long long plooplongtype;
+typedef unsigned int ploopinttype;
+#endif
+
 namespace FFF {
 
 	/**** typedef *****/

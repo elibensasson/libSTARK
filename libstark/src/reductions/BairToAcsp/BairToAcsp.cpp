@@ -189,7 +189,7 @@ vector<FieldElement> compositionAlg(const AcspInstance& instance, const AcspWitn
             }
 
 #pragma omp parallel for schedule(guided)
-            for(unsigned long long i=0; i< wDegBound; i++){
+            for(plooplongtype i=0; i< wDegBound; i++){
 
                 const long currLocation = i + (currOffset<<wDim);
 

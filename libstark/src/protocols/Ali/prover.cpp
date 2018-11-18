@@ -55,7 +55,7 @@ namespace{
         const size_t witnessPow2Deg = POW2(witnessDegLog);
 
 #pragma omp parallel for
-        for(unsigned int wIndex = 0; wIndex < numOfWitnesses; wIndex++){
+        for(ploopinttype wIndex = 0; wIndex < numOfWitnesses; wIndex++){
 
             const Algebra::UnivariatePolynomialInterface& witnessPoly = *(acspWitness.assignmentPolys()[wIndex]);
 
@@ -96,7 +96,7 @@ namespace{
 
     void initWitness_ZkMask_coeffs(FieldElement* res, const size_t numCoeffs){
 #pragma omp parallel for
-        for(unsigned long long i =0; i< numCoeffs; i++){
+        for(plooplongtype i =0; i< numCoeffs; i++){
             res[i] = Algebra::generateRandom();
         }
     }
@@ -254,7 +254,7 @@ namespace{
                     }
                     else{
 #pragma omp parallel for
-                        for(unsigned long long shiftIdx=0; shiftIdx < numCosetsInParallel; shiftIdx++){
+                        for(plooplongtype shiftIdx=0; shiftIdx < numCosetsInParallel; shiftIdx++){
                             FieldElement* currCoset = &cosetEval[shiftIdx*cosetSize*width];
 
                             //evaluate
@@ -459,7 +459,7 @@ namespace{
         const size_t blockLen = POW2(logBlockLen);
         const size_t numBlocks = POW2(cosetBasis.size() - logBlockLen);
 #pragma omp parallel for
-        for (unsigned long long blockIdx =0; blockIdx < numBlocks; blockIdx++){
+        for (plooplongtype blockIdx =0; blockIdx < numBlocks; blockIdx++){
             for (unsigned long long inBlockIdx = 0; inBlockIdx < blockLen; inBlockIdx++){
 
                 const size_t xIdx = blockIdx*blockLen + inBlockIdx;
@@ -514,7 +514,7 @@ namespace{
 
         vector<FieldElement> evaluation = compositionPolysEvaluation(acspInstance,acspWitness, basisPCPP.basis, basisPCPP.shift, *uniEvals.boundaryPolysMatrix, entireWitnessKept, numZkMasks);
 #pragma omp parallel for
-		  for (unsigned long long xIdx = 0; xIdx < spaceSize; xIdx++){
+		  for (plooplongtype xIdx = 0; xIdx < spaceSize; xIdx++){
             
             //the ZK mask poly
             evaluation[xIdx] *= randCoeffs.ZK_mask_composition[rsCombId].coeffUnshifted[0];
@@ -681,7 +681,7 @@ namespace{
             }
             else{
 #pragma omp parallel for
-                for(unsigned long long i=0; i<currBlockSize; i++){
+                for(plooplongtype i=0; i<currBlockSize; i++){
                     FieldElement* cosetEval = &cosetsEval[i*cosetSize*width];
                     const size_t shiftIdx = cosetsWithQueries[blockIdx+i];
                     {

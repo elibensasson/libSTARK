@@ -1,6 +1,7 @@
 #include "specsPrint.hpp"
 #include <iostream>
 #include <iomanip>
+#include<algorithm>
 
 namespace libstark{
 

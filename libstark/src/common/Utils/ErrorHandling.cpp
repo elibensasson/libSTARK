@@ -9,7 +9,9 @@
  */
   /************************************************************************************************************/
 #include <iostream>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include "ErrorHandling.hpp"
 
 using namespace std;
