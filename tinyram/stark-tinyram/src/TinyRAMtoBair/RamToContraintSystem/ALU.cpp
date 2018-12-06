@@ -132,7 +132,7 @@ void ALU_Gadget::createInternalComponents() {
 		resultVariables_);
 	components_[Opcode::UDIV] = ALU_UDIV_Gadget::create(pb_, inputVariables_,
 															resultVariables_);
-	components_[Opcode::UMOD] = ALU_UDIV_Gadget::create(pb_, inputVariables_,
+	components_[Opcode::UMOD] = ALU_UMOD_Gadget::create(pb_, inputVariables_,
 															resultVariables_);
 	components_[Opcode::CMPE] = ALU_CMPE_Gadget::create(pb_, inputVariables_,
 															resultVariables_);
