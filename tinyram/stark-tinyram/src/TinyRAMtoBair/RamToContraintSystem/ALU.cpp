@@ -963,7 +963,7 @@ void ALU_UDIV_Gadget::generateConstraints(){
 	unpackResult_g_->generateConstraints();
  	const size_t & registerLength = tinyRAMparams()->registerLength();
 	for (size_t i = 0; i < registerLength; i++)
-		enforceBooleanity(witnessRemainder_[i], Opcode::UMOD);
+		enforceBooleanity(witnessRemainder_[i], Opcode::UDIV);
 	mult_g_->generateConstraints();
 	if (standAlone_)
 	unpackArg1_g_->generateConstraints();
