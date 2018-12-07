@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 #include <algebraLib/variable_operators.hpp>
 #include <algebraLib/FieldElement.hpp>
@@ -1789,10 +1790,14 @@ void ALU_ANSWER_Gadget::generateWitness(){
 		flag = false;
 		if (Algebra::one() == program_output)
 			program_output = pb_->val(inputs_.arg2_val_);
-		/*
-         * size_t a = mapFieldElementToInteger(0, EXTDIM, pb_->val(inputs_.arg2_val_));
-         * std::cout << "\n*** TIMESTEPS=" << max_timestep << " ANSWER=" << a << " (binary " << std::bitset<REGISTER_LENGTH>(a) << ")\n" << std::endl;
-         */
+
+        /**
+         * Uncomment the following lines to print the result of ANSWER
+        **/
+
+        // size_t a = mapFieldElementToInteger(0, EXTDIM, pb_->val(inputs_.arg2_val_));
+        // std::cout << "\n*** TIMESTEPS=" << max_timestep << " ANSWER=" << a << " (binary " << std::bitset<REGISTER_LENGTH>(a) << ")\n" << std::endl;
+
 	}
 }
 
