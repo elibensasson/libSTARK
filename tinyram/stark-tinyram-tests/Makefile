@@ -25,7 +25,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 #	@echo 'Building target: $@'
 #	@echo 'Invoking: GCC Linker'
-	$(CC) -o "$@" $(OBJS) $(TINYRAMOBJS) -fopenmp $(LNKFLAGS) $(LIBFLAGS) $(LDFLAGS) 
+	$(CC) -o "$@" $(OBJS) $(TINYRAMOBJS) $(CFLAGS) $(LNKFLAGS) $(LIBFLAGS) $(LDFLAGS) 
 #	@echo 'Finished building target: $@'
 
 $(BLDDIR)/%.o: %.cpp
