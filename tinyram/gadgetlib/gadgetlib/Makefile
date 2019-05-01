@@ -20,6 +20,10 @@ SRCS=					\
 
 OBJS=$(addprefix $(BLDDIR)/, $(SRCS:.cpp=.o))
 
+ifeq ($(AR),)
+AR = ar -r
+endif
+
 $(BLDDIR)/%.o: %.cpp
 #	@echo 'Building file: $@ ($<)'
 	@$(MKDIR) -p $(shell $(DIRNAME) $@)
@@ -33,6 +37,6 @@ clean:
 $(TARGET): $(OBJS)
 #	@echo 'Building target: $@'
 #	@echo 'Invoking: GCC Archiver'
-	ar -r  "$@" $(OBJS) $(LIBS)
+	$(AR)  "$@" $(OBJS) $(LIBS)
 #	@echo 'Finished building target: $@'
 #	@echo ' '
