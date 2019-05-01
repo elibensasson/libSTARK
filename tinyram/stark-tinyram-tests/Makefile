@@ -25,13 +25,13 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 #	@echo 'Building target: $@'
 #	@echo 'Invoking: GCC Linker'
-	$(CC) -o "$@" $(OBJS) $(TINYRAMOBJS) -fopenmp $(LNKFLAGS) $(LIBFLAGS)
+	$(CC) -o "$@" $(OBJS) $(TINYRAMOBJS) $(CFLAGS) $(LNKFLAGS) $(LIBFLAGS) $(LDFLAGS) 
 #	@echo 'Finished building target: $@'
 
 $(BLDDIR)/%.o: %.cpp
 #	@echo 'Building file: $@ ($<)'
 	@$(MKDIR) -p $(shell $(DIRNAME) $@)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(INCFLAGS) -c -o "$@" "$<"
+	$(CC) $(CFLAGS) $(LDFLAGS) $(CPPFLAGS) $(INCFLAGS) -c -o "$@" "$<"
 
 clean:
 	rm -f $(TARGET) $(OBJS) $(DEPS)

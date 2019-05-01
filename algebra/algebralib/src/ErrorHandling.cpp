@@ -16,11 +16,12 @@ Common functionality needed by many components.
 #include "algebraLib/ErrorHandling.hpp"
 
 
-#ifdef __linux__
+#ifndef WIN32
 #include <unistd.h>
 #include <cstdio>
 #endif
-#ifdef __GLIBC__
+
+#if defined(__GLIBC__) || defined(__APPLE__)
 #include <execinfo.h> // backtraces
 #endif
 

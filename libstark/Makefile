@@ -10,13 +10,17 @@ SRCS    := $(shell find $(SRCDIR) -name '*.$(SRCEXT)')
 SRCDIRS := $(shell find . -name '*.$(SRCEXT)' -exec dirname {} \; | uniq)
 OBJS    := $(patsubst %.$(SRCEXT),$(OBJDIR)/%.o,$(SRCS))
 
+ifeq ($(AR),)
+AR = ar -r
+endif
+
 TARGET=$(BLDDIR)/libstark.a
 all: $(TARGET)
 
 $(TARGET): buildrepo $(OBJS)
 #	@echo 'Building target: $@'
 #	@echo 'Invoking: GCC Linker'
-	ar -r  "$@" $(OBJS) $(LIBS)
+	$(AR)  "$@" $(OBJS) $(LIBS)
 #	@echo 'Finished building target: $@'
 
 $(OBJDIR)/%.o: %.$(SRCEXT)

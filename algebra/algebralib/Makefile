@@ -12,6 +12,10 @@ TARGET=$(BLDDIR)/libalgebralib.a
 SRCS:= $(shell ls src/*.cpp)
 OBJS=$(addprefix $(BLDDIR)/, $(SRCS:.cpp=.o))
 
+ifeq ($(AR),)
+AR = ar -r
+endif
+
 $(BLDDIR)/%.o: %.cpp
 #	@echo 'Building file: $@ ($<)'
 	@$(MKDIR) -p $(shell $(DIRNAME) $@)
@@ -24,4 +28,4 @@ clean:
 
 $(TARGET): $(OBJS)
 #	@echo 'Building target: $@'
-	ar -r  "$@" $(OBJS)
+	$(AR) "$@" $(OBJS)
