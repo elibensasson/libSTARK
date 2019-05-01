@@ -6,8 +6,11 @@
 #include "reductions/BairToAcsp/BairToAcsp.hpp"
 
 #include <set>
-#if __GNUG__
-#include <sys/sysinfo.h>
+#ifdef __APPLE__
+    #include <sys/types.h>
+    #include <sys/sysctl.h>
+    #elif defined(__GNUG__)
+       #include <sys/sysinfo.h>
 #endif
 
 namespace libstark{
@@ -161,19 +164,46 @@ namespace{
             
             unsigned short logNumCosetsInParallel;
             {
-                unsigned short logRAM;
-                unsigned short logVM;
+                unsigned short logRAM = 33; // if not LINUX or macOS
+                unsigned short logVM = 33;  // if not LINUX or macOS
+
                 //compute RAM amount on current machine
                 {
-#if __GNUG__
+#if defined(__APPLE__)
+                    struct info_s {
+                          int64_t totalram;
+                        u_int64_t totalswap;
+                    } info;
+
+                    size_t len = sizeof(int64_t);
+                    struct xsw_usage xsw;
+                    /* on macOS Sierra:
+                     * struct xsw_usage {
+                     *      u_int64_t	xsu_total;
+                     *      u_int64_t	xsu_avail;
+                     *      u_int64_t	xsu_used;
+                     *      u_int32_t	xsu_pagesize;
+                     *      boolean_t	xsu_encrypted;
+                     * };
+                     */
+                    int  totalram_mib[2] = {CTL_HW, HW_PHYSMEM};
+                    int totalswap_mib[2] = {CTL_HW, VM_METER};
+                    // int sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp, size_t newlen);
+
+                    sysctl( totalram_mib, 2, &info.totalram, &len, NULL, 0);
+                    sysctl(totalswap_mib, 2, &xsw,           &len, NULL, 0);
+
+                    info.totalswap = xsw.xsu_total;
+
+#else 
+    #if defined(__GNUG__)
                     struct sysinfo info;
                     sysinfo(&info);
+    #endif
+
                     logRAM = std::floor(Log2(info.totalram));
                     logVM = std::floor(Log2(info.totalswap + info.totalram));
                     logVM = std::min(logVM, logRAM); //it seems to be giving best performance
-#else
-                    logRAM = 33;
-                    logVM = 33;
 #endif
                 }
                 const unsigned short logCosetSize = widthLog + cosetBasis.size() + Log2(sizeof(FieldElement));
@@ -582,15 +612,27 @@ namespace{
         //
         size_t NumCosetsInParallel;
         {
-            unsigned short logRAM;
+            unsigned short logRAM = 33; // Default value for non-linux and non-macOS platforms
             //compute RAM amount on current machine
             {
-#if __GNUG__
-                struct sysinfo info;
-                sysinfo(&info);
-                logRAM = Log2(std::round(info.totalram));
-#else
-                logRAM = 33;
+#if defined(__APPLE__)
+                    struct info_s {
+                          int64_t totalram;
+                        u_int64_t totalswap;
+                    } info;
+
+                    size_t len = sizeof(int64_t);
+                    int  totalram_mib[2] = {CTL_HW, HW_PHYSMEM};
+                    // int sysctl(int *name, u_int namelen, void *oldp, size_t *oldlenp, void *newp, size_t newlen);
+
+                    sysctl( totalram_mib, 2, &info.totalram, &len, NULL, 0);
+#else 
+    #if defined(__GNUG__)
+                    struct sysinfo info;
+                    sysinfo(&info);
+    #endif
+
+                    logRAM = std::floor(Log2(info.totalram));
 #endif
             }
             logRAM = std::max(logRAM, (unsigned short)(widthLog + cosetBasis.size() + Log2(sizeof(FieldElement)) + 1));
