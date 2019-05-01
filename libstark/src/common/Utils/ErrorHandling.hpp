@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-#ifdef __GLIBC__
+#ifndef WIN32
 #include <execinfo.h> // backtraces
 #endif
 

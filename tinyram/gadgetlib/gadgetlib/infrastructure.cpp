@@ -13,11 +13,10 @@ Common functionality needed by many components.
 #include <cassert>
 #include <stdexcept>
 #include <climits>
-#ifdef __linux__
+
+#ifndef WIN32
 #include <unistd.h>
 #include <cstdio>
-#endif
-#ifdef __GLIBC__
 #include <execinfo.h> // backtraces
 #endif
 
