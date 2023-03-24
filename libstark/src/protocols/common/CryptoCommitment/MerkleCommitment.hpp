@@ -6,6 +6,7 @@
 #include <cstring>
 #include <map>
 #include <set>
+#include <string>
 
 namespace libstark{
 namespace Protocols{
